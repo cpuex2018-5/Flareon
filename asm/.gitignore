@@ -1,0 +1,11 @@
+*.o
+main
+test
+*.dSYM/
+*.asm
+*.bin
+output
+input
+*.ppm
+*.coe
+*.S

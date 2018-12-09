@@ -1,0 +1,7 @@
+.DS_Store
+*.ppm
+*.coe
+*.bin
+*.asm
+*.o
+data.txt
