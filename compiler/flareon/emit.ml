@@ -216,11 +216,9 @@ and g' buf e =
   | NonTail(a), CallCls(f, iargs, fargs) ->
     g'_args buf [(f, reg_cl)] iargs fargs;
 (*
-    let ss = stacksize() + 8 in
+    let ss = stacksize() + 4 in
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" (-1 * ss);
     Printf.bprintf buf "\tsw\tra, %d(sp)\n" (ss - 4);
-    Printf.bprintf buf "\tsw\tfp, %d(sp)\n" (ss - 8);
-    Printf.bprintf buf "\taddi\tfp, sp, %d\n" ss;
 *)
     Printf.bprintf buf "\tlw\tra, 0(%s)\n" (reg reg_cl); (* set closure address to %ra *)
     Printf.bprintf buf "\tjalr\tra, ra, 0\n";
@@ -230,17 +228,14 @@ and g' buf e =
       Printf.bprintf buf "\tfmv\t%s, %s\n" (reg a) (reg fregs.(0));
 (*
     Printf.bprintf buf "\tlw\tra, %d(sp)\n" (ss - 4);
-    Printf.bprintf buf "\tlw\tfp, %d(sp)\n" (ss - 8);
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" ss;
 *)
   | (NonTail(a), CallDir(Id.L(f), iargs, fargs)) ->
     g'_args buf [] iargs fargs;
 (*
-    let ss = stacksize() + 8 in
+    let ss = stacksize() + 4 in
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" (-1 * ss);
     Printf.bprintf buf "\tsw\tra, %d(sp)\n" (ss - 4);
-    Printf.bprintf buf "\tsw\tfp, %d(sp)\n" (ss - 8);
-    Printf.bprintf buf "\taddi\tfp, sp, %d\n" ss;
 *)
     Printf.bprintf buf "\tcall\t%s\n" f;
     if List.mem a allregs && a <> regs.(0) then
@@ -249,7 +244,6 @@ and g' buf e =
       Printf.bprintf buf "\tfmv\t%s, %s\n" (reg a) (reg fregs.(0));
 (*
     Printf.bprintf buf "\tlw\tra, %d(sp)\n" (ss - 4);
-    Printf.bprintf buf "\tlw\tfp, %d(sp)\n" (ss - 8);
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" ss;
 *)
 and g'_tail_if buf rs1 rs2 e1 e2 b bn = (* bはラベルに使うだけで命令には使わない *)
@@ -321,15 +315,12 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   let buf = Buffer.create 128 in
   retlabel := x ^ "_ret";
   g buf (Tail, e);
-  let ss = stacksize () + 8 in
+  let ss = stacksize () + 4 in
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
   Printf.fprintf oc "\tsw\tra, %d(sp)\n" (ss - 4);
-  Printf.fprintf oc "\tsw\tfp, %d(sp)\n" (ss - 8);
-  Printf.fprintf oc "\taddi\tfp, sp, %d\n" ss;
   Buffer.output_buffer oc buf;
   Printf.fprintf oc "%s_ret:\n" x;
   Printf.fprintf oc "\tlw\tra, %d(sp)\n" (ss - 4);
-  Printf.fprintf oc "\tlw\tfp, %d(sp)\n" (ss - 8);
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "\tjr\tra\n"
 
@@ -344,14 +335,11 @@ let f oc (Prog(data, fundefs, e)) =
   stackmap := [];
   let buf = Buffer.create 128 in
   g buf (NonTail("_R_0"), e);
-  let ss = stacksize () + 8 in
+  let ss = stacksize () + 4 in
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
   Printf.fprintf oc "\tsw\tra, %d(sp)\n" (ss - 4);
-  Printf.fprintf oc "\tsw\tfp, %d(sp)\n" (ss - 8);
-  Printf.fprintf oc "\taddi\tfp, sp, %d\n" ss;
   Buffer.output_buffer oc buf;
   Printf.fprintf oc "\tlw\tra, %d(sp)\n" (ss - 4);
-  Printf.fprintf oc "\tlw\tfp, %d(sp)\n" (ss - 8);
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "#\tmain program ends\n";
   Printf.fprintf oc "end:\n";
