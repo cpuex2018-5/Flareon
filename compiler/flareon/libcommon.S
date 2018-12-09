@@ -15,15 +15,14 @@ min_caml_print_newline:
 	jr	ra
 
 min_caml_print_int:
-	addi	sp, sp, -16
-	sw	a1, 12(sp)
-	sw	t1, 8(sp)
+	addi	sp, sp, -12
+	sw	a1, 8(sp)
 	sw	s1, 4(sp)
 	sw	ra, 0(sp)
 # 負数なら'-'を出力し、絶対値を取る
 	bge	a0, zero, .print_int_L0
-	li	t1, 45
-	w	t1		# '-'
+	li	t6, 45
+	w	t6		# '-'
 	neg	a0, a0
 ############# 何桁あるか調べる
 .print_int_L0:
@@ -66,57 +65,56 @@ min_caml_print_int:
 	call	min_caml_div_rem	# a0: 商, a1: あまり
 	addi	a0, a0, 48
 	w	a0
-	li	t1, 1
-	beq	t1, s1, .print_int_end
+	li	t6, 1
+	beq	t6, s1, .print_int_end
 	mv	a0, a1
 	call	.print_int_div_10	# s1 <- s1 / 10
 	b	.print_int_body
 .print_int_end:
-	lw	a1, 12(sp)
-	lw	t1, 8(sp)
+	lw	a1, 8(sp)
 	lw	s1, 4(sp)
 	lw	ra, 0(sp)
-	addi	sp, sp, 16
+	addi	sp, sp, 12
 	jr	ra
 
 .print_int_div_10:	# s1 <- s1 / 10
-	li	t1, 10
-	bne	s1, t1, .print_int_div_10_L0
+	li	t6, 10
+	bne	s1, t6, .print_int_div_10_L0
 	li	s1, 1
 	jr	ra
 .print_int_div_10_L0:
-	li	t1, 100
-	bne	s1, t1, .print_int_div_10_L1
+	li	t6, 100
+	bne	s1, t6, .print_int_div_10_L1
 	li	s1, 10
 	jr	ra
 .print_int_div_10_L1:
-	li	t1, 1000
-	bne	s1, t1, .print_int_div_10_L2
+	li	t6, 1000
+	bne	s1, t6, .print_int_div_10_L2
 	li	s1, 100
 	jr	ra
 .print_int_div_10_L2:
-	li	t1, 10000
-	bne	s1, t1, .print_int_div_10_L3
+	li	t6, 10000
+	bne	s1, t6, .print_int_div_10_L3
 	li	s1, 1000
 	jr	ra
 .print_int_div_10_L3:
-	li	t1, 100000
-	bne	s1, t1, .print_int_div_10_L4
+	li	t6, 100000
+	bne	s1, t6, .print_int_div_10_L4
 	li	s1, 10000
 	jr	ra
 .print_int_div_10_L4:
-	li	t1, 1000000
-	bne	s1, t1, .print_int_div_10_L5
+	li	t6, 1000000
+	bne	s1, t6, .print_int_div_10_L5
 	li	s1, 100000
 	jr	ra
 .print_int_div_10_L5:
-	li	t1, 10000000
-	bne	s1, t1, .print_int_div_10_L6
+	li	t6, 10000000
+	bne	s1, t6, .print_int_div_10_L6
 	li	s1, 1000000
 	jr	ra
 .print_int_div_10_L6:
-	li	t1, 100000000
-	bne	s1, t1, .print_int_div_10_L7
+	li	t6, 100000000
+	bne	s1, t6, .print_int_div_10_L7
 	li	s1, 10000000
 	jr	ra
 .print_int_div_10_L7:	# s1 = 10 ** 9
@@ -177,37 +175,31 @@ min_caml_print_float:	# print float in hex
 	jr	ra
 
 min_caml_create_array:
-	addi	sp, sp, -8
-	sw	t1, 4(sp)
+	addi	sp, sp, -4
 	sw	t2, 0(sp)
-	mv	t1, zero
+	mv	t6, zero
 	mv	t2, gp
 .create_array_L0:
 	sw	a1, 0(gp)
 	addi	gp, gp, 4
-	addi	t1, t1, 1
-	ble	t1, a0, .create_array_L0
+	addi	t6, t6, 1
+	ble	t6, a0, .create_array_L0
 	mv	a0, t2
-	lw	t1, 4(sp)
 	lw	t2, 0(sp)
-	addi	sp, sp, 8
+	addi	sp, sp, 4
 	jr	ra
 
 min_caml_div_rem:
 # a0 <- a0 / a1, a1 <- a0 mod a1 (引数a0, a1は共に正)
-	addi	sp, sp, -4
-	sw	t1, 0(sp)
-	li	t1, 0			# t1が商
+	li	t6, 0			# t6が商
 .div_L0:
 	blt	a0, a1, .div_end
 	sub	a0, a0, a1
-	addi	t1, t1, 1
+	addi	t6, t6, 1
 	b	.div_L0
 .div_end:
 	mv	a1, a0
-	mv	a0, t1
-	lw	t1, 0(sp)
-	addi	sp, sp, 4
+	mv	a0, t6
 	jr	ra
 
 # min_caml_mul:
@@ -449,15 +441,15 @@ min_caml_atan:
 	fli	ft1, L_0
 	fle	s1, ft1, fa0	# s1: sign flag (s1 = 1 when positive)
 	fabs	fa0, fa0
-	fle	t1, ft0, fa0	# 0.4375 <= fa0
-	bne	t1, zero, .atan_L0
+	fle	t6, ft0, fa0	# 0.4375 <= fa0
+	bne	t6, zero, .atan_L0
 # |A| < 0.4375の場合
 	call	.kernel_atan
 	b	.atan_L2
 .atan_L0:
 	fli	ft0, L_Atan2
-	fle	t1, ft0, fa0	# 2.4375 <= fa0
-	bne	t1, zero, .atan_L1
+	fle	t6, ft0, fa0	# 2.4375 <= fa0
+	bne	t6, zero, .atan_L1
 # |A| < 2.4375の場合
 	fli	ft0, L_1
 	fsub	ft1, fa0, ft0	# ft1 = |A| - 1.0
@@ -490,46 +482,43 @@ min_caml_atan:
 	jr	ra
 
 min_caml_float_of_int: # int -> float
-	addi	sp, sp, -8
-	fsw	ft0, 4(sp)
-	sw	t1, 0(sp)
+	addi	sp, sp, -4
+	fsw	ft0, 0(sp)
 	fli	ft0, L_8388608
-	li	t1, 1258291200  # 0x4b000000
+	li	t6, 1258291200  # 0x4b000000
 	bge	a0, zero, .float_of_int_pos
 # negativeの場合
 	neg	a0, a0
-	add	a0, a0, t1
+	add	a0, a0, t6
 	sw	a0, -4(sp)
 	flw	fa0, -4(sp)
 	fsub	fa0, fa0, ft0
 	fneg	fa0, fa0
 	b	.float_of_int_ret
 .float_of_int_pos:
-	add	a0, a0, t1
+	add	a0, a0, t6
 # TODO: integer -> floating レジスタ間のmv (fmv.w.x) がほしいかもしれない...
 	sw	a0, -4(sp)
 	flw	fa0, -4(sp)
 	fsub	fa0, fa0, ft0
 .float_of_int_ret:
-	flw	ft0, 4(sp)
-	lw	t1, 0(sp)
-	addi	sp, sp, 8
+	flw	ft0, 0(sp)
+	addi	sp, sp, 4
 	jr	ra
 
 min_caml_int_of_float: # float -> int
-	addi	sp, sp, -8
-	fsw	ft0, 4(sp)
-	sw	t1, 0(sp)
+	addi	sp, sp, -4
+	fsw	ft0, 0(sp)
 	fli	ft0, L_0
-	fle	t1, ft0, fa0
-	beq	zero, t1, .int_of_float_neg
+	fle	t6, ft0, fa0
+	beq	zero, t6, .int_of_float_neg
 # positiveの場合
 	fli	ft0, L_8388608
 	fadd	fa0, fa0, ft0
 	fsw	fa0, -4(sp)
 	lw	a0, -4(sp)
-	li	t1, 1258291200
-	sub	a0, a0, t1
+	li	t6, 1258291200
+	sub	a0, a0, t6
 	b	.int_of_float_ret
 .int_of_float_neg:
 	fabs	fa0, fa0
@@ -537,13 +526,12 @@ min_caml_int_of_float: # float -> int
 	fadd	fa0, fa0, ft0
 	fsw	fa0, -4(sp)
 	lw	a0, -4(sp)
-	li	t1, 1258291200
-	sub	a0, a0, t1
+	li	t6, 1258291200
+	sub	a0, a0, t6
 	neg	a0, a0
 .int_of_float_ret:
-	flw	ft0, 4(sp)
-	lw	t1, 0(sp)
-	addi	sp, sp, 8
+	flw	ft0, 0(sp)
+	addi	sp, sp, 4
 	jr	ra
 
 	.data
