@@ -23,7 +23,7 @@ and exp =
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
-  | FDiv of Id.t * Id.t
+  | FInv of Id.t
   | FEq of Id.t * Id.t
   | FLE of Id.t * Id.t
   | FAbs of Id.t
