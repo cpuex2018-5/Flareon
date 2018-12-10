@@ -51,7 +51,7 @@ min_caml_print_int:
 	bge	a0, s1, .print_int_body
 	li	s1, 1000000
 	bge	a0, s1, .print_int_body
-	li	a0, 100000
+	li	s1, 100000
 	b	.print_int_body
 .print_int_L3:	# >= 10 ** 8
 	li	s1, 1000000000
