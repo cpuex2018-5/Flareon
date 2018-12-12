@@ -236,6 +236,13 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
   | Syntax.If(Syntax.Not(e1, _), e2, e3, p) ->
     (* converting branch by not (caml2html: knormal_not) *)
     g env (Syntax.If(e1, e3, e2, p))
+  | Syntax.If(Syntax.Eq(_, _, Type.Float, _) as e, e3, e4, _) ->
+    insert_let (g env e)
+      (fun x -> insert_let (g env (Syntax.Bool(false)))
+          (fun y ->
+             let e3', t3 = g env e3 in
+             let e4', t4 = g env e4 in
+             IfEq(x, y, e4', e3'), t3))
   | Syntax.If(Syntax.Eq(e1, e2, _, _), e3, e4, _) ->
     insert_let (g env e1)
       (fun x -> insert_let (g env e2)
@@ -243,6 +250,13 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
              let e3', t3 = g env e3 in
              let e4', t4 = g env e4 in
              IfEq(x, y, e3', e4'), t3))
+  | Syntax.If(Syntax.LE(_, _, Type.Float, _) as e, e3, e4, _) ->
+    insert_let (g env e)
+      (fun x -> insert_let (g env (Syntax.Bool(false)))
+          (fun y ->
+             let e3', t3 = g env e3 in
+             let e4', t4 = g env e4 in
+             IfEq(x, y, e4', e3'), t3))
   | Syntax.If(Syntax.LE(e1, e2, _, _), e3, e4, _) ->
     insert_let (g env e1)
       (fun x -> insert_let (g env e2)

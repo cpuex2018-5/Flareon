@@ -66,12 +66,12 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
   | Closure.IfEq(x, y, e1, e2) ->
     (match M.find x env with
      | Type.Bool | Type.Int -> Ans(IfEq(x, V(y), g env e1, g env e2))
-     | Type.Float -> Ans(IfFEq(x, y, g env e1, g env e2))
+     | Type.Float -> failwith "unreached"
      | _ -> failwith "equality supported only for bool, int, and float")
   | Closure.IfLE(x, y, e1, e2) ->
     (match M.find x env with
      | Type.Bool | Type.Int -> Ans(IfLE(x, V(y), g env e1, g env e2))
-     | Type.Float -> Ans(IfFLE(x, y, g env e1, g env e2))
+     | Type.Float -> failwith "unreached"
      | _ -> failwith "inequality supported only for bool, int, and float")
   | Closure.Let((x, t1), e1, e2) ->
     let e1' = g env e1 in

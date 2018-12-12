@@ -161,15 +161,6 @@ and g' buf e =
      | _ ->
        Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
        g'_tail_if buf x reg_tmp e1 e2 "bge" "blt")
-  | Tail, IfFEq(x, y, e1, e2) ->
-    (* Store the comparison result in reg_tmp (integer register!) *)
-    Printf.bprintf buf "\tfeq\t%s, %s, %s\n" (reg reg_tmp) (reg x) (reg y);
-    (* reg_tmp = 0 -> not equal -> 分岐する *)
-    g'_tail_if buf reg_tmp "zero" e1 e2 "bne" "beq"
-  | Tail, IfFLE(x, y, e1, e2) ->
-    Printf.bprintf buf "\tfle\t%s, %s, %s\n" (reg reg_tmp) (reg x) (reg y);
-    (* reg_tmp = 0 -> x > y -> 分岐する *)
-    g'_tail_if buf reg_tmp "zero" e1 e2 "bne" "beq"
   | NonTail(z), IfEq(x, V(y), e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "beq" "bne"
   | NonTail(z), IfEq(x, C(y), e1, e2) ->
@@ -197,12 +188,6 @@ and g' buf e =
      | _ ->
        Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
        g'_non_tail_if buf (NonTail(z)) x reg_tmp e1 e2 "bge" "blt")
-  | NonTail(z), IfFEq(x, y, e1, e2) ->
-    Printf.bprintf buf "\tfeq\t%s, %s, %s\n" (reg reg_tmp) (reg x) (reg y);
-    g'_non_tail_if buf (NonTail(z)) reg_tmp "zero" e1 e2 "bne" "beq"
-  | NonTail(z), IfFLE(x, y, e1, e2) ->
-    Printf.bprintf buf "\tfle\t%s, %s, %s\n" (reg reg_tmp) (reg x) (reg y);
-    g'_non_tail_if buf (NonTail(z)) reg_tmp "zero" e1 e2 "bne" "beq"
 
   (* INFO: caller-save regs: ra, t*, a* / callee-save regs: sp, fp, s* *)
   | Tail, CallCls(f, iargs, fargs) ->
