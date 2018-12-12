@@ -7,8 +7,9 @@
 //まずは入力xに対してx^(-1/2)を求め、これにxをかけてsqrt(x)を求めることにしているよ
 
 module fsqrt(
-  input wire [31:0] x,
-  output wire [31:0] y);
+  input clk,
+  input [31:0] x,
+  output [31:0] y);
   
   wire sx;
   wire [7:0] ex;
@@ -19,6 +20,9 @@ module fsqrt(
   //25bit_verに対応させた
   wire [25:0] three;
   wire [25:0] cube;
+
+  logic [25:0] three_reg;
+  logic [25:0] cube_reg;
   
   //テーブルをもとに作成
   assign three = 
@@ -4137,12 +4141,12 @@ module fsqrt(
 //偶数(つまり指数部の最下位が0)の時は、割る4ゆえ49と48の境目になり、
 //奇数(つまり指数部の最下位が1)の時は、割る8ゆえ50と49の境目になる.
   wire [50:0] b;
-  assign b = manx * cube;
+  assign b = manx * cube_reg;
   
 
 //小数点は上位2bit目と3bit目との間。結果は、01.hogeとなっているはず      
   wire [25:0] m_gap;
-  assign m_gap = state ? three - b[50:25]  : three - b[49:24] ;  //bの下位1bitは捨てうる  
+  assign m_gap = state ? three_reg - b[50:25]  : three_reg - b[49:24] ;  //bの下位1bitは捨てうる  
   wire [22:0] my;
   assign my = m_gap[23:1];
   
@@ -4153,8 +4157,16 @@ module fsqrt(
 
   wire [31:0] x_sqrt_inv;
   assign x_sqrt_inv = {sx, ey, my};
+
+  logic [31:0] tmp;
   
 // x*x^(-1/2)=x^1/2　　
-  fmul u1(x, x_sqrt_inv, y);
+  fmul u1(x, tmp, y);
+
+always @(posedge clk) begin
+    three_reg <= three;
+    cube_reg <= cube;
+    tmp <= x_sqrt_inv;
+end
   
 endmodule

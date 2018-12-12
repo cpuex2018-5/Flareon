@@ -104,10 +104,12 @@ assign e_imm_u = {b_rdata[31:12],12'd0};
 assign e_imm_b = b_rdata[31]?{19'd524287, b_rdata[31],b_rdata[7],b_rdata[30:25],b_rdata[11:8],1'b0}:{19'd0, b_rdata[31],b_rdata[7],b_rdata[30:25],b_rdata[11:8],1'b0};
 assign e_imm_j = b_rdata[31]?{11'd2047,b_rdata[31],b_rdata[19:12],b_rdata[20],b_rdata[30:21],1'b0}:{11'd0, b_rdata[31],b_rdata[19:12],b_rdata[20],b_rdata[30:21],1'b0};
 
-fadd fadd(.x1(freg_rs1),
+fadd fadd(.clk(clk),
+          .x1(freg_rs1),
           .x2(freg_rs2),
           .y(fadd_y));
-fsub fsub(.x1(freg_rs1),
+fsub fsub(.clk(clk),
+          .x1(freg_rs1),
           .x2(freg_rs2),
           .y(fsub_y));
 fmul fmul(.x1(freg_rs1),
@@ -133,7 +135,8 @@ fneg fneg(.x(freg_rs1),
           .y(fneg_y));
 fabs fabs(.x(freg_rs1),
           .y(fabs_y));
-finv finv(.x(freg_rs1),
+finv finv(.clk(clk),
+          .x(freg_rs1),
           .y(finv_y));
           
 initial begin
@@ -172,11 +175,8 @@ always @(posedge clk) begin
     end else if (main_stage) begin
         m_we <= 0;
         if (fetch_stage) begin
-            case(e_opcode)
-                LOAD_FP: f_registers[e_rd] <= m_r_data;
-                OP_LOAD: e_registers[e_rd] <= m_r_data;
-                default: begin e_registers[e_rd] <= reg_rd; f_registers[e_rd] <= freg_rd; end
-            endcase
+            e_registers[e_rd] <= reg_rd;
+            f_registers[e_rd] <= freg_rd;
 
             fetch_stage <= 0;
             set_stage <= 1;
@@ -192,14 +192,15 @@ always @(posedge clk) begin
             set_stage <= 0;
 
             case(e_opcode)
-                OP_LOAD:  exe_remain <= 1; //load
-                OP_STORE: exe_remain <= 1; //store
-                LOAD_FP:  exe_remain <= 1; //flw
-                STORE_FP: exe_remain <= 1; //fsw
+                LOAD_FP: exe_remain <= 2;
+                OP_LOAD: exe_remain <= 2;
                 OP_FP: begin //float
                     case(e_funct7)
-                        7'b0001100: exe_remain <= 2; //fdiv
-                        7'b0101100: exe_remain <= 2; //fsqrt
+                        7'b0000000: exe_remain <= 2; //fadd
+                        7'b0000100: exe_remain <= 2; //fsub
+                        7'b0001100: exe_remain <= 3; //fdiv
+                        7'b0101100: exe_remain <= 3; //fsqrt
+                        7'b0010000: if (e_funct == 3'b011) exe_remain <= 2; else exe_remain <= 1; //finv
                         default: exe_remain <= 1;
                     endcase
                 end
@@ -265,8 +266,8 @@ always @(posedge clk) begin
             end
             else if (e_opcode == OP_FP) begin
                 case(e_funct7)
-                    7'b0000000: freg_rd <= fadd_y;                       //fadd
-                    7'b0000100: freg_rd <= fsub_y;                       //fsub
+                    7'b0000000: if (exe_remain == 1) freg_rd <= fadd_y;  //fadd
+                    7'b0000100: if (exe_remain == 1) freg_rd <= fsub_y;  //fsub
                     7'b0001000: freg_rd <= fmul_y;                       //fmul
                     7'b0001100: if (exe_remain == 1) freg_rd <= fdiv_y;  //fdiv
                     7'b0101100: if (exe_remain == 1) freg_rd <= fsqrt_y; //fsqrt
@@ -283,7 +284,7 @@ always @(posedge clk) begin
                                         3'b000: freg_rd <= freg_rs1; //fmv
                                         3'b001: freg_rd <= fneg_y;   //fneg
                                         3'b010: freg_rd <= fabs_y;   //fabs
-                                        3'b011: freg_rd <= finv_y;   //finv
+                                        3'b011: if (exe_remain == 1) freg_rd <= finv_y;   //finv
                                         default: freg_rd <= finv_y;
                                     endcase
                                 end
@@ -400,6 +401,9 @@ always @(posedge clk) begin
             end
         end
         if (out_stage) begin
+            if (e_opcode == LOAD_FP) freg_rd <= m_r_data;
+            if (e_opcode == OP_LOAD) reg_rd  <= m_r_data;
+
             out_stage <= 0;
             fetch_stage <= 1;
 

@@ -2,6 +2,7 @@
 
 
 module fsub(
+  input clk, 
   input wire [31:0] x1,
   input wire [31:0] x2,
   output wire [31:0] y);
@@ -11,7 +12,7 @@ module fsub(
   assign s2=~x2[31];
   assign em2=x2[30:0];
   
-  fadd u1(x1,{s2,em2},y);
+  fadd u1(clk,x1,{s2,em2},y);
   
 endmodule   
    
