@@ -3,25 +3,20 @@
 _min_caml_start: # main entry point
 	li	gp, 92	# initialize gp
 #	main program starts
-	addi	sp, sp, -8
-	sw	ra, 4(sp)
-	sw	fp, 0(sp)
-	addi	fp, sp, 8
+	addi	sp, sp, -4
+	sw	ra, 0(sp)
 	li	a0, 21600
 	li	a1, 337500
 	call	gcd_7
 	call	min_caml_print_int
-	lw	ra, 4(sp)
-	lw	fp, 0(sp)
-	addi	sp, sp, 8
+	lw	ra, 0(sp)
+	addi	sp, sp, 4
 #	main program ends
 end:
 	b	end
 gcd_7:
-	addi	sp, sp, -8
-	sw	ra, 4(sp)
-	sw	fp, 0(sp)
-	addi	fp, sp, 8
+	addi	sp, sp, -4
+	sw	ra, 0(sp)
 	bne	a0, zero, beq_else_17
 	mv	a0, a1
 	b	gcd_7_ret
@@ -32,12 +27,11 @@ beq_else_17:
 	b	gcd_7_ret
 ble_else_18:
 	sub	a0, a0, a1
-	mv	t5, a1
+	mv	t4, a1
 	mv	a1, a0
-	mv	a0, t5
+	mv	a0, t4
 	call	gcd_7
 gcd_7_ret:
-	lw	ra, 4(sp)
-	lw	fp, 0(sp)
-	addi	sp, sp, 8
+	lw	ra, 0(sp)
+	addi	sp, sp, 4
 	jr	ra
