@@ -1,4 +1,4 @@
-OBJS=fadd.o fsub.o futil.o util.o fmul.o fsqrt.o finv.o fdiv.o ftest.o
+OBJS=fadd_new.o fsub.o futil.o util.o fmul.o fsqrt.o finv.o fdiv.o ftest.o
 SRCS=$(OBJS:%.o=%.cpp)
 
 CXXFLAGS=-Wall -g -std=c++11
