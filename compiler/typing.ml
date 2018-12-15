@@ -164,6 +164,7 @@ let rec g env e =
 
 let f e =
   extenv := M.empty;
+  extenv := M.add "xor"     (Type.Fun([Bool; Bool], Bool)) !extenv;
   extenv := M.add "sin"     (Type.Fun([Float], Float)) !extenv;
   extenv := M.add "cos"     (Type.Fun([Float], Float)) !extenv;
   extenv := M.add "atan"    (Type.Fun([Float], Float)) !extenv;
