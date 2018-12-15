@@ -13,7 +13,7 @@ _min_caml_start: # main entry point
 	sw	a0, 0(sp)
 	fsw	fa0, 4(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 60
 	li	a2, 0
 	li	a3, 0
@@ -42,22 +42,22 @@ _min_caml_start: # main entry point
 	flw	fa0, 4(sp)
 	sw	a0, 8(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 12(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 16(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 1
 	fli	fa0, l_8737
 	sw	a0, 20(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 50
 	li	a2, 1
 	li	a3, -1
@@ -84,7 +84,7 @@ _min_caml_start: # main entry point
 	flw	fa0, 4(sp)
 	sw	a0, 40(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 1
 	li	a2, 0
 	sw	a0, 44(sp)
@@ -95,12 +95,12 @@ _min_caml_start: # main entry point
 	fli	fa0, l_8653
 	sw	a0, 48(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 52(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 1
 	li	a2, 0
 	sw	a0, 56(sp)
@@ -111,22 +111,22 @@ _min_caml_start: # main entry point
 	flw	fa0, 4(sp)
 	sw	a0, 60(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 64(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 68(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 72(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 2
 	li	a2, 0
 	sw	a0, 76(sp)
@@ -143,42 +143,42 @@ _min_caml_start: # main entry point
 	flw	fa0, 4(sp)
 	sw	a0, 84(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 88(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 92(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 96(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 100(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 104(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 108(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 0
 	flw	fa0, 4(sp)
 	sw	a0, 112(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	li	a0, 0
 	sw	a1, 116(sp)
@@ -201,12 +201,12 @@ _min_caml_start: # main entry point
 	flw	fa0, 4(sp)
 	sw	a0, 120(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 3
 	flw	fa0, 4(sp)
 	sw	a0, 124(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	li	a1, 60
 	lw	a2, 124(sp)
 	sw	a0, 128(sp)
@@ -222,7 +222,7 @@ _min_caml_start: # main entry point
 	flw	fa0, 4(sp)
 	sw	a1, 132(sp)
 	mv	a0, a2
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	li	a0, 0
 	sw	a1, 136(sp)
@@ -1250,7 +1250,7 @@ beq_else_10493:
 	sw	a0, 20(sp)
 	fsw	fa0, 24(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	sw	a0, 28(sp)
 	call	min_caml_read_float
 	lw	a0, 28(sp)
@@ -1264,7 +1264,7 @@ beq_else_10493:
 	li	a1, 3
 	flw	fa0, 24(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	sw	a0, 32(sp)
 	call	min_caml_read_float
 	lw	a0, 32(sp)
@@ -1283,7 +1283,7 @@ beq_else_10493:
 	sw	a0, 36(sp)
 	mv	a0, a1
 	fmv	fa0, fa1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	sw	a0, 40(sp)
 	call	min_caml_read_float
 	lw	a0, 40(sp)
@@ -1294,7 +1294,7 @@ beq_else_10493:
 	li	a1, 3
 	flw	fa0, 24(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	sw	a0, 44(sp)
 	call	min_caml_read_float
 	lw	a0, 44(sp)
@@ -1308,7 +1308,7 @@ beq_else_10493:
 	li	a1, 3
 	flw	fa0, 24(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 20(sp)
 	bne	a1, zero, beq_else_10494
 	b	beq_cont_10495
@@ -1344,7 +1344,7 @@ beq_cont_10497:
 	sw	a2, 56(sp)
 	sw	a0, 48(sp)
 	mv	a0, a3
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, gp
 	addi	gp, gp, 44
 	sw	a0, 40(a1)
@@ -2364,7 +2364,7 @@ setup_rect_table_2686:
 	fsw	fa0, 4(sp)
 	sw	a0, 8(sp)
 	mv	a0, a2
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 8(sp)
 	flw	fa0, 0(a1)
 	flw	fa1, 4(sp)
@@ -2449,7 +2449,7 @@ setup_surface_table_2689:
 	sw	a1, 4(sp)
 	sw	a0, 8(sp)
 	mv	a0, a2
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 8(sp)
 	flw	fa0, 0(a1)
 	lw	a2, 4(sp)
@@ -2499,7 +2499,7 @@ setup_second_table_2692:
 	sw	a1, 4(sp)
 	sw	a0, 8(sp)
 	mv	a0, a2
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 8(sp)
 	flw	fa0, 0(a1)
 	flw	fa1, 4(a1)
@@ -5571,7 +5571,7 @@ create_float5x3array_2875:
 	li	a0, 3
 	fli	fa0, l_8282
 	fsw	fa0, 0(sp)
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	li	a0, 5
 	call	min_caml_create_array
@@ -5579,22 +5579,22 @@ create_float5x3array_2875:
 	flw	fa0, 0(sp)
 	sw	a0, 4(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 4(sp)
 	sw	a0, 4(a1)
 	li	a0, 3
 	flw	fa0, 0(sp)
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 4(sp)
 	sw	a0, 8(a1)
 	li	a0, 3
 	flw	fa0, 0(sp)
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 4(sp)
 	sw	a0, 12(a1)
 	li	a0, 3
 	flw	fa0, 0(sp)
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	lw	a1, 4(sp)
 	sw	a0, 16(a1)
 	mv	a0, a1
@@ -5607,7 +5607,7 @@ create_pixel_2877:
 	sw	ra, 28(sp)
 	li	a0, 3
 	fli	fa0, l_8282
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	sw	a0, 0(sp)
 	call	create_float5x3array_2875
 	li	a1, 5
@@ -5961,7 +5961,7 @@ create_dirvec_elements_2908:
 	sw	a1, 12(sp)
 	sw	a2, 16(sp)
 	mv	a0, a3
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 16(sp)
 	lw	a2, 0(a0)
@@ -5985,7 +5985,7 @@ create_dirvec_elements_2908:
 	flw	fa0, 4(sp)
 	sw	a0, 24(sp)
 	mv	a0, a1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 16(sp)
 	lw	a0, 0(a0)
@@ -6029,7 +6029,7 @@ create_dirvecs_2911:
 	sw	a4, 20(sp)
 	sw	a1, 24(sp)
 	mv	a0, a5
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 24(sp)
 	lw	a2, 0(a0)
@@ -6055,7 +6055,7 @@ create_dirvecs_2911:
 	flw	fa0, 8(sp)
 	sw	a0, 32(sp)
 	mv	a0, a2
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 24(sp)
 	lw	a0, 0(a0)
@@ -6223,7 +6223,7 @@ setup_rect_reflection_2927:
 	sw	a4, 52(sp)
 	mv	a0, s1
 	fmv	fa0, fa5
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 52(sp)
 	lw	a2, 0(a0)
@@ -6275,7 +6275,7 @@ setup_rect_reflection_2927:
 	fsw	fa1, 72(sp)
 	mv	a0, a6
 	fmv	fa0, fa2
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 52(sp)
 	lw	a2, 0(a0)
@@ -6328,7 +6328,7 @@ setup_rect_reflection_2927:
 	fsw	fa1, 92(sp)
 	mv	a0, a4
 	fmv	fa0, fa2
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 52(sp)
 	lw	a2, 0(a0)
@@ -6428,7 +6428,7 @@ setup_surface_reflection_2930:
 	fsw	fa3, 40(sp)
 	fsw	fa2, 44(sp)
 	fmv	fa0, fa1
-	call	min_caml_create_array
+	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 24(sp)
 	lw	a2, 0(a0)
