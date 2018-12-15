@@ -97,8 +97,10 @@ class BinGen {
         // |imm|がラベルの場合は対応する値を返し、即値ならstoiして返す　
         uint32_t MyStoi(std::string imm);
 
-        // 浮動小数の即値ラベルをさす|label|を具体的な即値に変換する
-        uint32_t SolveImmLabel(std::string label);
+        // コード領域上のラベルをさす|label|を具体的な即値に変換する
+        uint32_t SolveLabel(std::string label);
+        // データ領域上のラベルをさす|label|を具体的な即値に変換する
+        uint32_t SolveDataLabel(std::string label);
 
         // Number of instructions read so far
         int nline_ = 0;

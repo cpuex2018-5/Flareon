@@ -11,3 +11,16 @@
 * デフォルトでのinlineの深さを15にした
 * `Asm.t` から `IfFEq`, `IfFLE` をなくして `KNormal.t` の時点で`fle`,`feq`の結果とboolとの比較に持ち込むようにした。
     * この結果、-inline=15だと3303616314, -inline=20だと3189324226になって少しだけ縮まった。
+
+## 12/15
+* global.mlで定義される変数をヒープに移すことをし始めた
+* アセンブラに`lda` (load data address) というpseudo-instructionを追加:
+
+    lda rd, symbol -> lui rd, symbol[31:12]
+                      addi rd, rd, symbol[11:0]
+
+    * `la` と異なり1命令目が`lui`
+    * 主にヒープに置いているglobal変数のアクセス時に使う
+
+* `create_float_array` を作るのを忘れていたので作った(今まで正常に動いていたのは奇跡っぽい)
+* `create_array`, `create_float_array` を少し短くした

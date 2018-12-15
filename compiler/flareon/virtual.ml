@@ -152,7 +152,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
        Let((offset, Type.Int), Sll(y, C(2)),
            Ans(Sw(z, x, V(offset))))
      | _ -> assert false)
-  | Closure.ExtArray(Id.L(x)) -> Ans(SetL(Id.L("min_caml_" ^ x)))
+  | Closure.ExtArray(Id.L(x)) -> Ans(SetDL(Id.L("min_caml_" ^ x)))
 
 (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
 let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.formal_fv = zts; Closure.body = e } =

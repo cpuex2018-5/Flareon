@@ -164,11 +164,29 @@ let rec g env e =
 
 let f e =
   extenv := M.empty;
-  extenv := M.add "sin" (Type.Fun([Float], Float)) !extenv;
-  extenv := M.add "cos" (Type.Fun([Float], Float)) !extenv;
-  extenv := M.add "sqrt" (Type.Fun([Float], Float)) !extenv;
-  extenv := M.add "abs_float" (Type.Fun([Float], Float)) !extenv;
-  extenv := M.add "create_array" (Type.Fun([Int; Int], Array(Int))) !extenv;
+  extenv := M.add "xor"     (Type.Fun([Bool; Bool], Bool)) !extenv;
+  extenv := M.add "sin"     (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "cos"     (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "atan"    (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "sqrt"    (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "fsqr"    (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "fhalf"   (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "fneg"    (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "fabs"    (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "floor"   (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "fiszero" (Type.Fun([Float], Bool)) !extenv;
+  extenv := M.add "fispos"  (Type.Fun([Float], Bool)) !extenv;
+  extenv := M.add "fisneg"  (Type.Fun([Float], Bool)) !extenv;
+  extenv := M.add "fless"   (Type.Fun([Float; Float], Bool)) !extenv;
+  extenv := M.add "abs_float"     (Type.Fun([Float], Float)) !extenv;
+  extenv := M.add "create_array"  (Type.Fun([Int; Int], Array(Int))) !extenv;
+  extenv := M.add "float_of_int"  (Type.Fun([Int], Float)) !extenv;
+  extenv := M.add "int_of_float"  (Type.Fun([Float], Int)) !extenv;
+  extenv := M.add "print_newline" (Type.Fun([Unit], Unit)) !extenv;
+  extenv := M.add "print_int"     (Type.Fun([Int], Unit)) !extenv;
+  extenv := M.add "print_char"    (Type.Fun([Int], Unit)) !extenv;
+  extenv := M.add "read_int"      (Type.Fun([Unit], Int)) !extenv;
+  extenv := M.add "read_float"    (Type.Fun([Unit], Float)) !extenv;
 (*
   (match deref_typ (g M.empty e) with
   | Type.Unit -> ()

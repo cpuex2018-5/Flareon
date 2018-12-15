@@ -17,7 +17,7 @@
 (* let create_array = Array.make in *)
 
 (* オブジェクトの個数 *)
-let n_objects = create_array 1 0 in
+(* let n_objects = create_array 1 0 in *)
 
 (* オブジェクトのデータを入れるベクトル（最大60個）*)
 let objects =
@@ -105,8 +105,8 @@ let n_reflections = create_array 1 0 in
 
 (*
 (*MINCAML*) let true = 1 in
-(*MINCAML*) let false = 0 in *)
-(*MINCAML*) let rec xor x y = if x then not y else y in
+(*MINCAML*) let false = 0 in
+(*MINCAML*) let rec xor x y = if x then not y else y in *)
 
 (******************************************************************************
    ユーティリティー

@@ -135,6 +135,7 @@ let rec fv = function
   | LetTuple(xts, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xts)))
   | Put(x, y, z) -> S.of_list [x; y; z]
 
+let is_verbose = ref false
 let toplevel : fundef list ref = ref []
 
 let rec g env known e =
@@ -177,8 +178,9 @@ let rec g env known e =
         (known', e1')
       else
         (* 駄目だったら状態(toplevelの値)を戻して、クロージャ変換をやり直す *)
-        (Format.eprintf "free variable(s) %s found in function %s@." (Id.pp_list (S.elements zs)) x;
-         Format.eprintf "function %s cannot be directly applied in fact@." x;
+        (if !is_verbose then
+           (Format.eprintf "free variable(s) [%s] found in function %s@." (Id.pp_list (S.elements zs)) x;
+            Format.eprintf "function %s cannot be directly applied in fact@." x);
          toplevel := toplevel_backup;
          let e1' = g (M.add_list yts env') known e1 in
          known, e1') in
@@ -189,10 +191,12 @@ let rec g env known e =
     if S.mem x (fv e2') then (* xが変数としてe2'に出現するか *)
       MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2') (* 出現していたら削除しない *)
     else
-      (Format.eprintf "eliminating closure(s) %s@." x;
+      (if !is_verbose then
+         Format.eprintf "eliminating closure(s) %s@." x;
        e2') (* 出現しなければMakeClsを削除 *)
   | KNormal.App(x, ys) when S.mem x known ->
-    Format.eprintf "directly applying %s@." x;
+    if !is_verbose then
+      Format.eprintf "directly applying %s@." x;
     AppDir(Id.L(x), ys)
   | KNormal.App(f, xs) -> AppCls(f, xs)
   | KNormal.Tuple(xs) -> Tuple(xs)
@@ -202,7 +206,8 @@ let rec g env known e =
   | KNormal.ExtArray(x) -> ExtArray(Id.L(x))
   | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys)
 
-let f e =
+let f b e =
+  is_verbose := b;
   toplevel := [];
   let e' = g M.empty S.empty e in
   Prog(List.rev !toplevel, e')
