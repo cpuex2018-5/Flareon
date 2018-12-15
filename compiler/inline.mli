@@ -1,2 +1,2 @@
 val threshold : int ref
-val f : KNormal.t -> KNormal.t
+val f : bool -> KNormal.t -> KNormal.t

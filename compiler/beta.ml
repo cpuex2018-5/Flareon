@@ -1,5 +1,7 @@
 open KNormal
 
+let is_verbose = ref false
+
 let find x env = try M.find x env with Not_found -> x
 
 let rec g env = function
@@ -25,7 +27,8 @@ let rec g env = function
   | Let((x, t), e1, e2) ->
     (match g env e1 with
      | Var(y) ->
-       Format.eprintf "beta-reducing %s = %s@." x y;
+       if !is_verbose then
+         Format.eprintf "beta-reducing %s = %s@." x y;
        g (M.add x y env) e2
      | e1' ->
        let e2' = g env e2 in
@@ -41,4 +44,4 @@ let rec g env = function
   | ExtArray(x) -> ExtArray(x)
   | ExtFunApp(x, ys) -> ExtFunApp(x, List.map (fun y -> find y env) ys)
 
-let f = g M.empty
+let f b = is_verbose := b; g M.empty

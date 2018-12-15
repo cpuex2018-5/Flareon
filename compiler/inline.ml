@@ -1,5 +1,7 @@
 open KNormal
 
+let is_verbose = ref false
+
 (* インライン展開する関数の最大サイズ (caml2html: inline_threshold) *)
 let threshold = ref 15 (* Mainで-inlineオプションによりセットされる *)
 
@@ -18,7 +20,8 @@ let rec g env = function (* インライン展開ルーチン本体 (caml2html: 
     LetRec({ name = (x, t); args = yts; body = g env e1}, g env e2)
   | App(x, ys) when M.mem x env -> (* 関数適用の場合 (caml2html: inline_app) *)
     let (zs, e) = M.find x env in
-    Format.eprintf "inlining %s@." x;
+    if !is_verbose then
+      Format.eprintf "inlining %s@." x;
     let env' =
       List.fold_left2
         (fun env' (z, t) y -> M.add z y env')
@@ -29,4 +32,4 @@ let rec g env = function (* インライン展開ルーチン本体 (caml2html: 
   | LetTuple(xts, y, e) -> LetTuple(xts, y, g env e)
   | e -> e
 
-let f e = g M.empty e
+let f b e = is_verbose := b; g M.empty e
