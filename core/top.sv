@@ -175,14 +175,16 @@ always @(posedge clk) begin
     end else if (main_stage) begin
         m_we <= 0;
         if (fetch_stage) begin
-            e_registers[e_rd] <= reg_rd;
-            f_registers[e_rd] <= freg_rd;
+            if (global_counter != 0) begin
+                e_registers[e_rd] <= reg_rd;
+                f_registers[e_rd] <= freg_rd;
+            end
 
             fetch_stage <= 0;
             set_stage <= 1;
             global_counter <= global_counter + 1;
         end
-        if (set_stage) begin
+        else if (set_stage) begin
             reg_rs1 <= e_registers[e_rs1];
             reg_rs2 <= e_registers[e_rs2];
             reg_rd <= e_registers[e_rd];
@@ -207,7 +209,7 @@ always @(posedge clk) begin
                 default: exe_remain <= 1;
             endcase
         end
-        if (exe_remain > 0) begin
+        else if (exe_remain > 0) begin
             if (e_opcode != OP_INOUT) begin
                 exe_remain <= exe_remain - 1;
                 if (exe_remain == 1) begin
@@ -288,7 +290,7 @@ always @(posedge clk) begin
                                         default: freg_rd <= finv_y;
                                     endcase
                                 end
-                    default: freg_rd <= fadd_y;
+                    default: freg_rd <= freg_rd;
                 endcase
             end
             else if (e_opcode == OP_INOUT) begin //inout
@@ -400,7 +402,7 @@ always @(posedge clk) begin
                 end
             end
         end
-        if (out_stage) begin
+        else if (out_stage) begin
             if (e_opcode == LOAD_FP) freg_rd <= m_r_data;
             if (e_opcode == OP_LOAD) reg_rd  <= m_r_data;
 

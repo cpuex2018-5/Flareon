@@ -10,8 +10,8 @@ module fsub(
     wire [7:0] e1, e2;
     wire [22:0] f1, f2;
 
-    assign {s1, e1, f1} = (x1[30:0] < x2[30:0])?x2:x1;
-    assign {s2, e2, f2} = (x1[30:0] < x2[30:0])?{~x1[31],x1[30:0]}:{~x2[31],x2[30:0]};
+    assign {s1, e1, f1} = (x1[30:0] < x2[30:0])?{~x2[31],x2[30:0]}:x1;
+    assign {s2, e2, f2} = (x1[30:0] < x2[30:0])?x1:{~x2[31],x2[30:0]};
 
     wire [7:0] e12;
     wire [4:0] e3;
@@ -79,7 +79,11 @@ module fsub(
                 (tmp_f3[1] == 1)?tmp_f3 << 22:
                 (tmp_f3[0] == 1)?tmp_f3 << 23:0;
 
-    assign y = {tmp_s1,e4,f4}; 
+    logic [7:0] e5;
+
+    assign e5 = (e4 > tmp_e1+1)?0:e4;
+
+    assign y = {tmp_s1,e5,f4}; 
 
 always @(posedge clk) begin
     tmp_f3 <= f3;

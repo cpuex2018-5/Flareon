@@ -18,7 +18,7 @@ module fadd(
     wire [24:0] f3;
     assign e12 = e1 - e2;
     assign e3 = e12>30?30:e12;
-    assign f3 = (s1==s2)?({2'b01,f1}+({2'b01,f2} >> e3)):({2'b01,f1}-({2'b01,f2}>>e3));
+    assign f3 = (s1==s2)?({2'b01,f1}+({2'b01,f2}>>e3)):({2'b01,f1}-({2'b01,f2}>>e3));
 
     wire [7:0] e4;
     wire [22:0] f4;
@@ -78,10 +78,12 @@ module fadd(
                 (tmp_f3[2] == 1)?tmp_f3 << 21:
                 (tmp_f3[1] == 1)?tmp_f3 << 22:
                 (tmp_f3[0] == 1)?tmp_f3 << 23:0;
-    wire ss;
-    assign ss = (tmp_f3==0?0:tmp_s1);
+    
+    logic [7:0] e5;
 
-    assign y = {ss,e4,f4}; 
+    assign e5 = (e4 > tmp_e1+1)?0:e4;
+
+    assign y = {tmp_s1,e5,f4}; 
 
 always @(posedge clk) begin
     tmp_f3 <= f3;
@@ -90,3 +92,4 @@ always @(posedge clk) begin
 end
          
 endmodule   
+
