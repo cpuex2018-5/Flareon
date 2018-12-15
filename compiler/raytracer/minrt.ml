@@ -17,7 +17,7 @@
 (* let create_array = Array.make in *)
 
 (* オブジェクトの個数 *)
-let n_objects = create_array 1 0 in
+(* let n_objects = create_array 1 0 in *)
 
 (* オブジェクトのデータを入れるベクトル（最大60個）*)
 let objects =

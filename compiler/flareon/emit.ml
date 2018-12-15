@@ -55,10 +55,9 @@ and g' buf e =
   match e with
   | NonTail(_), Nop -> ()
   | NonTail(x), Li(i) -> Printf.bprintf buf "\tli\t%s, %d\n" (reg x) i
-  | NonTail(x), FLi(Id.L(l)) ->
-    Printf.bprintf buf "\tfli\t%s, %s\n" (reg x) l
-  | NonTail(x), SetL(Id.L(y)) ->
-    Printf.bprintf buf "\tla\t%s, %s\n" (reg x) y
+  | NonTail(x), FLi(Id.L(l)) -> Printf.bprintf buf "\tfli\t%s, %s\n" (reg x) l
+  | NonTail(x), SetL(Id.L(y)) -> Printf.bprintf buf "\tla\t%s, %s\n" (reg x) y
+  | NonTail(x), SetDL(Id.L(y)) -> Printf.bprintf buf "\tlda\t%s, %s\n" (reg x) y
   | NonTail(x), Mv(y) when x = y -> ()
   | NonTail(x), Mv(y) -> Printf.bprintf buf "\tmv\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), Not(y) -> Printf.bprintf buf "\txori\t%s, %s, 1\t# boolean not\n" (reg x) (reg y)
@@ -122,7 +121,7 @@ and g' buf e =
   (* 末尾だったら計算結果を%a0か%fa0にセットしてリターン (caml2html: emit_tailret) *)
   | Tail, (Nop | Sw _ | Fsw _ | Comment _ | Save _ as exp) ->
     g' buf (NonTail(Id.gentmp Type.Unit), exp);
-  | Tail, (Li _ | SetL _ | Mv _ | Neg _ | Not _ | Xor _ | Add _ | Sub _ | Mul _ | Div _ | Sll _ | Lw _ as exp) ->
+  | Tail, (Li _ | SetL _ | SetDL _ | Mv _ | Neg _ | Not _ | Xor _ | Add _ | Sub _ | Mul _ | Div _ | Sll _ | Lw _ as exp) ->
     g' buf (NonTail(regs.(0)), exp);
   | Tail, (FLi _ | FMv _ | FNeg _ | FAdd _ | FSub _ | FMul _ | FDiv _ | FEq _ | FLE _ | FAbs _ | FSqrt _ | Flw _ as exp) ->
     g' buf (NonTail(fregs.(0)), exp);
@@ -314,7 +313,7 @@ let f oc (Prog(data, fundefs, e)) =
   Printf.fprintf oc "\t.text\n";
   Printf.fprintf oc "\t.globl _min_caml_start\n";
   Printf.fprintf oc "_min_caml_start: # main entry point\n";
-  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" ((List.length data + 23) * 4);
+  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" ((List.length data + 24) * 4);
   Printf.fprintf oc "#\tmain program starts\n";
   stackset := S.empty;
   stackmap := [];
@@ -337,3 +336,5 @@ let f oc (Prog(data, fundefs, e)) =
           Printf.fprintf oc "%s:\t# %f\n" x d;
           Printf.fprintf oc "\t.word\t%ld\n" (castToInt d))
        data);
+  Printf.fprintf oc "min_caml_n_objects:\n";
+  Printf.fprintf oc "\t.word\t%ld\n" Int32.zero

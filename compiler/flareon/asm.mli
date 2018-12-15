@@ -7,6 +7,7 @@ and exp =
   | Li of int
   | FLi of Id.l
   | SetL of Id.l
+  | SetDL of Id.l
   | Mv of Id.t
   | Not of Id.t
   | Neg of Id.t
