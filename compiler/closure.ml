@@ -191,12 +191,12 @@ let rec g env known e =
     if S.mem x (fv e2') then (* xが変数としてe2'に出現するか *)
       MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2') (* 出現していたら削除しない *)
     else
-      (if !is_verbose then
-         Format.eprintf "eliminating closure(s) %s@." x;
-       e2') (* 出現しなければMakeClsを削除 *)
+      ((* if !is_verbose then
+          Format.eprintf "eliminating closure(s) %s@." x; *)
+        e2') (* 出現しなければMakeClsを削除 *)
   | KNormal.App(x, ys) when S.mem x known ->
-    if !is_verbose then
-      Format.eprintf "directly applying %s@." x;
+    (* if !is_verbose then
+       Format.eprintf "directly applying %s@." x; *)
     AppDir(Id.L(x), ys)
   | KNormal.App(f, xs) -> AppCls(f, xs)
   | KNormal.Tuple(xs) -> Tuple(xs)
