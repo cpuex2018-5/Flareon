@@ -42,11 +42,12 @@ void BinGen::ReadLabels(std::string input) {
     if (data_mode_) {
         if (mnemo.back() != ':') {
             assert(mnemo == ".word");
+            ndata_++;
             return;
         }
         mnemo.pop_back();
         // std::cerr << "[INFO] new label " << mnemo << " registered at " << ndata_ * 4 << std::endl;
-        data_map_[mnemo] = ndata_++;
+        data_map_[mnemo] = ndata_;
         return;
     }
 
