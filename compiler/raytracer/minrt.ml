@@ -14,8 +14,6 @@
 
 (********************** from globals.ml **********************)
 (**************** グローバル変数の宣言 ****************)
-(* let create_array = Array.make in *)
-
 (* オブジェクトの個数 *)
 (* let n_objects = create_array 1 0 in *)
 
@@ -31,7 +29,7 @@ let viewpoint = create_array 3 0.0 in
 (* 光源方向ベクトル (単位ベクトル) *)
 let light = create_array 3 0.0 in
 (* 鏡面ハイライト強度 (標準=255) *)
-let beam = create_array 1 255.0 in
+(* let beam = create_array 1 255.0 in *)
 (* AND ネットワークを保持 *)
 let and_net = create_array 50 (create_array 1 (-1)) in
 (* OR ネットワークを保持 *)
@@ -39,15 +37,15 @@ let or_net = create_array 1 (create_array 1 (and_net.(0))) in
 
 (* 以下、交差判定ルーチンの返り値格納用 *)
 (* solver の交点 の t の値 *)
-let solver_dist = create_array 1 0.0 in
+(* let solver_dist = create_array 1 0.0 in *)
 (* 交点の直方体表面での方向 *)
-let intsec_rectside = create_array 1 0 in
+(* let intsec_rectside = create_array 1 0 in *)
 (* 発見した交点の最小の t *)
-let tmin = create_array 1 (1000000000.0) in
+(* let tmin = create_array 1 (1000000000.0) in *)
 (* 交点の座標 *)
 let intersection_point = create_array 3 0.0 in
 (* 衝突したオブジェクト番号 *)
-let intersected_object_id = create_array 1 0 in
+(* let intersected_object_id = create_array 1 0 in *)
 (* 法線ベクトル *)
 let nvector = create_array 3 0.0 in
 (* 交点の色 *)
@@ -63,7 +61,7 @@ let image_size = create_array 2 0 in
 (* 画像の中心 = 画像サイズの半分 *)
 let image_center = create_array 2 0 in
 (* 3次元上のピクセル間隔 *)
-let scan_pitch = create_array 1 0.0 in
+(* let scan_pitch = create_array 1 0.0 in *)
 
 (* judge_intersectionに与える光線始点 *)
 let startp = create_array 3 0.0 in
@@ -100,8 +98,7 @@ let reflections =
   create_array 180 (0, dummydv, 0.0) in
 
 (* reflectionsの有効な要素数 *)
-
-let n_reflections = create_array 1 0 in
+(* let n_reflections = create_array 1 0 in *)
 
 (*
 (*MINCAML*) let true = 1 in

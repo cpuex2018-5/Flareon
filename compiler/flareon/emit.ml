@@ -309,11 +309,25 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   Printf.fprintf oc "\tjr\tra\n"
 
 let f oc (Prog(data, fundefs, e)) =
+  let int_array =
+    [("n_objects", 1, 0);
+     ("intsec_rectside", 1, 0);
+     ("intersected_object_id", 1, 0);
+     ("n_reflections", 1, 0);
+    ] in
+  let float_array =
+    [ ("beam", 1, 255.0);
+      ("solver_dist", 1, 0.0);
+      ("tmin", 1, 1000000000.0);
+      ("scan_pitch", 1, 0.0);
+    ] in
+  let int_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
+  let float_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   Printf.fprintf oc "\t.globl _min_caml_start\n";
   Printf.fprintf oc "_min_caml_start: # main entry point\n";
-  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" ((List.length data + 24) * 4);
+  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" ((List.length data + int_global_size + float_global_size + 23) * 4);
   Printf.fprintf oc "#\tmain program starts\n";
   stackset := S.empty;
   stackmap := [];
@@ -336,5 +350,17 @@ let f oc (Prog(data, fundefs, e)) =
           Printf.fprintf oc "%s:\t# %f\n" x d;
           Printf.fprintf oc "\t.word\t%ld\n" (castToInt d))
        data);
-  Printf.fprintf oc "min_caml_n_objects:\n";
-  Printf.fprintf oc "\t.word\t%ld\n" Int32.zero
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int init);
+       done)
+    int_array;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%ld\n" (castToInt init);
+       done)
+    float_array
