@@ -338,13 +338,20 @@ let f oc (Prog(data, fundefs, e)) =
      ("screenz_dir", 3, 0.0);
      ("ptrace_dirvec", 3, 0.0);
     ] in
+  let nested_array =
+    [("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
+     (* ("and_net", 50, [-1]); *)
+    ]
+  in
   let int_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
   let float_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
+  let nested_global_size = List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 nested_array in
+  let global_size = List.length data + int_global_size + float_global_size + nested_global_size + 23 in
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   Printf.fprintf oc "\t.globl _min_caml_start\n";
   Printf.fprintf oc "_min_caml_start: # main entry point\n";
-  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" ((List.length data + int_global_size + float_global_size + 23) * 4);
+  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" (global_size * 4);
   Printf.fprintf oc "#\tmain program starts\n";
   stackset := S.empty;
   stackmap := [];
@@ -382,4 +389,15 @@ let f oc (Prog(data, fundefs, e)) =
        for i = 1 to len do
          Printf.fprintf oc "\t.word\t%ld\n" (castToInt init);
        done)
-    float_array
+    float_array;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t.%s_%d\n" str i;
+       done;
+       for i = 1 to len do
+         (Printf.fprintf oc ".%s_%d:\n" str i;
+          List.iter (fun v -> Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int v)) init);
+       done;
+    ) nested_array

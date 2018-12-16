@@ -18,9 +18,9 @@
 (* let n_objects = create_array 1 0 in *)
 
 (* オブジェクトのデータを入れるベクトル（最大60個）*)
-let objects =
-  let dummy = create_array 0 0.0 in
-  create_array 60 (0, 0, 0, 0, dummy, dummy, false, dummy, dummy, dummy, dummy) in
+(* let objects =
+   let dummy = create_array 0 0.0 in
+   create_array 60 (0, 0, 0, 0, dummy, dummy, false, dummy, dummy, dummy, dummy) in *)
 
 (* Screen の中心座標 *)
 (* let screen = create_array 3 0.0 in *)
