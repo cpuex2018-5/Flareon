@@ -42,6 +42,7 @@ and exp =
   | CallDir of Id.l * Id.t list * Id.t list
   | Save of Id.t * Id.t (* レジスタ変数の値をスタック変数へ保存 *)
   | Restore of Id.t (* スタック変数から値を復元 *)
+
 type fundef = { name : Id.l; args : Id.t list; fargs : Id.t list; body : t; ret : Type.t }
 type prog = Prog of (Id.l * float) list * fundef list * t
 type global = {
@@ -50,6 +51,12 @@ type global = {
   tuple_array  : (string * int * int list) list;
   sub_array    : (string * int * string) list;
 }
+
+val print_t : t -> unit
+val print_exp : exp -> unit
+val string_of_t : ?depth:int -> t -> string
+val string_of_exp : ?depth:int -> exp -> string
+val print_prog : prog -> unit
 
 val fletd : Id.t * exp * t -> t (* shorthand of Let for float *)
 val seq : exp * t -> t (* shorthand of Let for unit *)
@@ -69,6 +76,7 @@ val reg_tmp : Id.t
 val is_reg : Id.t -> bool
 
 val fv : t -> Id.t list
+val fv_exp : exp -> Id.t list
 val concat : t -> Id.t * Type.t -> t -> t
 
 val globals : global

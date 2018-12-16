@@ -48,6 +48,9 @@ let lexbuf outchan l = (* compile the buffer and put it to outchan (caml2html: m
   (* Closure.print_prog e; *)
   let e = Virtual.f e in
   let e = Simm.f e in
+  let e = Schedule.f Schedule.resource e in
+  print_endline "-----------Before RegAlloc.f-----------------";
+  Asm.print_prog e;
   let e = RegAlloc.f e in
   Emit.f outchan Asm.globals e
 
