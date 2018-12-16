@@ -203,7 +203,7 @@ BinGen::Inst BinGen::Convert(std::string input) {
     if (mnemo == ".word") {
         assert(data_mode_);
         assert(1 == arg.size());
-        if (data_map_.count(arg[0]) != 0) {
+        if (data_map_.count(arg[0]) > 0) {
             return Inst(0xffffffff, 0xffffffff, SolveDataLabel(arg[0]));
         }
         return Inst(0xffffffff, 0xffffffff, MyStoi(arg[0]));

@@ -310,43 +310,46 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   Printf.fprintf oc "\tjr\tra\n"
 
 let f oc (Prog(data, fundefs, e)) =
-  let int_array =
-    [("n_objects", 1, 0);
-     ("intsec_rectside", 1, 0);
-     ("intersected_object_id", 1, 0);
-     ("image_size", 2, 0);
-     ("image_center", 2, 0);
-     ("n_reflections", 1, 0);
-    ] in
-  let float_array =
-    [("screen", 3, 0.0);
-     ("viewpoint", 3, 0.0);
-     ("light", 3, 0.0);
-     ("beam", 1, 255.0);
-     ("solver_dist", 1, 0.0);
-     ("tmin", 1, 1000000000.0);
-     ("intersection_point", 3, 0.0);
-     ("nvector", 3, 0.0);
-     ("texture_color", 3, 0.0);
-     ("diffuse_ray", 3, 0.0);
-     ("rgb", 3, 0.0);
-     ("startp", 3, 0.0);
-     ("startp_fast", 3, 0.0);
-     ("scan_pitch", 1, 0.0);
-     ("screenx_dir", 3, 0.0);
-     ("screeny_dir", 3, 0.0);
-     ("screenz_dir", 3, 0.0);
-     ("ptrace_dirvec", 3, 0.0);
-    ] in
-  let nested_array =
-    [("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
-     (* ("and_net", 50, [-1]); *)
-    ]
-  in
-  let int_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
-  let float_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
-  let nested_global_size = List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 nested_array in
-  let global_size = List.length data + int_global_size + float_global_size + nested_global_size + 23 in
+  let int_array = [
+    ("n_objects", 1, 0);
+    (* ("and_net_1", 1, -1); *)
+    ("intsec_rectside", 1, 0);
+    ("intersected_object_id", 1, 0);
+    ("image_size", 2, 0);
+    ("image_center", 2, 0);
+    ("n_reflections", 1, 0);
+  ] in
+  let float_array = [
+    ("screen", 3, 0.0);
+    ("viewpoint", 3, 0.0);
+    ("light", 3, 0.0);
+    ("beam", 1, 255.0);
+    ("solver_dist", 1, 0.0);
+    ("tmin", 1, 1000000000.0);
+    ("intersection_point", 3, 0.0);
+    ("nvector", 3, 0.0);
+    ("texture_color", 3, 0.0);
+    ("diffuse_ray", 3, 0.0);
+    ("rgb", 3, 0.0);
+    ("startp", 3, 0.0);
+    ("startp_fast", 3, 0.0);
+    ("scan_pitch", 1, 0.0);
+    ("screenx_dir", 3, 0.0);
+    ("screeny_dir", 3, 0.0);
+    ("screenz_dir", 3, 0.0);
+    ("ptrace_dirvec", 3, 0.0);
+  ] in
+  let nested_array = [
+    (* ("and_net", 50, "min_caml_and_net_1"); *)
+  ] in
+  let tuple_array = [
+    ("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
+  ] in
+  let global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
+  let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
+  let global_size = global_size + List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 tuple_array in
+  let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 nested_array in
+  let global_size = global_size + List.length data + 23 in
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   Printf.fprintf oc "\t.globl _min_caml_start\n";
@@ -369,13 +372,13 @@ let f oc (Prog(data, fundefs, e)) =
   Printf.fprintf oc "end:\n";
   Printf.fprintf oc "\tb\tend\n";
   List.iter (fun fundef -> h oc fundef) fundefs;
+  Printf.fprintf oc "\t.data\n";
   if data <> [] then
-    (Printf.fprintf oc "\t.data\n";
-     List.iter
-       (fun (Id.L(x), d) ->
-          Printf.fprintf oc "%s:\t# %f\n" x d;
-          Printf.fprintf oc "\t.word\t%ld\n" (castToInt d))
-       data);
+    List.iter
+      (fun (Id.L(x), d) ->
+         Printf.fprintf oc "%s:\t# %f\n" x d;
+         Printf.fprintf oc "\t.word\t%ld\n" (castToInt d))
+      data;
   List.iter
     (fun (str, len, init) ->
        Printf.fprintf oc "min_caml_%s:\n" str;
@@ -394,10 +397,17 @@ let f oc (Prog(data, fundefs, e)) =
     (fun (str, len, init) ->
        Printf.fprintf oc "min_caml_%s:\n" str;
        for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%s\n" init;
+       done)
+    nested_array;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
          Printf.fprintf oc "\t.word\t.%s_%d\n" str i;
        done;
        for i = 1 to len do
          (Printf.fprintf oc ".%s_%d:\n" str i;
           List.iter (fun v -> Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int v)) init);
        done;
-    ) nested_array
+    ) tuple_array
