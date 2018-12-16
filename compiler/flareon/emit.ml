@@ -314,13 +314,29 @@ let f oc (Prog(data, fundefs, e)) =
     [("n_objects", 1, 0);
      ("intsec_rectside", 1, 0);
      ("intersected_object_id", 1, 0);
+     ("image_size", 2, 0);
+     ("image_center", 2, 0);
      ("n_reflections", 1, 0);
     ] in
   let float_array =
-    [("beam", 1, 255.0);
+    [("screen", 3, 0.0);
+     ("viewpoint", 3, 0.0);
+     ("light", 3, 0.0);
+     ("beam", 1, 255.0);
      ("solver_dist", 1, 0.0);
      ("tmin", 1, 1000000000.0);
+     ("intersection_point", 3, 0.0);
+     ("nvector", 3, 0.0);
+     ("texture_color", 3, 0.0);
+     ("diffuse_ray", 3, 0.0);
+     ("rgb", 3, 0.0);
+     ("startp", 3, 0.0);
+     ("startp_fast", 3, 0.0);
      ("scan_pitch", 1, 0.0);
+     ("screenx_dir", 3, 0.0);
+     ("screeny_dir", 3, 0.0);
+     ("screenz_dir", 3, 0.0);
+     ("ptrace_dirvec", 3, 0.0);
     ] in
   let int_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
   let float_global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
