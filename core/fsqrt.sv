@@ -9,7 +9,7 @@
 module fsqrt(
   input clk,
   input [31:0] x,
-  output [31:0] y);
+  output logic [31:0] y);
   
   wire sx;
   wire [7:0] ex;
@@ -4140,9 +4140,10 @@ module fsqrt(
 //小数点は23*2より、下から47bit目と46bit目の境目。
 //偶数(つまり指数部の最下位が0)の時は、割る4ゆえ49と48の境目になり、
 //奇数(つまり指数部の最下位が1)の時は、割る8ゆえ50と49の境目になる.
-  wire [50:0] b;
-  assign b = manx * cube_reg;
-  
+  wire [50:0] tmp_b;
+  assign tmp_b = manx * cube_reg;
+
+  logic [50:0] b;
 
 //小数点は上位2bit目と3bit目との間。結果は、01.hogeとなっているはず      
   wire [25:0] m_gap;
@@ -4159,14 +4160,18 @@ module fsqrt(
   assign x_sqrt_inv = {sx, ey, my};
 
   logic [31:0] tmp;
+
+  logic [31:0] tmp_y;
   
 // x*x^(-1/2)=x^1/2　　
-  fmul u1(x, tmp, y);
+  fmul u1(clk, x, tmp, tmp_y);
 
 always @(posedge clk) begin
     three_reg <= three;
     cube_reg <= cube;
     tmp <= x_sqrt_inv;
+    b <= tmp_b;
+    y <= tmp_y;
 end
   
 endmodule

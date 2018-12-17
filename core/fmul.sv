@@ -2,9 +2,10 @@
 
 
 module fmul(
+  input clk,
   input wire [31:0] x1,
   input wire [31:0] x2,
-  output wire [31:0] y);
+  output logic [31:0] y);
   
   wire s1;
   wire s2;
@@ -46,25 +47,30 @@ module fmul(
 //if zero_flag=1, returns e=0 (and m=0), which means 0. 
   wire zero_flag; 
   assign zero_flag= zero1||zero2 ;
-  
+
 //caluculations of m  
   wire [24:0] m1a;
   wire [24:0] m2a;    
   assign m1a={2'b01, m1};
   assign m2a={2'b01, m2};
 
+  logic [24:0] tmp_m1a;
+  logic [24:0] tmp_m2a;
+
 //pipe lineではここを工夫すべし。  
 //size can be changed if needed, like [49:0].  
   wire [48:0] mmul;
-  assign mmul=m1a*m2a;
+  assign mmul=tmp_m1a*tmp_m2a;
+
+  logic [48:0] tmp_mmul;
   
 //rise=1 means there's 桁上がり  
   wire rise;
-  assign rise=mmul[47];
+  assign rise=tmp_mmul[47];
 
 //丸めしない。切り捨てる。  
   wire [22:0] mout;
-  assign mout= rise? mmul[46:24] : mmul[45:23];
+  assign mout= rise? tmp_mmul[46:24] : tmp_mmul[45:23];
   
   wire [7:0] eouti;
   assign eouti = eout[7:0]+ 8'b01; 
@@ -74,9 +80,19 @@ module fmul(
   
   wire [22:0] my;
   assign my=zero_flag ? 23'b0: mout;
+
+  logic [31:0] tmp_y;
   
-  assign y ={sy, ey, my};    
-  
+  assign tmp_y = {sy, ey, my};    
+  //assign y = {sy, ey, my};    
+
+always @(posedge clk) begin
+    y <= tmp_y;
+    tmp_mmul <= mmul;
+    tmp_m1a <= m1a;
+    tmp_m2a <= m2a;
+end
+
 endmodule   
 
 

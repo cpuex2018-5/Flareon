@@ -4132,13 +4132,15 @@ module finv(
   wire [48:0] b;
   assign b = manx_reg * square_reg;
 
+  logic [48:0] tmp_b;
+
   wire [24:0] m_inv;
-  assign m_inv = twice_reg - b[48:24];  //ここでも切り捨ててるけど大丈夫かな？
+  assign m_inv = twice_reg - tmp_b[48:24];  //ここでも切り捨ててるけど大丈夫かな？
   
   //基本的にm_invの最上位bitは0になり、次のbitが1になるはずであり、このとき残り23bitを仮数部とすればよい。
   //基本的にはstate==0なはず
   wire state;
-  assign state = m_inv[24] ;
+  assign state = m_inv[24];
   
   wire [7:0] ey;
   assign ey = state ? (8'd254 - ex) : (8'd253 - ex) ;
@@ -4152,20 +4154,7 @@ always @(posedge clk) begin
     manx_reg <= manx;
     square_reg <= square_table[x[22:12]];
     twice_reg  <= twice_table[x[22:12]];
+    tmp_b <= b;
 end
 
-endmodule   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-
-
+endmodule

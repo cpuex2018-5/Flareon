@@ -17,7 +17,10 @@ module fsub(
     wire [4:0] e3;
     wire [24:0] f3;
     assign e12 = e1 - e2;
-    assign e3 = e12>30?30:e12;
+
+    logic [7:0] tmp_e12;
+
+    assign e3 = tmp_e12>30?30:tmp_e12;
     assign f3 = (s1==s2)?({2'b01,f1}+({2'b01,f2} >> e3)):({2'b01,f1}-({2'b01,f2}>>e3));
 
     wire [7:0] e4;
@@ -86,6 +89,7 @@ module fsub(
     assign y = {tmp_s1,e5,f4}; 
 
 always @(posedge clk) begin
+    tmp_e12 <= e12;
     tmp_f3 <= f3;
     tmp_e1 <= e1;
     tmp_s1 <= s1;

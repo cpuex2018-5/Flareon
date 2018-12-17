@@ -30,6 +30,8 @@ module subtop #(
     input [31:0] b_rdata
 );
 
+logic [31:0] b_rdata_reg;
+
 logic [31:0] b_stat;
 logic [9:0] b_stage;
 logic [1:0] b_resp;
@@ -38,10 +40,12 @@ logic b_flag1;
 logic b_flag2;
 
 (* mark_debug = "true" *) logic [31:0] e_program_counter;
+logic [14:0] pre_b_addr;
 (* mark_debug = "true" *) logic signed [31:0] e_registers[0:31];
 (* mark_debug = "true" *) logic [31:0] f_registers[0:31];
 logic signed [31:0] reg_rs1, reg_rs2, reg_rd;
 logic [31:0] freg_rs1, freg_rs2, freg_rd;
+logic [31:0] freg_rd_load, reg_rd_load;
 
 logic [6:0] e_funct7;
 logic [6:0] e_opcode;
@@ -91,18 +95,18 @@ localparam OP_FP    = 7'b1010011;
 localparam OP_INOUT = 7'b1111111;
 localparam OP_IMM   = 7'b0010011;
 
-assign e_funct7 = b_rdata[31:25];
-assign e_opcode = b_rdata[6:0];
-assign e_funct = b_rdata[14:12];
-assign e_rd = b_rdata[11:7];
-assign e_rs1 = b_rdata[19:15];
-assign e_rs2 = b_rdata[24:20];
-assign e_imm_sham = {27'd0, b_rdata[24:20]};
-assign e_imm_i = b_rdata[31]?{20'd1048575,b_rdata[31:20]}:{20'd0,b_rdata[31:20]};
-assign e_imm_s = b_rdata[31]?{20'd1048575, b_rdata[31:25],b_rdata[11:7]}:{20'd0, b_rdata[31:25],b_rdata[11:7]};
-assign e_imm_u = {b_rdata[31:12],12'd0};
-assign e_imm_b = b_rdata[31]?{19'd524287, b_rdata[31],b_rdata[7],b_rdata[30:25],b_rdata[11:8],1'b0}:{19'd0, b_rdata[31],b_rdata[7],b_rdata[30:25],b_rdata[11:8],1'b0};
-assign e_imm_j = b_rdata[31]?{11'd2047,b_rdata[31],b_rdata[19:12],b_rdata[20],b_rdata[30:21],1'b0}:{11'd0, b_rdata[31],b_rdata[19:12],b_rdata[20],b_rdata[30:21],1'b0};
+assign e_funct7 = b_rdata_reg[31:25];
+assign e_opcode = b_rdata_reg[6:0];
+assign e_funct = b_rdata_reg[14:12];
+assign e_rd = b_rdata_reg[11:7];
+assign e_rs1 = b_rdata_reg[19:15];
+assign e_rs2 = b_rdata_reg[24:20];
+assign e_imm_sham = {27'd0, b_rdata_reg[24:20]};
+assign e_imm_i = b_rdata_reg[31]?{20'd1048575,b_rdata_reg[31:20]}:{20'd0,b_rdata_reg[31:20]};
+assign e_imm_s = b_rdata_reg[31]?{20'd1048575, b_rdata_reg[31:25],b_rdata_reg[11:7]}:{20'd0, b_rdata_reg[31:25],b_rdata_reg[11:7]};
+assign e_imm_u = {b_rdata_reg[31:12],12'd0};
+assign e_imm_b = b_rdata_reg[31]?{19'd524287, b_rdata_reg[31],b_rdata_reg[7],b_rdata_reg[30:25],b_rdata_reg[11:8],1'b0}:{19'd0, b_rdata_reg[31],b_rdata_reg[7],b_rdata_reg[30:25],b_rdata_reg[11:8],1'b0};
+assign e_imm_j = b_rdata_reg[31]?{11'd2047,b_rdata_reg[31],b_rdata_reg[19:12],b_rdata_reg[20],b_rdata_reg[30:21],1'b0}:{11'd0, b_rdata_reg[31],b_rdata_reg[19:12],b_rdata_reg[20],b_rdata_reg[30:21],1'b0};
 
 fadd fadd(.clk(clk),
           .x1(freg_rs1),
@@ -112,7 +116,8 @@ fsub fsub(.clk(clk),
           .x1(freg_rs1),
           .x2(freg_rs2),
           .y(fsub_y));
-fmul fmul(.x1(freg_rs1),
+fmul fmul(.clk(clk),
+          .x1(freg_rs1),
           .x2(freg_rs2),
           .y(fmul_y));
 fdiv fdiv(.clk(clk),
@@ -163,6 +168,7 @@ always @(posedge clk) begin
 
         global_counter <= 0;
         e_program_counter <= 0;
+        pre_b_addr <= 0;
         e_wait <= 0;
 
         main_stage <= 1;
@@ -176,13 +182,21 @@ always @(posedge clk) begin
         m_we <= 0;
         if (fetch_stage) begin
             if (global_counter != 0) begin
-                e_registers[e_rd] <= reg_rd;
-                f_registers[e_rd] <= freg_rd;
+                if (e_opcode == OP_LOAD) begin
+                    e_registers[e_rd] <= reg_rd_load;
+                end else if (e_opcode == LOAD_FP) begin
+                    f_registers[e_rd] <= freg_rd_load;
+                end else begin
+                    e_registers[e_rd] <= reg_rd;
+                    f_registers[e_rd] <= freg_rd;
+                end
             end
 
             fetch_stage <= 0;
             set_stage <= 1;
             global_counter <= global_counter + 1;
+
+            b_rdata_reg <= b_rdata;
         end
         else if (set_stage) begin
             reg_rs1 <= e_registers[e_rs1];
@@ -198,11 +212,12 @@ always @(posedge clk) begin
                 OP_LOAD: exe_remain <= 2;
                 OP_FP: begin //float
                     case(e_funct7)
-                        7'b0000000: exe_remain <= 2; //fadd
-                        7'b0000100: exe_remain <= 2; //fsub
-                        7'b0001100: exe_remain <= 3; //fdiv
-                        7'b0101100: exe_remain <= 3; //fsqrt
-                        7'b0010000: if (e_funct == 3'b011) exe_remain <= 2; else exe_remain <= 1; //finv
+                        7'b0000000: exe_remain <= 3; //fadd
+                        7'b0000100: exe_remain <= 3; //fsub
+                        7'b0001000: exe_remain <= 4; //fmul
+                        7'b0001100: exe_remain <= 8; //fdiv
+                        7'b0101100: exe_remain <= 8; //fsqrt
+                        7'b0010000: if (e_funct == 3'b011) exe_remain <= 3; else exe_remain <= 1; //finv
                         default: exe_remain <= 1;
                     endcase
                 end
@@ -215,6 +230,7 @@ always @(posedge clk) begin
                 if (exe_remain == 1) begin
                     out_stage <= 1;
                     e_program_counter <= e_program_counter+4;
+                    b_addr <= (e_program_counter+4)/4;
                 end
             end
 
@@ -233,13 +249,18 @@ always @(posedge clk) begin
             else if (e_opcode == OP_JALR) begin
                 reg_rd <= e_program_counter + 4;
                 e_program_counter <= reg_rs1 + e_imm_i;
+                b_addr <= (reg_rs1 + e_imm_i)/4;
             end
             else if (e_opcode == BRANCH) begin
                 case(e_funct)
-                    3'b000: e_program_counter <= e_program_counter + (reg_rs1==reg_rs2?e_imm_b:4); // beq
-                    3'b001: e_program_counter <= e_program_counter + (reg_rs1!=reg_rs2?e_imm_b:4); // bne
-                    3'b100: e_program_counter <= e_program_counter + (reg_rs1<reg_rs2?e_imm_b:4);  // blt
-                    3'b101: e_program_counter <= e_program_counter + (reg_rs1>=reg_rs2?e_imm_b:4); // bge
+                    3'b000: begin e_program_counter <= e_program_counter + (reg_rs1==reg_rs2?e_imm_b:4);
+                                            b_addr <= (e_program_counter + (reg_rs1==reg_rs2?e_imm_b:4))/4; end // beq
+                    3'b001: begin e_program_counter <= e_program_counter + (reg_rs1!=reg_rs2?e_imm_b:4);
+                                            b_addr <= (e_program_counter + (reg_rs1!=reg_rs2?e_imm_b:4))/4; end// bne
+                    3'b100: begin e_program_counter <= e_program_counter + (reg_rs1<reg_rs2?e_imm_b:4);
+                                            b_addr <= (e_program_counter + (reg_rs1<reg_rs2?e_imm_b:4))/4; end// blt
+                    3'b101: begin e_program_counter <= e_program_counter + (reg_rs1>=reg_rs2?e_imm_b:4);
+                                            b_addr <= (e_program_counter + (reg_rs1>=reg_rs2?e_imm_b:4))/4; end// bge
                     default: e_program_counter <= e_program_counter;
                 endcase
             end
@@ -267,31 +288,33 @@ always @(posedge clk) begin
                 m_addr <= (reg_rs1 + e_imm_s)>>2; m_w_data <= freg_rs2; m_we <= 1;
             end
             else if (e_opcode == OP_FP) begin
-                case(e_funct7)
-                    7'b0000000: if (exe_remain == 1) freg_rd <= fadd_y;  //fadd
-                    7'b0000100: if (exe_remain == 1) freg_rd <= fsub_y;  //fsub
-                    7'b0001000: freg_rd <= fmul_y;                       //fmul
-                    7'b0001100: if (exe_remain == 1) freg_rd <= fdiv_y;  //fdiv
-                    7'b0101100: if (exe_remain == 1) freg_rd <= fsqrt_y; //fsqrt
-                    7'b1010000: begin
-                                    case(e_funct)
-                                        3'b010: reg_rd <= feq_y; //feq
-                                        3'b001: reg_rd <= flt_y; //flt
-                                        3'b000: reg_rd <= fle_y; //fle
-                                        default: reg_rd <= fle_y;
-                                    endcase
-                                end
-                    7'b0010000: begin
-                                    case(e_funct)
-                                        3'b000: freg_rd <= freg_rs1; //fmv
-                                        3'b001: freg_rd <= fneg_y;   //fneg
-                                        3'b010: freg_rd <= fabs_y;   //fabs
-                                        3'b011: if (exe_remain == 1) freg_rd <= finv_y;   //finv
-                                        default: freg_rd <= finv_y;
-                                    endcase
-                                end
-                    default: freg_rd <= freg_rd;
-                endcase
+                if (exe_remain == 1) begin
+                    case(e_funct7)
+                        7'b0000000: freg_rd <= fadd_y;  //fadd
+                        7'b0000100: freg_rd <= fsub_y;  //fsub
+                        7'b0001000: freg_rd <= fmul_y;  //fmul
+                        7'b0001100: freg_rd <= fdiv_y;  //fdiv
+                        7'b0101100: freg_rd <= fsqrt_y; //fsqrt
+                        7'b1010000: begin
+                                        case(e_funct)
+                                            3'b010: reg_rd <= feq_y; //feq
+                                            3'b001: reg_rd <= flt_y; //flt
+                                            3'b000: reg_rd <= fle_y; //fle
+                                            default: reg_rd <= fle_y;
+                                        endcase
+                                    end
+                        7'b0010000: begin
+                                        case(e_funct)
+                                            3'b000: freg_rd <= freg_rs1; //fmv
+                                            3'b001: freg_rd <= fneg_y;   //fneg
+                                            3'b010: freg_rd <= fabs_y;   //fabs
+                                            3'b011: freg_rd <= finv_y;   //finv
+                                            default: freg_rd <= finv_y;
+                                        endcase
+                                    end
+                        default: freg_rd <= freg_rd;
+                    endcase
+                end
             end
             else if (e_opcode == OP_INOUT) begin //inout
                 if (e_funct == 0) begin //out
@@ -349,6 +372,7 @@ always @(posedge clk) begin
                             exe_remain <= 0;
                             out_stage <= 1;
                             e_program_counter <= e_program_counter+4;
+                            b_addr <= (e_program_counter+4)/4;
                             e_wait <= 0;
                         end
                     end
@@ -397,22 +421,23 @@ always @(posedge clk) begin
                         exe_remain <= 0;
                         out_stage <= 1;
                         e_program_counter <= e_program_counter+4;
+                        b_addr <= (e_program_counter+4)/4;
                         e_wait <= 0;
                     end
                 end
             end
         end
         else if (out_stage) begin
-            if (e_opcode == LOAD_FP) freg_rd <= m_r_data;
-            if (e_opcode == OP_LOAD) reg_rd  <= m_r_data;
+            freg_rd_load <= m_r_data;
+            reg_rd_load  <= m_r_data;
 
             out_stage <= 0;
             fetch_stage <= 1;
 
-            if (b_addr == e_program_counter/4) begin
+            if (b_addr == pre_b_addr) begin
                 main_stage <= 0;
             end
-            b_addr <= e_program_counter/4;
+            pre_b_addr <= b_addr;
         end
         e_registers[0] <= 0;
     end
