@@ -9,19 +9,25 @@
 class BinGen {
     public:
         typedef struct inst {
-            inst() : fst(0xffffffff), snd(0xffffffff), data(0xffffffff) {};
-            inst(uint32_t fst, uint32_t snd, uint32_t data) : fst(fst), snd(snd), data(data) {};
+          public:
+            inst() {};
             ~inst() {};
 
-            // 各フィールドは、0xffffffffだったら何も入っていない(None)を意味する
-            uint32_t fst;  // instruction
-            uint32_t snd;  // instruction
-            uint32_t data; // floating-point data
+            uint32_t fst = 0;  // instruction
+            uint32_t snd = 0;  // instruction
+            uint32_t data = 0; // floating-point data
+            void set_fst(uint32_t v) { fst = v; has_fst = true; }
+            void set_snd(uint32_t v) { snd = v; has_snd = true; }
+            void set_data(uint32_t v) { data = v; has_data = true; }
+            bool is_empty() { return !has_fst && !has_snd && !has_data; }
+            bool is_inst() { return has_fst; }
+            bool is_double_inst() { return has_fst && has_snd; }
+            bool is_data() { return has_data; }
 
-            bool is_empty() { return fst == 0xffffffff && snd == 0xffffffff && data == 0xffffffff; }
-            bool is_inst() { return fst != 0xffffffff; }
-            bool is_double_inst() { return fst != 0xffffffff && snd != 0xffffffff; }
-            bool is_data() { return data != 0xffffffff; }
+          private:
+            bool has_fst = false;
+            bool has_snd = false;
+            bool has_data = false;
         } Inst;
 
         BinGen(std::ofstream ofs, std::ofstream coefs, bool is_verbose, bool is_debug, bool is_ascii);
