@@ -313,10 +313,12 @@ let f oc (Prog(data, fundefs, e)) =
   let int_array = [
     ("n_objects", 1, 0);
     (* ("and_net_1", 1, -1); *)
+    ("dirvecs", 5, 0);
     ("intsec_rectside", 1, 0);
     ("intersected_object_id", 1, 0);
     ("image_size", 2, 0);
     ("image_center", 2, 0);
+    ("light_dirvec_consts", 60, 0);
     ("n_reflections", 1, 0);
   ] in
   let float_array = [
@@ -338,17 +340,25 @@ let f oc (Prog(data, fundefs, e)) =
     ("screeny_dir", 3, 0.0);
     ("screenz_dir", 3, 0.0);
     ("ptrace_dirvec", 3, 0.0);
+    ("light_dirvec_v3", 3, 0.0);
   ] in
   let nested_array = [
-    (* ("and_net", 50, "min_caml_and_net_1"); *)
+    (* ("and_net", 50, "min_caml_and_net_1");
+       ("or_net_1", 1, "min_caml_and_net_1");
+       ("or_net", 1, "min_caml_or_net_1"); *)
+  ] in
+  let nested_tuple = [
+    ("light_dirvec", ["min_caml_light_dirvec_v3"; "min_caml_light_dirvec_consts"]);
   ] in
   let tuple_array = [
     ("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
+    ("reflections", 180, [0; 0; 0; 0]);
   ] in
   let global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
   let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
-  let global_size = global_size + List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 tuple_array in
   let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 nested_array in
+  let global_size = global_size + List.fold_left (fun acc (_, labels) -> List.length labels + acc) 0 nested_tuple in
+  let global_size = global_size + List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 tuple_array in
   let global_size = global_size + List.length data + 23 in
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
@@ -400,6 +410,11 @@ let f oc (Prog(data, fundefs, e)) =
          Printf.fprintf oc "\t.word\t%s\n" init;
        done)
     nested_array;
+  List.iter
+    (fun (str, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       List.iter (fun s -> Printf.fprintf oc "\t.word\t%s\n" s) init)
+    nested_tuple;
   List.iter
     (fun (str, len, init) ->
        Printf.fprintf oc "min_caml_%s:\n" str;

@@ -42,6 +42,7 @@ let rec g env = function
   | Put(x, y, z) -> Put(find x env, find y env, find z env)
   | App(g, xs) -> App(find g env, List.map (fun x -> find x env) xs)
   | ExtArray(x) -> ExtArray(x)
+  | ExtTuple(x) -> ExtTuple(x)
   | ExtFunApp(x, ys) -> ExtFunApp(x, List.map (fun y -> find y env) ys)
 
 let f b = is_verbose := b; g M.empty
