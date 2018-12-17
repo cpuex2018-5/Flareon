@@ -77,11 +77,11 @@ let or_net = create_array 1 (create_array 1 (and_net.(0))) in
 (* let ptrace_dirvec  = create_array 3 0.0 in *)
 
 (* 間接光サンプリングに使う方向ベクトル *)
-let dirvecs =
-  let dummyf = create_array 0 0.0 in
-  let dummyff = create_array 0 dummyf in
-  let dummy_vs = create_array 0 (dummyf, dummyff) in
-  create_array 5 dummy_vs in
+(* let dirvecs =
+   let dummyf = create_array 0 0.0 in
+   let dummyff = create_array 0 dummyf in
+   let dummy_vs = create_array 0 (dummyf, dummyff) in
+   create_array 5 dummy_vs in *)
 
 (* 光源光の前処理済み方向ベクトル *)
 let light_dirvec =
@@ -91,11 +91,11 @@ let light_dirvec =
   (v3, consts) in
 
 (* 鏡平面の反射情報 *)
-let reflections =
-  let dummyf3 = create_array 0 0.0 in
-  let dummyff3 = create_array 0 dummyf3 in
-  let dummydv = (dummyf3, dummyff3) in
-  create_array 180 (0, dummydv, 0.0) in
+(* let reflections =
+   let dummyf3 = create_array 0 0.0 in
+   let dummyff3 = create_array 0 dummyf3 in
+   let dummydv = (dummyf3, dummyff3) in
+   create_array 180 (0, dummydv, 0.0) in *)
 
 (* reflectionsの有効な要素数 *)
 (* let n_reflections = create_array 1 0 in *)
