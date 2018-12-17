@@ -318,7 +318,7 @@ let f oc (Prog(data, fundefs, e)) =
     ("intersected_object_id", 1, 0);
     ("image_size", 2, 0);
     ("image_center", 2, 0);
-    (* ("light_dirvec_consts", 60, 0); *)
+    ("light_dirvec_consts", 60, 0);
     ("n_reflections", 1, 0);
   ] in
   let float_array = [
@@ -340,13 +340,15 @@ let f oc (Prog(data, fundefs, e)) =
     ("screeny_dir", 3, 0.0);
     ("screenz_dir", 3, 0.0);
     ("ptrace_dirvec", 3, 0.0);
-    (* ("light_dirvec_v3", 3, 0.0); *)
+    ("light_dirvec_v3", 3, 0.0);
   ] in
   let nested_array = [
-    (* ("and_net", 50, "min_caml_and_net_1"); *)
+    (* ("and_net", 50, "min_caml_and_net_1");
+       ("or_net_1", 1, "min_caml_and_net_1");
+       ("or_net", 1, "min_caml_or_net_1"); *)
   ] in
   let nested_tuple = [
-    (* ("light_dirvec", ["light_dirvec_v3"; "light_dirvec_consts"]); *)
+    ("light_dirvec", ["min_caml_light_dirvec_v3"; "min_caml_light_dirvec_consts"]);
   ] in
   let tuple_array = [
     ("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);

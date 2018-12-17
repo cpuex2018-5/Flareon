@@ -29,6 +29,7 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | Get of Id.t * Id.t
   | Put of Id.t * Id.t * Id.t
   | ExtArray of Id.l
+  | ExtTuple of Id.l
 type fundef = { name : Id.l * Type.t;
                 args : (Id.t * Type.t) list;
                 formal_fv : (Id.t * Type.t) list;
@@ -74,6 +75,7 @@ let rec str_of_t ?(no_indent = false) ?(endline = "\n") (exp : t) (depth : int) 
   | Get (e1, e2) -> indent ^ e1 ^ "[ " ^ e2 ^ " ]" ^ endline
   | Put (e1, e2, e3) -> indent ^ e1 ^ "[ " ^ e2 ^ " ] <- " ^ e3 ^ endline
   | ExtArray Id.L(e) -> indent ^ e
+  | ExtTuple Id.L(e) -> indent ^ e
 
 let string_of_t (exp : t) = str_of_t exp 0
 
@@ -122,7 +124,7 @@ let rec id_subst (e : t) (a : Id.t) (b : Id.t) : t =
   | _ -> e
 
 let rec fv = function
-  | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
+  | Unit | Int(_) | Float(_) | ExtArray(_) | ExtTuple(_) -> S.empty
   | Not(x) | Neg(x) | FNeg(x) -> S.singleton x
   | Xor(x, y) | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y)
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | FEq(x, y) | FLE(x, y) | Get(x, y) -> S.of_list [x; y]
@@ -204,6 +206,7 @@ let rec g env known e =
   | KNormal.Get(x, y) -> Get(x, y)
   | KNormal.Put(x, y, z) -> Put(x, y, z)
   | KNormal.ExtArray(x) -> ExtArray(Id.L(x))
+  | KNormal.ExtTuple(x) -> ExtTuple(Id.L(x))
   | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys)
 
 let f b e =

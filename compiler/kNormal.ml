@@ -29,6 +29,7 @@ type t = (* formula after K-normalization (caml2html: knormal_t) *)
   | Get of Id.t * Id.t
   | Put of Id.t * Id.t * Id.t
   | ExtArray of Id.t
+  | ExtTuple of Id.t
   | ExtFunApp of Id.t * Id.t list
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
@@ -71,6 +72,7 @@ let string_of_t (exp : t) =
     | Get (e1, e2) -> indent ^ e1 ^ "[ " ^ e2 ^ " ]" ^ endline
     | Put (e1, e2, e3) -> indent ^ e1 ^ "[ " ^ e2 ^ " ] <- " ^ e3 ^ endline
     | ExtArray e -> indent ^ e
+    | ExtTuple e -> indent ^ e
     | ExtFunApp (e, el) -> indent ^ e ^ " (" ^ (String.concat " " el) ^ ")\n"
   and
     str_of_fundef (f : fundef) (depth : int) =
@@ -83,7 +85,7 @@ let print_t (exp : t) =
 
 (* S.t = Id.t *)
 let rec fv = function (* free variable (caml2html: knormal_fv) *)
-  | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
+  | Unit | Int(_) | Float(_) | ExtArray(_) | ExtTuple(_) -> S.empty
   | Not(x) | Neg(x) | FNeg(x) -> S.singleton x
   | Xor(x, y) | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y)
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | FEq(x, y) | FLE(x, y) | Get(x, y) -> S.of_list [x; y]
@@ -129,6 +131,7 @@ let rec id_subst (e : t) (a : Id.t) (b : Id.t) : t =
   | Get (e1, e2) -> Get (subst_ e1, subst_ e2)
   | Put (e1, e2, e3) -> Put (subst_ e1, subst_ e2, subst_ e3)
   | ExtArray e -> ExtArray (subst_ e)
+  | ExtTuple e -> ExtTuple (subst_ e)
   | ExtFunApp (e, el) -> ExtFunApp (subst_ e, List.map subst_ el)
   | _ -> e
 and id_subst_fun (f : fundef) (a : Id.t) (b : Id.t) : fundef =
@@ -274,6 +277,7 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
   | Syntax.Var(x) -> (* reference to an external array (caml2html: knormal_extarray) *)
     (match M.find x !Typing.extenv with
      | Type.Array(_) as t -> ExtArray x, t
+     | Type.Tuple(_) as t -> ExtArray x, t
      | _ -> failwith (Printf.sprintf "external variable %s does not have an array type" x))
   | Syntax.LetRec({ Syntax.name = (x, t); Syntax.args = yts; Syntax.body = e1 }, e2, _) ->
     let env' = M.add x t env in

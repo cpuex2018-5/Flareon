@@ -84,11 +84,11 @@ let or_net = create_array 1 (create_array 1 (and_net.(0))) in
    create_array 5 dummy_vs in *)
 
 (* 光源光の前処理済み方向ベクトル *)
-let light_dirvec =
+(* let light_dirvec =
   let dummyf2 = create_array 0 0.0 in
   let v3 = create_array 3 0.0 in
   let consts = create_array 60 dummyf2 in
-  (v3, consts) in
+  (v3, consts) in *)
 
 (* 鏡平面の反射情報 *)
 (* let reflections =
