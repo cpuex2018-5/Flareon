@@ -7,9 +7,17 @@ let rec pp_list = function
   | x :: xs -> x ^ " " ^ pp_list xs
 
 let counter = ref 0
+let imm_counter = ref 0
 let genid s =
   incr counter;
   Printf.sprintf "%s_%d" s !counter
+
+let genDataId s =
+  incr imm_counter;
+  Printf.sprintf "%s_%d" s !imm_counter
+
+let resetCounter () =
+  counter := 0
 
 let rec id_of_typ = function
   | Type.Unit -> "u"

@@ -175,18 +175,23 @@ min_caml_print_float:	# print float in hex
 	jr	ra
 
 min_caml_create_array:
-	addi	sp, sp, -4
-	sw	t2, 0(sp)
-	mv	t6, zero
-	mv	t2, gp
+	mv	t6, gp
 .create_array_L0:
 	sw	a1, 0(gp)
 	addi	gp, gp, 4
-	addi	t6, t6, 1
-	ble	t6, a0, .create_array_L0
-	mv	a0, t2
-	lw	t2, 0(sp)
-	addi	sp, sp, 4
+	addi	a0, a0, -1
+	bgt	a0, zero, .create_array_L0
+	mv	a0, t6
+	jr	ra
+
+min_caml_create_float_array:
+	mv	t6, gp
+.create_float_array_L0:
+	fsw	fa0, 0(gp)
+	addi	gp, gp, 4
+	addi	a0, a0, -1
+	bgt	a0, zero, .create_float_array_L0
+	mv	a0, t6
 	jr	ra
 
 min_caml_div_rem:

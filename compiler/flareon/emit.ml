@@ -42,7 +42,7 @@ let rec shuffle sw xys =
                                        xys)
   | xys, acyc -> acyc @ shuffle sw xys
 
-let retlabel = ref ""
+let funcname = ref ""
 
 type dest = Tail | NonTail of Id.t (* 末尾かどうかを表すデータ型 (caml2html: emit_dest) *)
 let rec g buf = function (* 命令列のアセンブリ生成 (caml2html: emit_g) *)
@@ -55,10 +55,9 @@ and g' buf e =
   match e with
   | NonTail(_), Nop -> ()
   | NonTail(x), Li(i) -> Printf.bprintf buf "\tli\t%s, %d\n" (reg x) i
-  | NonTail(x), FLi(Id.L(l)) ->
-    Printf.bprintf buf "\tfli\t%s, %s\n" (reg x) l
-  | NonTail(x), SetL(Id.L(y)) ->
-    Printf.bprintf buf "\tla\t%s, %s\n" (reg x) y
+  | NonTail(x), FLi(Id.L(l)) -> Printf.bprintf buf "\tfli\t%s, %s\n" (reg x) l
+  | NonTail(x), SetL(Id.L(y)) -> Printf.bprintf buf "\tla\t%s, %s\n" (reg x) y
+  | NonTail(x), SetDL(Id.L(y)) -> Printf.bprintf buf "\tlda\t%s, %s\n" (reg x) y
   | NonTail(x), Mv(y) when x = y -> ()
   | NonTail(x), Mv(y) -> Printf.bprintf buf "\tmv\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), Not(y) -> Printf.bprintf buf "\txori\t%s, %s, 1\t# boolean not\n" (reg x) (reg y)
@@ -122,7 +121,7 @@ and g' buf e =
   (* 末尾だったら計算結果を%a0か%fa0にセットしてリターン (caml2html: emit_tailret) *)
   | Tail, (Nop | Sw _ | Fsw _ | Comment _ | Save _ as exp) ->
     g' buf (NonTail(Id.gentmp Type.Unit), exp);
-  | Tail, (Li _ | SetL _ | Mv _ | Neg _ | Not _ | Xor _ | Add _ | Sub _ | Mul _ | Div _ | Sll _ | Lw _ as exp) ->
+  | Tail, (Li _ | SetL _ | SetDL _ | Mv _ | Neg _ | Not _ | Xor _ | Add _ | Sub _ | Mul _ | Div _ | Sll _ | Lw _ as exp) ->
     g' buf (NonTail(regs.(0)), exp);
   | Tail, (FLi _ | FMv _ | FNeg _ | FAdd _ | FSub _ | FMul _ | FDiv _ | FEq _ | FLE _ | FAbs _ | FSqrt _ | Flw _ as exp) ->
     g' buf (NonTail(fregs.(0)), exp);
@@ -234,14 +233,14 @@ and g' buf e =
 and g'_tail_if buf rs1 rs2 e1 e2 b bn = (* bはラベルに使うだけで命令には使わない *)
   match e2 with
   | Ans(Nop) ->
-    Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) !retlabel;
+    Printf.bprintf buf "\t%s\t%s, %s, %s_ret\n" bn (reg rs1) (reg rs2) !funcname;
     g buf (Tail, e1) (* if内がtrueの場合 = jumpしなかった場合 *)
   | _ ->
-    let b_else = Id.genid (b ^ "_else") in
+    let b_else = Id.genid ("." ^ !funcname ^ "_else") in
     Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_else;
     let stackset_back = !stackset in
     g buf (Tail, e1); (* if内がtrueの場合 = jumpしなかった場合 *)
-    Printf.bprintf buf "\tb\t%s\n" !retlabel;
+    Printf.bprintf buf "\tb\t%s_ret\n" !funcname;
     Printf.bprintf buf "%s:\n" b_else;
     stackset := stackset_back;
     g buf (Tail, e2);
@@ -254,7 +253,7 @@ and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
   in
   match does_e2_write with
   | false ->
-    let b_cont = Id.genid (b ^ "_cont") in
+    let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
     Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_cont;
     let stackset_back = !stackset in
     g buf (dest, e1);
@@ -262,8 +261,8 @@ and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
     Printf.bprintf buf "%s:\n" b_cont;
     stackset := S.inter stackset1 stackset_back
   | _ ->
-    let b_else = Id.genid (b ^ "_else") in
-    let b_cont = Id.genid (b ^ "_cont") in
+    let b_else = Id.genid ("." ^ !funcname ^ "_else") in
+    let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
     Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_else;
     let stackset_back = !stackset in
     g buf (dest, e1);
@@ -298,27 +297,70 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   stackset := S.empty;
   stackmap := [];
   let buf = Buffer.create 128 in
-  retlabel := x ^ "_ret";
+  funcname := String.sub x 0 (String.rindex x '_');
   g buf (Tail, e);
   let ss = stacksize () + 4 in
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
   Printf.fprintf oc "\tsw\tra, %d(sp)\n" (ss - 4);
+  Id.resetCounter ();
   Buffer.output_buffer oc buf;
-  Printf.fprintf oc "%s_ret:\n" x;
+  Printf.fprintf oc "%s_ret:\n" !funcname;
   Printf.fprintf oc "\tlw\tra, %d(sp)\n" (ss - 4);
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "\tjr\tra\n"
 
 let f oc (Prog(data, fundefs, e)) =
+  let int_array = [
+    ("n_objects", 1, 0);
+    (* ("and_net_1", 1, -1); *)
+    ("intsec_rectside", 1, 0);
+    ("intersected_object_id", 1, 0);
+    ("image_size", 2, 0);
+    ("image_center", 2, 0);
+    ("n_reflections", 1, 0);
+  ] in
+  let float_array = [
+    ("screen", 3, 0.0);
+    ("viewpoint", 3, 0.0);
+    ("light", 3, 0.0);
+    ("beam", 1, 255.0);
+    ("solver_dist", 1, 0.0);
+    ("tmin", 1, 1000000000.0);
+    ("intersection_point", 3, 0.0);
+    ("nvector", 3, 0.0);
+    ("texture_color", 3, 0.0);
+    ("diffuse_ray", 3, 0.0);
+    ("rgb", 3, 0.0);
+    ("startp", 3, 0.0);
+    ("startp_fast", 3, 0.0);
+    ("scan_pitch", 1, 0.0);
+    ("screenx_dir", 3, 0.0);
+    ("screeny_dir", 3, 0.0);
+    ("screenz_dir", 3, 0.0);
+    ("ptrace_dirvec", 3, 0.0);
+  ] in
+  let nested_array = [
+    (* ("and_net", 50, "min_caml_and_net_1"); *)
+  ] in
+  let tuple_array = [
+    ("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
+  ] in
+  let global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
+  let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
+  let global_size = global_size + List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 tuple_array in
+  let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 nested_array in
+  let global_size = global_size + List.length data + 23 in
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   Printf.fprintf oc "\t.globl _min_caml_start\n";
   Printf.fprintf oc "_min_caml_start: # main entry point\n";
-  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" ((List.length data + 23) * 4);
+  Printf.fprintf oc "\tli\tgp, %d\t# initialize gp\n" (global_size * 4);
   Printf.fprintf oc "#\tmain program starts\n";
   stackset := S.empty;
   stackmap := [];
   let buf = Buffer.create 128 in
+  funcname := "main";
+  Id.resetCounter ();
   g buf (NonTail("_R_0"), e);
   let ss = stacksize () + 4 in
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
@@ -330,10 +372,42 @@ let f oc (Prog(data, fundefs, e)) =
   Printf.fprintf oc "end:\n";
   Printf.fprintf oc "\tb\tend\n";
   List.iter (fun fundef -> h oc fundef) fundefs;
+  Printf.fprintf oc "\t.data\n";
   if data <> [] then
-    (Printf.fprintf oc "\t.data\n";
-     List.iter
-       (fun (Id.L(x), d) ->
-          Printf.fprintf oc "%s:\t# %f\n" x d;
-          Printf.fprintf oc "\t.word\t%ld\n" (castToInt d))
-       data);
+    List.iter
+      (fun (Id.L(x), d) ->
+         Printf.fprintf oc "%s:\t# %f\n" x d;
+         Printf.fprintf oc "\t.word\t%ld\n" (castToInt d))
+      data;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int init);
+       done)
+    int_array;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%ld\n" (castToInt init);
+       done)
+    float_array;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%s\n" init;
+       done)
+    nested_array;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "min_caml_%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t.%s_%d\n" str i;
+       done;
+       for i = 1 to len do
+         (Printf.fprintf oc ".%s_%d:\n" str i;
+          List.iter (fun v -> Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int v)) init);
+       done;
+    ) tuple_array

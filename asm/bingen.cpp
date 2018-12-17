@@ -42,11 +42,12 @@ void BinGen::ReadLabels(std::string input) {
     if (data_mode_) {
         if (mnemo.back() != ':') {
             assert(mnemo == ".word");
+            ndata_++;
             return;
         }
         mnemo.pop_back();
         // std::cerr << "[INFO] new label " << mnemo << " registered at " << ndata_ * 4 << std::endl;
-        data_map_[mnemo] = ndata_++;
+        data_map_[mnemo] = ndata_;
         return;
     }
 
@@ -54,7 +55,7 @@ void BinGen::ReadLabels(std::string input) {
         // The input wasn't a label.
 
         // Some pseudo-instructions will expand to two instrs
-        if (mnemo == "la" || mnemo == "ret" || mnemo == "call" || mnemo == "fli" || mnemo == "tail") {
+        if (mnemo == "la" || mnemo == "lda" || mnemo == "ret" || mnemo == "call" || mnemo == "fli" || mnemo == "tail") {
             nline_ += 2;
             return;
         }
@@ -202,6 +203,9 @@ BinGen::Inst BinGen::Convert(std::string input) {
     if (mnemo == ".word") {
         assert(data_mode_);
         assert(1 == arg.size());
+        if (data_map_.count(arg[0]) > 0) {
+            return Inst(0xffffffff, 0xffffffff, SolveDataLabel(arg[0]));
+        }
         return Inst(0xffffffff, 0xffffffff, MyStoi(arg[0]));
     }
 
@@ -293,8 +297,16 @@ BinGen::Inst BinGen::Convert(std::string input) {
     // Pseudo-instructions ===================================================================
     else if (mnemo == "la") {
         assert(2 == arg.size());
-        uint32_t tmp = MyStoi(arg[1]);
+        uint32_t tmp = SolveLabel(arg[1]);
         inst1 = auipc(arg[0], ((tmp >> 12) + ((tmp >> 11) & 0x1)) & 0xfffff);
+        nline_++;
+        inst2 = op_imm("addi", arg[0], arg[0], tmp & 0xfff);
+    }
+
+    else if (mnemo == "lda") {
+        assert(2 == arg.size());
+        uint32_t tmp = SolveDataLabel(arg[1]);
+        inst1 = lui(arg[0], ((tmp >> 12) + ((tmp >> 11) & 0x1)) & 0xfffff);
         nline_++;
         inst2 = op_imm("addi", arg[0], arg[0], tmp & 0xfff);
     }
@@ -325,16 +337,16 @@ BinGen::Inst BinGen::Convert(std::string input) {
     }
     else if (mnemo == "bgt") {
         assert(3 == arg.size());
-        inst1 = branch("blt", arg[1], arg[0], MyStoi(arg[2]));
+        inst1 = branch("blt", arg[1], arg[0], SolveLabel(arg[2]));
     }
     else if (mnemo == "ble") {
         assert(3 == arg.size());
-        inst1 = branch("bge", arg[1], arg[0], MyStoi(arg[2]));
+        inst1 = branch("bge", arg[1], arg[0], SolveLabel(arg[2]));
     }
     else if (mnemo == "b") {
         assert(1 == arg.size());
         // TODO: bgeじゃなくbeqにする？
-        inst1 = branch("bge", "zero", "zero", MyStoi(arg[0]));
+        inst1 = branch("bge", "zero", "zero", SolveLabel(arg[0]));
     }
     else if (mnemo == "jr") {
         assert(1 == arg.size());
@@ -346,7 +358,7 @@ BinGen::Inst BinGen::Convert(std::string input) {
     }
     else if (mnemo == "call") {
         assert(1 == arg.size());
-        uint32_t imm = MyStoi(arg[0]);
+        uint32_t imm = SolveLabel(arg[0]);
         // jalrが符号拡張するため、下から12bit目が1の場合はauipcに渡す即値に1を足す
         // その結果2 ^ 12を超える場合は下位20bitをわたす
         inst1 = auipc("x6", ((imm >> 12) + ((imm >> 11) & 1)) & 0xfffff);
@@ -355,7 +367,7 @@ BinGen::Inst BinGen::Convert(std::string input) {
     }
     else if (mnemo == "tail") {
         assert(1 == arg.size());
-        uint32_t imm = MyStoi(arg[0]);
+        uint32_t imm = SolveLabel(arg[0]);
         inst1 = auipc("x6", ((imm >> 12) + ((imm >> 11) & 1)) & 0xfffff);
         nline_++;
         inst2 = jalr("x0", "x6", imm & 0xfff);
@@ -364,7 +376,7 @@ BinGen::Inst BinGen::Convert(std::string input) {
     else if (mnemo == "fli") {
         // Note: t6レジスタが潰される
         assert(2 == arg.size());
-        uint32_t imm = SolveImmLabel(arg[1]);
+        uint32_t imm = SolveDataLabel(arg[1]);
         std::string tmp_reg = "t6";
         inst1 = lui(tmp_reg, ((imm >> 12) + ((imm >> 11) & 1)) & 0xfffff);
         nline_++;
@@ -682,7 +694,6 @@ uint32_t BinGen::MyStoi(std::string imm) {
     }
     catch (...) {
         // stoi() failed. |imm| was a label.
-        // std::cout << imm << label_map_[imm] << std::endl;
         if (label_map_.count(imm) == 0) {
             std::cerr << "\x1b[31m[ERROR] Undefined symbol: " << imm << "\x1b[39m\n";
             return 0;
@@ -691,7 +702,15 @@ uint32_t BinGen::MyStoi(std::string imm) {
     }
 }
 
-uint32_t BinGen::SolveImmLabel(std::string label) {
+uint32_t BinGen::SolveLabel(std::string label) {
+    if (label_map_.count(label) == 0) {
+        std::cerr << "\x1b[31m[ERROR] Undefined symbol: " << label << "\x1b[39m\n";
+        return 0;
+    }
+    return (label_map_[label] - nline_) * 4;
+}
+
+uint32_t BinGen::SolveDataLabel(std::string label) {
     if (data_map_.count(label) == 0) {
         std::cerr << "\x1b[31m[ERROR] Undefined symbol: " << label << "\x1b[39m\n";
         return 0;
