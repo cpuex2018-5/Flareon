@@ -55,7 +55,7 @@ let rec helper (e : KNormal.t) (f : Id.t) (args : Id.t list) : KNormal.t =
 (* collect free variables in e *)
 let rec fvs (e : KNormal.t) : S.t =
   match e with
-  | Unit | Int _ | Float _ | ExtArray _ -> S.empty
+  | Unit | Int _ | Float _ | ExtArray _ | ExtTuple _ -> S.empty
   | Not x | Neg x | FNeg x -> S.singleton x
   | Xor(x, y) | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y) -> S.of_list [x; y]
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | FEq(x, y) | FLE(x, y) -> S.of_list [x; y]

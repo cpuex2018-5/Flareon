@@ -76,10 +76,16 @@ and g' buf e =
   | NonTail(x), Div(y, C(z)) -> Printf.bprintf buf "\tdivi\t%s, %s, %d\n" (reg x) (reg y) z         (* アセンブラ非対応 *)
   | NonTail(x), Sll(y, V(z)) -> Printf.bprintf buf "\tsll\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), Sll(y, C(z)) -> Printf.bprintf buf "\tslli\t%s, %s, %d\n" (reg x) (reg y) z
+  | NonTail(x), Lw(y, L(Id.L(l))) ->
+    Printf.bprintf buf "\taddli\t%s, %s, %s\n" (reg reg_tmp) (reg y) l;
+    Printf.bprintf buf "\tlw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(x), Lw(y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tlw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(x), Lw(y, C(z)) -> Printf.bprintf buf "\tlw\t%s, %d(%s)\n" (reg x) z (reg y)
+  | NonTail(_), Sw(x, y, L(Id.L(l))) ->
+    Printf.bprintf buf "\taddli\t%s, %s, %s\n"(reg reg_tmp) (reg y) l;
+    Printf.bprintf buf "\tsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(_), Sw(x, y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n"(reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
@@ -95,10 +101,16 @@ and g' buf e =
   | NonTail(x), FLE(y, z) -> Printf.bprintf buf "\tfle\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), FAbs(y) -> Printf.bprintf buf "\tfabs\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), FSqrt(y) -> Printf.bprintf buf "\tfsqrt\t%s, %s\n" (reg x) (reg y)
+  | NonTail(x), Flw(y, L(Id.L(l))) ->
+    Printf.bprintf buf "\taddli\t%s, %s, %s\n" (reg reg_tmp) (reg y) l;
+    Printf.bprintf buf "\tflw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(x), Flw(y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tflw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(x), Flw(y, C(z)) -> Printf.bprintf buf "\tflw\t%s, %d(%s)\n" (reg x) z (reg y)
+  | NonTail(_), Fsw(x, y, L(Id.L(l))) ->
+    Printf.bprintf buf "\taddli\t%s, %s, %s\n" (reg reg_tmp) (reg y) l;
+    Printf.bprintf buf "\tfsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(_), Fsw(x, y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tfsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
@@ -309,57 +321,43 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "\tjr\tra\n"
 
-let f oc (Prog(data, fundefs, e)) =
-  let int_array = [
-    ("n_objects", 1, 0);
-    ("and_net_1", 1, -1);
-    ("dirvecs", 5, 0);
-    ("intsec_rectside", 1, 0);
-    ("intersected_object_id", 1, 0);
-    ("image_size", 2, 0);
-    ("image_center", 2, 0);
-    ("light_dirvec_consts", 60, 0);
-    ("n_reflections", 1, 0);
-  ] in
-  let float_array = [
-    ("screen", 3, 0.0);
-    ("viewpoint", 3, 0.0);
-    ("light", 3, 0.0);
-    ("beam", 1, 255.0);
-    ("solver_dist", 1, 0.0);
-    ("tmin", 1, 1000000000.0);
-    ("intersection_point", 3, 0.0);
-    ("nvector", 3, 0.0);
-    ("texture_color", 3, 0.0);
-    ("diffuse_ray", 3, 0.0);
-    ("rgb", 3, 0.0);
-    ("startp", 3, 0.0);
-    ("startp_fast", 3, 0.0);
-    ("scan_pitch", 1, 0.0);
-    ("screenx_dir", 3, 0.0);
-    ("screeny_dir", 3, 0.0);
-    ("screenz_dir", 3, 0.0);
-    ("ptrace_dirvec", 3, 0.0);
-    ("light_dirvec_v3", 3, 0.0);
-  ] in
-  let tuple_array = [
-    ("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
-    ("reflections", 180, [0; 0; 0; 0]);
-  ] in
-  let nested_array = [
-    ("and_net", 50, "min_caml_and_net_1");
-    ("or_net_1", 1, "min_caml_and_net_1");
-    ("or_net", 1, "min_caml_or_net_1");
-  ] in
-  let nested_tuple = [
-    ("light_dirvec", ["min_caml_light_dirvec_v3"; "min_caml_light_dirvec_consts"]);
-  ] in
-  let global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
-  let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in
-  let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 nested_array in
-  let global_size = global_size + List.fold_left (fun acc (_, labels) -> List.length labels + acc) 0 nested_tuple in
-  let global_size = global_size + List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 tuple_array in
-  let global_size = global_size + List.length data + 23 in
+let print_globals oc globals =
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%s\n" init;
+       done)
+    globals.single_array;
+  List.iter
+    (fun (str, init) ->
+       Printf.fprintf oc "%s:\n" str;
+       List.iter (fun s -> Printf.fprintf oc "\t.word\t%s\n" s) init)
+    globals.nested_tuple;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t.%s_%d\n" str i;
+       done)
+    globals.tuple_array;
+  List.iter
+    (fun (str, len, init) ->
+       for i = 1 to len do
+         (Printf.fprintf oc ".%s_%d:\n" str i;
+          List.iter (fun v -> Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int v)) init);
+       done)
+    globals.tuple_array;
+  List.iter
+    (fun (str, len, init) ->
+       Printf.fprintf oc "%s:\n" str;
+       for i = 1 to len do
+         Printf.fprintf oc "\t.word\t%s\n" init;
+       done)
+    globals.sub_array
+
+let f oc globals (Prog(data, fundefs, e)) =
+  let global_size = Asm.global_size() + List.length data + 23 in
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   Printf.fprintf oc "\t.globl _min_caml_start\n";
@@ -383,46 +381,10 @@ let f oc (Prog(data, fundefs, e)) =
   Printf.fprintf oc "\tb\tend\n";
   List.iter (fun fundef -> h oc fundef) fundefs;
   Printf.fprintf oc "\t.data\n";
+  print_globals oc globals;
   if data <> [] then
     List.iter
       (fun (Id.L(x), d) ->
          Printf.fprintf oc "%s:\t# %f\n" x d;
          Printf.fprintf oc "\t.word\t%ld\n" (castToInt d))
       data;
-  List.iter
-    (fun (str, len, init) ->
-       Printf.fprintf oc "min_caml_%s:\n" str;
-       for i = 1 to len do
-         Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int init);
-       done)
-    int_array;
-  List.iter
-    (fun (str, len, init) ->
-       Printf.fprintf oc "min_caml_%s:\n" str;
-       for i = 1 to len do
-         Printf.fprintf oc "\t.word\t%ld\n" (castToInt init);
-       done)
-    float_array;
-  List.iter
-    (fun (str, len, init) ->
-       Printf.fprintf oc "min_caml_%s:\n" str;
-       for i = 1 to len do
-         Printf.fprintf oc "\t.word\t%s\n" init;
-       done)
-    nested_array;
-  List.iter
-    (fun (str, init) ->
-       Printf.fprintf oc "min_caml_%s:\n" str;
-       List.iter (fun s -> Printf.fprintf oc "\t.word\t%s\n" s) init)
-    nested_tuple;
-  List.iter
-    (fun (str, len, init) ->
-       Printf.fprintf oc "min_caml_%s:\n" str;
-       for i = 1 to len do
-         Printf.fprintf oc "\t.word\t.%s_%d\n" str i;
-       done;
-       for i = 1 to len do
-         (Printf.fprintf oc ".%s_%d:\n" str i;
-          List.iter (fun v -> Printf.fprintf oc "\t.word\t%ld\n" (Int32.of_int v)) init);
-       done;
-    ) tuple_array

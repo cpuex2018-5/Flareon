@@ -5222,74 +5222,8 @@ rt_ret:
 	addi	sp, sp, 32
 	jr	ra
 	.data
-l_data_32:	# 128.000000
-	.word	1124073472
-l_data_31:	# 0.900000
-	.word	1063675494
-l_data_30:	# 0.200000
-	.word	1045220557
-l_data_29:	# -150.000000
-	.word	-1021968384
-l_data_28:	# 150.000000
-	.word	1125515264
-l_data_27:	# 0.100000
-	.word	1036831949
-l_data_26:	# -2.000000
-	.word	-1073741824
-l_data_25:	# 0.003906
-	.word	998244352
-l_data_24:	# 20.000000
-	.word	1101004800
-l_data_23:	# 0.050000
-	.word	1028443341
-l_data_22:	# 0.250000
-	.word	1048576000
-l_data_21:	# 10.000000
-	.word	1092616192
-l_data_20:	# 0.300000
-	.word	1050253722
-l_data_19:	# 255.000000
-	.word	1132396544
-l_data_18:	# 0.500000
-	.word	1056964608
-l_data_17:	# 0.150000
-	.word	1041865114
-l_data_16:	# 15.000000
-	.word	1097859072
-l_data_15:	# 3.141593
-	.word	1078530011
-l_data_14:	# 30.000000
-	.word	1106247680
-l_data_13:	# 0.000100
-	.word	953267991
-l_data_12:	# 100000000.000000
-	.word	1287568416
-l_data_11:	# 1000000000.000000
-	.word	1315859240
-l_data_10:	# -0.100000
-	.word	-1110651699
-l_data_9:	# 0.010000
-	.word	1008981770
-l_data_8:	# -0.200000
-	.word	-1102263091
-l_data_7:	# 2.000000
-	.word	1073741824
-l_data_6:	# -200.000000
-	.word	-1018691584
-l_data_5:	# 200.000000
-	.word	1128792064
-l_data_4:	# 0.017453
-	.word	1016003125
-l_data_3:	# -1.000000
-	.word	-1082130432
-l_data_2:	# 1.000000
-	.word	1065353216
-l_data_1:	# 0.000000
-	.word	0
 min_caml_n_objects:
 	.word	0
-min_caml_and_net_1:
-	.word	-1
 min_caml_dirvecs:
 	.word	0
 	.word	0
@@ -5304,67 +5238,6 @@ min_caml_image_size:
 	.word	0
 	.word	0
 min_caml_image_center:
-	.word	0
-	.word	0
-min_caml_light_dirvec_consts:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
 	.word	0
 	.word	0
 min_caml_n_reflections:
@@ -5433,1927 +5306,2054 @@ min_caml_ptrace_dirvec:
 	.word	0
 	.word	0
 	.word	0
-min_caml_light_dirvec_v3:
-	.word	0
-	.word	0
-	.word	0
 min_caml_and_net:
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-min_caml_or_net_1:
-	.word	min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
+	.word	.min_caml_and_net_1
 min_caml_or_net:
-	.word	min_caml_or_net_1
+	.word	.min_caml_or_net_1
 min_caml_light_dirvec:
-	.word	min_caml_light_dirvec_v3
-	.word	min_caml_light_dirvec_consts
+	.word	.min_caml_light_dirvec_v3
+	.word	.min_caml_light_dirvec_consts
 min_caml_objects:
-	.word	.objects_1
-	.word	.objects_2
-	.word	.objects_3
-	.word	.objects_4
-	.word	.objects_5
-	.word	.objects_6
-	.word	.objects_7
-	.word	.objects_8
-	.word	.objects_9
-	.word	.objects_10
-	.word	.objects_11
-	.word	.objects_12
-	.word	.objects_13
-	.word	.objects_14
-	.word	.objects_15
-	.word	.objects_16
-	.word	.objects_17
-	.word	.objects_18
-	.word	.objects_19
-	.word	.objects_20
-	.word	.objects_21
-	.word	.objects_22
-	.word	.objects_23
-	.word	.objects_24
-	.word	.objects_25
-	.word	.objects_26
-	.word	.objects_27
-	.word	.objects_28
-	.word	.objects_29
-	.word	.objects_30
-	.word	.objects_31
-	.word	.objects_32
-	.word	.objects_33
-	.word	.objects_34
-	.word	.objects_35
-	.word	.objects_36
-	.word	.objects_37
-	.word	.objects_38
-	.word	.objects_39
-	.word	.objects_40
-	.word	.objects_41
-	.word	.objects_42
-	.word	.objects_43
-	.word	.objects_44
-	.word	.objects_45
-	.word	.objects_46
-	.word	.objects_47
-	.word	.objects_48
-	.word	.objects_49
-	.word	.objects_50
-	.word	.objects_51
-	.word	.objects_52
-	.word	.objects_53
-	.word	.objects_54
-	.word	.objects_55
-	.word	.objects_56
-	.word	.objects_57
-	.word	.objects_58
-	.word	.objects_59
-	.word	.objects_60
-.objects_1:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_2:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_3:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_4:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_5:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_6:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_7:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_8:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_9:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_10:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_11:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_12:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_13:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_14:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_15:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_16:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_17:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_18:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_19:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_20:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_21:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_22:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_23:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_24:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_25:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_26:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_27:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_28:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_29:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_30:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_31:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_32:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_33:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_34:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_35:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_36:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_37:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_38:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_39:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_40:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_41:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_42:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_43:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_44:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_45:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_46:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_47:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_48:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_49:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_50:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_51:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_52:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_53:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_54:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_55:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_56:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_57:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_58:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_59:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_60:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
+	.word	.min_caml_objects_1
+	.word	.min_caml_objects_2
+	.word	.min_caml_objects_3
+	.word	.min_caml_objects_4
+	.word	.min_caml_objects_5
+	.word	.min_caml_objects_6
+	.word	.min_caml_objects_7
+	.word	.min_caml_objects_8
+	.word	.min_caml_objects_9
+	.word	.min_caml_objects_10
+	.word	.min_caml_objects_11
+	.word	.min_caml_objects_12
+	.word	.min_caml_objects_13
+	.word	.min_caml_objects_14
+	.word	.min_caml_objects_15
+	.word	.min_caml_objects_16
+	.word	.min_caml_objects_17
+	.word	.min_caml_objects_18
+	.word	.min_caml_objects_19
+	.word	.min_caml_objects_20
+	.word	.min_caml_objects_21
+	.word	.min_caml_objects_22
+	.word	.min_caml_objects_23
+	.word	.min_caml_objects_24
+	.word	.min_caml_objects_25
+	.word	.min_caml_objects_26
+	.word	.min_caml_objects_27
+	.word	.min_caml_objects_28
+	.word	.min_caml_objects_29
+	.word	.min_caml_objects_30
+	.word	.min_caml_objects_31
+	.word	.min_caml_objects_32
+	.word	.min_caml_objects_33
+	.word	.min_caml_objects_34
+	.word	.min_caml_objects_35
+	.word	.min_caml_objects_36
+	.word	.min_caml_objects_37
+	.word	.min_caml_objects_38
+	.word	.min_caml_objects_39
+	.word	.min_caml_objects_40
+	.word	.min_caml_objects_41
+	.word	.min_caml_objects_42
+	.word	.min_caml_objects_43
+	.word	.min_caml_objects_44
+	.word	.min_caml_objects_45
+	.word	.min_caml_objects_46
+	.word	.min_caml_objects_47
+	.word	.min_caml_objects_48
+	.word	.min_caml_objects_49
+	.word	.min_caml_objects_50
+	.word	.min_caml_objects_51
+	.word	.min_caml_objects_52
+	.word	.min_caml_objects_53
+	.word	.min_caml_objects_54
+	.word	.min_caml_objects_55
+	.word	.min_caml_objects_56
+	.word	.min_caml_objects_57
+	.word	.min_caml_objects_58
+	.word	.min_caml_objects_59
+	.word	.min_caml_objects_60
 min_caml_reflections:
-	.word	.reflections_1
-	.word	.reflections_2
-	.word	.reflections_3
-	.word	.reflections_4
-	.word	.reflections_5
-	.word	.reflections_6
-	.word	.reflections_7
-	.word	.reflections_8
-	.word	.reflections_9
-	.word	.reflections_10
-	.word	.reflections_11
-	.word	.reflections_12
-	.word	.reflections_13
-	.word	.reflections_14
-	.word	.reflections_15
-	.word	.reflections_16
-	.word	.reflections_17
-	.word	.reflections_18
-	.word	.reflections_19
-	.word	.reflections_20
-	.word	.reflections_21
-	.word	.reflections_22
-	.word	.reflections_23
-	.word	.reflections_24
-	.word	.reflections_25
-	.word	.reflections_26
-	.word	.reflections_27
-	.word	.reflections_28
-	.word	.reflections_29
-	.word	.reflections_30
-	.word	.reflections_31
-	.word	.reflections_32
-	.word	.reflections_33
-	.word	.reflections_34
-	.word	.reflections_35
-	.word	.reflections_36
-	.word	.reflections_37
-	.word	.reflections_38
-	.word	.reflections_39
-	.word	.reflections_40
-	.word	.reflections_41
-	.word	.reflections_42
-	.word	.reflections_43
-	.word	.reflections_44
-	.word	.reflections_45
-	.word	.reflections_46
-	.word	.reflections_47
-	.word	.reflections_48
-	.word	.reflections_49
-	.word	.reflections_50
-	.word	.reflections_51
-	.word	.reflections_52
-	.word	.reflections_53
-	.word	.reflections_54
-	.word	.reflections_55
-	.word	.reflections_56
-	.word	.reflections_57
-	.word	.reflections_58
-	.word	.reflections_59
-	.word	.reflections_60
-	.word	.reflections_61
-	.word	.reflections_62
-	.word	.reflections_63
-	.word	.reflections_64
-	.word	.reflections_65
-	.word	.reflections_66
-	.word	.reflections_67
-	.word	.reflections_68
-	.word	.reflections_69
-	.word	.reflections_70
-	.word	.reflections_71
-	.word	.reflections_72
-	.word	.reflections_73
-	.word	.reflections_74
-	.word	.reflections_75
-	.word	.reflections_76
-	.word	.reflections_77
-	.word	.reflections_78
-	.word	.reflections_79
-	.word	.reflections_80
-	.word	.reflections_81
-	.word	.reflections_82
-	.word	.reflections_83
-	.word	.reflections_84
-	.word	.reflections_85
-	.word	.reflections_86
-	.word	.reflections_87
-	.word	.reflections_88
-	.word	.reflections_89
-	.word	.reflections_90
-	.word	.reflections_91
-	.word	.reflections_92
-	.word	.reflections_93
-	.word	.reflections_94
-	.word	.reflections_95
-	.word	.reflections_96
-	.word	.reflections_97
-	.word	.reflections_98
-	.word	.reflections_99
-	.word	.reflections_100
-	.word	.reflections_101
-	.word	.reflections_102
-	.word	.reflections_103
-	.word	.reflections_104
-	.word	.reflections_105
-	.word	.reflections_106
-	.word	.reflections_107
-	.word	.reflections_108
-	.word	.reflections_109
-	.word	.reflections_110
-	.word	.reflections_111
-	.word	.reflections_112
-	.word	.reflections_113
-	.word	.reflections_114
-	.word	.reflections_115
-	.word	.reflections_116
-	.word	.reflections_117
-	.word	.reflections_118
-	.word	.reflections_119
-	.word	.reflections_120
-	.word	.reflections_121
-	.word	.reflections_122
-	.word	.reflections_123
-	.word	.reflections_124
-	.word	.reflections_125
-	.word	.reflections_126
-	.word	.reflections_127
-	.word	.reflections_128
-	.word	.reflections_129
-	.word	.reflections_130
-	.word	.reflections_131
-	.word	.reflections_132
-	.word	.reflections_133
-	.word	.reflections_134
-	.word	.reflections_135
-	.word	.reflections_136
-	.word	.reflections_137
-	.word	.reflections_138
-	.word	.reflections_139
-	.word	.reflections_140
-	.word	.reflections_141
-	.word	.reflections_142
-	.word	.reflections_143
-	.word	.reflections_144
-	.word	.reflections_145
-	.word	.reflections_146
-	.word	.reflections_147
-	.word	.reflections_148
-	.word	.reflections_149
-	.word	.reflections_150
-	.word	.reflections_151
-	.word	.reflections_152
-	.word	.reflections_153
-	.word	.reflections_154
-	.word	.reflections_155
-	.word	.reflections_156
-	.word	.reflections_157
-	.word	.reflections_158
-	.word	.reflections_159
-	.word	.reflections_160
-	.word	.reflections_161
-	.word	.reflections_162
-	.word	.reflections_163
-	.word	.reflections_164
-	.word	.reflections_165
-	.word	.reflections_166
-	.word	.reflections_167
-	.word	.reflections_168
-	.word	.reflections_169
-	.word	.reflections_170
-	.word	.reflections_171
-	.word	.reflections_172
-	.word	.reflections_173
-	.word	.reflections_174
-	.word	.reflections_175
-	.word	.reflections_176
-	.word	.reflections_177
-	.word	.reflections_178
-	.word	.reflections_179
-	.word	.reflections_180
-.reflections_1:
+	.word	.min_caml_reflections_1
+	.word	.min_caml_reflections_2
+	.word	.min_caml_reflections_3
+	.word	.min_caml_reflections_4
+	.word	.min_caml_reflections_5
+	.word	.min_caml_reflections_6
+	.word	.min_caml_reflections_7
+	.word	.min_caml_reflections_8
+	.word	.min_caml_reflections_9
+	.word	.min_caml_reflections_10
+	.word	.min_caml_reflections_11
+	.word	.min_caml_reflections_12
+	.word	.min_caml_reflections_13
+	.word	.min_caml_reflections_14
+	.word	.min_caml_reflections_15
+	.word	.min_caml_reflections_16
+	.word	.min_caml_reflections_17
+	.word	.min_caml_reflections_18
+	.word	.min_caml_reflections_19
+	.word	.min_caml_reflections_20
+	.word	.min_caml_reflections_21
+	.word	.min_caml_reflections_22
+	.word	.min_caml_reflections_23
+	.word	.min_caml_reflections_24
+	.word	.min_caml_reflections_25
+	.word	.min_caml_reflections_26
+	.word	.min_caml_reflections_27
+	.word	.min_caml_reflections_28
+	.word	.min_caml_reflections_29
+	.word	.min_caml_reflections_30
+	.word	.min_caml_reflections_31
+	.word	.min_caml_reflections_32
+	.word	.min_caml_reflections_33
+	.word	.min_caml_reflections_34
+	.word	.min_caml_reflections_35
+	.word	.min_caml_reflections_36
+	.word	.min_caml_reflections_37
+	.word	.min_caml_reflections_38
+	.word	.min_caml_reflections_39
+	.word	.min_caml_reflections_40
+	.word	.min_caml_reflections_41
+	.word	.min_caml_reflections_42
+	.word	.min_caml_reflections_43
+	.word	.min_caml_reflections_44
+	.word	.min_caml_reflections_45
+	.word	.min_caml_reflections_46
+	.word	.min_caml_reflections_47
+	.word	.min_caml_reflections_48
+	.word	.min_caml_reflections_49
+	.word	.min_caml_reflections_50
+	.word	.min_caml_reflections_51
+	.word	.min_caml_reflections_52
+	.word	.min_caml_reflections_53
+	.word	.min_caml_reflections_54
+	.word	.min_caml_reflections_55
+	.word	.min_caml_reflections_56
+	.word	.min_caml_reflections_57
+	.word	.min_caml_reflections_58
+	.word	.min_caml_reflections_59
+	.word	.min_caml_reflections_60
+	.word	.min_caml_reflections_61
+	.word	.min_caml_reflections_62
+	.word	.min_caml_reflections_63
+	.word	.min_caml_reflections_64
+	.word	.min_caml_reflections_65
+	.word	.min_caml_reflections_66
+	.word	.min_caml_reflections_67
+	.word	.min_caml_reflections_68
+	.word	.min_caml_reflections_69
+	.word	.min_caml_reflections_70
+	.word	.min_caml_reflections_71
+	.word	.min_caml_reflections_72
+	.word	.min_caml_reflections_73
+	.word	.min_caml_reflections_74
+	.word	.min_caml_reflections_75
+	.word	.min_caml_reflections_76
+	.word	.min_caml_reflections_77
+	.word	.min_caml_reflections_78
+	.word	.min_caml_reflections_79
+	.word	.min_caml_reflections_80
+	.word	.min_caml_reflections_81
+	.word	.min_caml_reflections_82
+	.word	.min_caml_reflections_83
+	.word	.min_caml_reflections_84
+	.word	.min_caml_reflections_85
+	.word	.min_caml_reflections_86
+	.word	.min_caml_reflections_87
+	.word	.min_caml_reflections_88
+	.word	.min_caml_reflections_89
+	.word	.min_caml_reflections_90
+	.word	.min_caml_reflections_91
+	.word	.min_caml_reflections_92
+	.word	.min_caml_reflections_93
+	.word	.min_caml_reflections_94
+	.word	.min_caml_reflections_95
+	.word	.min_caml_reflections_96
+	.word	.min_caml_reflections_97
+	.word	.min_caml_reflections_98
+	.word	.min_caml_reflections_99
+	.word	.min_caml_reflections_100
+	.word	.min_caml_reflections_101
+	.word	.min_caml_reflections_102
+	.word	.min_caml_reflections_103
+	.word	.min_caml_reflections_104
+	.word	.min_caml_reflections_105
+	.word	.min_caml_reflections_106
+	.word	.min_caml_reflections_107
+	.word	.min_caml_reflections_108
+	.word	.min_caml_reflections_109
+	.word	.min_caml_reflections_110
+	.word	.min_caml_reflections_111
+	.word	.min_caml_reflections_112
+	.word	.min_caml_reflections_113
+	.word	.min_caml_reflections_114
+	.word	.min_caml_reflections_115
+	.word	.min_caml_reflections_116
+	.word	.min_caml_reflections_117
+	.word	.min_caml_reflections_118
+	.word	.min_caml_reflections_119
+	.word	.min_caml_reflections_120
+	.word	.min_caml_reflections_121
+	.word	.min_caml_reflections_122
+	.word	.min_caml_reflections_123
+	.word	.min_caml_reflections_124
+	.word	.min_caml_reflections_125
+	.word	.min_caml_reflections_126
+	.word	.min_caml_reflections_127
+	.word	.min_caml_reflections_128
+	.word	.min_caml_reflections_129
+	.word	.min_caml_reflections_130
+	.word	.min_caml_reflections_131
+	.word	.min_caml_reflections_132
+	.word	.min_caml_reflections_133
+	.word	.min_caml_reflections_134
+	.word	.min_caml_reflections_135
+	.word	.min_caml_reflections_136
+	.word	.min_caml_reflections_137
+	.word	.min_caml_reflections_138
+	.word	.min_caml_reflections_139
+	.word	.min_caml_reflections_140
+	.word	.min_caml_reflections_141
+	.word	.min_caml_reflections_142
+	.word	.min_caml_reflections_143
+	.word	.min_caml_reflections_144
+	.word	.min_caml_reflections_145
+	.word	.min_caml_reflections_146
+	.word	.min_caml_reflections_147
+	.word	.min_caml_reflections_148
+	.word	.min_caml_reflections_149
+	.word	.min_caml_reflections_150
+	.word	.min_caml_reflections_151
+	.word	.min_caml_reflections_152
+	.word	.min_caml_reflections_153
+	.word	.min_caml_reflections_154
+	.word	.min_caml_reflections_155
+	.word	.min_caml_reflections_156
+	.word	.min_caml_reflections_157
+	.word	.min_caml_reflections_158
+	.word	.min_caml_reflections_159
+	.word	.min_caml_reflections_160
+	.word	.min_caml_reflections_161
+	.word	.min_caml_reflections_162
+	.word	.min_caml_reflections_163
+	.word	.min_caml_reflections_164
+	.word	.min_caml_reflections_165
+	.word	.min_caml_reflections_166
+	.word	.min_caml_reflections_167
+	.word	.min_caml_reflections_168
+	.word	.min_caml_reflections_169
+	.word	.min_caml_reflections_170
+	.word	.min_caml_reflections_171
+	.word	.min_caml_reflections_172
+	.word	.min_caml_reflections_173
+	.word	.min_caml_reflections_174
+	.word	.min_caml_reflections_175
+	.word	.min_caml_reflections_176
+	.word	.min_caml_reflections_177
+	.word	.min_caml_reflections_178
+	.word	.min_caml_reflections_179
+	.word	.min_caml_reflections_180
+.min_caml_objects_1:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_2:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_3:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_2:
 	.word	0
-.reflections_4:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_5:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_6:
 	.word	0
 	.word	0
+.min_caml_objects_3:
 	.word	0
 	.word	0
-.reflections_7:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_8:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_9:
 	.word	0
+.min_caml_objects_4:
 	.word	0
 	.word	0
 	.word	0
-.reflections_10:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_11:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_12:
+.min_caml_objects_5:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_13:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_14:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_6:
 	.word	0
-.reflections_15:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_16:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_17:
 	.word	0
 	.word	0
+.min_caml_objects_7:
 	.word	0
 	.word	0
-.reflections_18:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_19:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_20:
 	.word	0
+.min_caml_objects_8:
 	.word	0
 	.word	0
 	.word	0
-.reflections_21:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_22:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_23:
+.min_caml_objects_9:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_24:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_25:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_10:
 	.word	0
-.reflections_26:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_27:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_28:
 	.word	0
 	.word	0
+.min_caml_objects_11:
 	.word	0
 	.word	0
-.reflections_29:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_30:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_31:
 	.word	0
+.min_caml_objects_12:
 	.word	0
 	.word	0
 	.word	0
-.reflections_32:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_33:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_34:
+.min_caml_objects_13:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_35:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_36:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_14:
 	.word	0
-.reflections_37:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_38:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_39:
 	.word	0
 	.word	0
+.min_caml_objects_15:
 	.word	0
 	.word	0
-.reflections_40:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_41:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_42:
 	.word	0
+.min_caml_objects_16:
 	.word	0
 	.word	0
 	.word	0
-.reflections_43:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_44:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_45:
+.min_caml_objects_17:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_46:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_47:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_18:
 	.word	0
-.reflections_48:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_49:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_50:
 	.word	0
 	.word	0
+.min_caml_objects_19:
 	.word	0
 	.word	0
-.reflections_51:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_52:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_53:
 	.word	0
+.min_caml_objects_20:
 	.word	0
 	.word	0
 	.word	0
-.reflections_54:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_55:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_56:
+.min_caml_objects_21:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_57:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_58:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_22:
 	.word	0
-.reflections_59:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_60:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_61:
 	.word	0
 	.word	0
+.min_caml_objects_23:
 	.word	0
 	.word	0
-.reflections_62:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_63:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_64:
 	.word	0
+.min_caml_objects_24:
 	.word	0
 	.word	0
 	.word	0
-.reflections_65:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_66:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_67:
+.min_caml_objects_25:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_68:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_69:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_26:
 	.word	0
-.reflections_70:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_71:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_72:
 	.word	0
 	.word	0
+.min_caml_objects_27:
 	.word	0
 	.word	0
-.reflections_73:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_74:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_75:
 	.word	0
+.min_caml_objects_28:
 	.word	0
 	.word	0
 	.word	0
-.reflections_76:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_77:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_78:
+.min_caml_objects_29:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_79:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_80:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_30:
 	.word	0
-.reflections_81:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_82:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_83:
 	.word	0
 	.word	0
+.min_caml_objects_31:
 	.word	0
 	.word	0
-.reflections_84:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_85:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_86:
 	.word	0
+.min_caml_objects_32:
 	.word	0
 	.word	0
 	.word	0
-.reflections_87:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_88:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_89:
+.min_caml_objects_33:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_90:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_91:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_34:
 	.word	0
-.reflections_92:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_93:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_94:
 	.word	0
 	.word	0
+.min_caml_objects_35:
 	.word	0
 	.word	0
-.reflections_95:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_96:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_97:
 	.word	0
+.min_caml_objects_36:
 	.word	0
 	.word	0
 	.word	0
-.reflections_98:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_99:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_100:
+.min_caml_objects_37:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_101:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_102:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_38:
 	.word	0
-.reflections_103:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_104:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_105:
 	.word	0
 	.word	0
+.min_caml_objects_39:
 	.word	0
 	.word	0
-.reflections_106:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_107:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_108:
 	.word	0
+.min_caml_objects_40:
 	.word	0
 	.word	0
 	.word	0
-.reflections_109:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_110:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_111:
+.min_caml_objects_41:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_112:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_113:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_42:
 	.word	0
-.reflections_114:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_115:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_116:
 	.word	0
 	.word	0
+.min_caml_objects_43:
 	.word	0
 	.word	0
-.reflections_117:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_118:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_119:
 	.word	0
+.min_caml_objects_44:
 	.word	0
 	.word	0
 	.word	0
-.reflections_120:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_121:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_122:
+.min_caml_objects_45:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_123:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_124:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_46:
 	.word	0
-.reflections_125:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_126:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_127:
 	.word	0
 	.word	0
+.min_caml_objects_47:
 	.word	0
 	.word	0
-.reflections_128:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_129:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_130:
 	.word	0
+.min_caml_objects_48:
 	.word	0
 	.word	0
 	.word	0
-.reflections_131:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_132:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_133:
+.min_caml_objects_49:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_134:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_135:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_50:
 	.word	0
-.reflections_136:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_137:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_138:
 	.word	0
 	.word	0
+.min_caml_objects_51:
 	.word	0
 	.word	0
-.reflections_139:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_140:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_141:
 	.word	0
+.min_caml_objects_52:
 	.word	0
 	.word	0
 	.word	0
-.reflections_142:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_143:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_144:
+.min_caml_objects_53:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_145:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_146:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_54:
 	.word	0
-.reflections_147:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_148:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_149:
 	.word	0
 	.word	0
+.min_caml_objects_55:
 	.word	0
 	.word	0
-.reflections_150:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_151:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_152:
 	.word	0
+.min_caml_objects_56:
 	.word	0
 	.word	0
 	.word	0
-.reflections_153:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_154:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_155:
+.min_caml_objects_57:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_156:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_157:
 	.word	0
 	.word	0
 	.word	0
+.min_caml_objects_58:
 	.word	0
-.reflections_158:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_159:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_160:
 	.word	0
 	.word	0
+.min_caml_objects_59:
 	.word	0
 	.word	0
-.reflections_161:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_162:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_163:
 	.word	0
+.min_caml_objects_60:
 	.word	0
 	.word	0
 	.word	0
-.reflections_164:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_165:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_166:
+.min_caml_reflections_1:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_167:
+.min_caml_reflections_2:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_168:
+.min_caml_reflections_3:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_169:
+.min_caml_reflections_4:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_170:
+.min_caml_reflections_5:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_171:
+.min_caml_reflections_6:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_172:
+.min_caml_reflections_7:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_173:
+.min_caml_reflections_8:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_174:
+.min_caml_reflections_9:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_175:
+.min_caml_reflections_10:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_176:
+.min_caml_reflections_11:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_177:
+.min_caml_reflections_12:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_178:
+.min_caml_reflections_13:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_179:
+.min_caml_reflections_14:
 	.word	0
 	.word	0
 	.word	0
 	.word	0
-.reflections_180:
+.min_caml_reflections_15:
 	.word	0
 	.word	0
 	.word	0
+	.word	0
+.min_caml_reflections_16:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_17:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_18:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_19:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_20:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_21:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_22:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_23:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_24:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_25:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_26:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_27:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_28:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_29:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_30:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_31:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_32:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_33:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_34:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_35:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_36:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_37:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_38:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_39:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_40:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_41:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_42:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_43:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_44:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_45:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_46:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_47:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_48:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_49:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_50:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_51:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_52:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_53:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_54:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_55:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_56:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_57:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_58:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_59:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_60:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_61:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_62:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_63:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_64:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_65:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_66:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_67:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_68:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_69:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_70:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_71:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_72:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_73:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_74:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_75:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_76:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_77:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_78:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_79:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_80:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_81:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_82:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_83:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_84:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_85:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_86:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_87:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_88:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_89:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_90:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_91:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_92:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_93:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_94:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_95:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_96:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_97:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_98:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_99:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_100:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_101:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_102:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_103:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_104:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_105:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_106:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_107:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_108:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_109:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_110:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_111:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_112:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_113:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_114:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_115:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_116:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_117:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_118:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_119:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_120:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_121:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_122:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_123:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_124:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_125:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_126:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_127:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_128:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_129:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_130:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_131:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_132:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_133:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_134:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_135:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_136:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_137:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_138:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_139:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_140:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_141:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_142:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_143:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_144:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_145:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_146:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_147:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_148:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_149:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_150:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_151:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_152:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_153:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_154:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_155:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_156:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_157:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_158:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_159:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_160:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_161:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_162:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_163:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_164:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_165:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_166:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_167:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_168:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_169:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_170:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_171:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_172:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_173:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_174:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_175:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_176:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_177:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_178:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_179:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_reflections_180:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_light_dirvec_consts:
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+	.word	0
+.min_caml_and_net_1:
+	.word	-1
+.min_caml_or_net_1:
+	.word	.min_caml_and_net_1
+.min_caml_light_dirvec_v3:
+	.word	0
+	.word	0
+	.word	0
+l_data_32:	# 128.000000
+	.word	1124073472
+l_data_31:	# 0.900000
+	.word	1063675494
+l_data_30:	# 0.200000
+	.word	1045220557
+l_data_29:	# -150.000000
+	.word	-1021968384
+l_data_28:	# 150.000000
+	.word	1125515264
+l_data_27:	# 0.100000
+	.word	1036831949
+l_data_26:	# -2.000000
+	.word	-1073741824
+l_data_25:	# 0.003906
+	.word	998244352
+l_data_24:	# 20.000000
+	.word	1101004800
+l_data_23:	# 0.050000
+	.word	1028443341
+l_data_22:	# 0.250000
+	.word	1048576000
+l_data_21:	# 10.000000
+	.word	1092616192
+l_data_20:	# 0.300000
+	.word	1050253722
+l_data_19:	# 255.000000
+	.word	1132396544
+l_data_18:	# 0.500000
+	.word	1056964608
+l_data_17:	# 0.150000
+	.word	1041865114
+l_data_16:	# 15.000000
+	.word	1097859072
+l_data_15:	# 3.141593
+	.word	1078530011
+l_data_14:	# 30.000000
+	.word	1106247680
+l_data_13:	# 0.000100
+	.word	953267991
+l_data_12:	# 100000000.000000
+	.word	1287568416
+l_data_11:	# 1000000000.000000
+	.word	1315859240
+l_data_10:	# -0.100000
+	.word	-1110651699
+l_data_9:	# 0.010000
+	.word	1008981770
+l_data_8:	# -0.200000
+	.word	-1102263091
+l_data_7:	# 2.000000
+	.word	1073741824
+l_data_6:	# -200.000000
+	.word	-1018691584
+l_data_5:	# 200.000000
+	.word	1128792064
+l_data_4:	# 0.017453
+	.word	1016003125
+l_data_3:	# -1.000000
+	.word	-1082130432
+l_data_2:	# 1.000000
+	.word	1065353216
+l_data_1:	# 0.000000
 	.word	0

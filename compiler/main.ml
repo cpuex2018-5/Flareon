@@ -49,7 +49,7 @@ let lexbuf outchan l = (* compile the buffer and put it to outchan (caml2html: m
   let e = Virtual.f e in
   let e = Simm.f e in
   let e = RegAlloc.f e in
-  Emit.f outchan e
+  Emit.f outchan Asm.globals e
 
 let string s = lexbuf stdout (Lexing.from_string s) (* compile a string and put it to stdout (caml2html: main_string) *)
 
