@@ -312,7 +312,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
 let f oc (Prog(data, fundefs, e)) =
   let int_array = [
     ("n_objects", 1, 0);
-    (* ("and_net_1", 1, -1); *)
+    ("and_net_1", 1, -1);
     ("dirvecs", 5, 0);
     ("intsec_rectside", 1, 0);
     ("intersected_object_id", 1, 0);
@@ -342,17 +342,17 @@ let f oc (Prog(data, fundefs, e)) =
     ("ptrace_dirvec", 3, 0.0);
     ("light_dirvec_v3", 3, 0.0);
   ] in
-  let nested_array = [
-    (* ("and_net", 50, "min_caml_and_net_1");
-       ("or_net_1", 1, "min_caml_and_net_1");
-       ("or_net", 1, "min_caml_or_net_1"); *)
-  ] in
-  let nested_tuple = [
-    ("light_dirvec", ["min_caml_light_dirvec_v3"; "min_caml_light_dirvec_consts"]);
-  ] in
   let tuple_array = [
     ("objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
     ("reflections", 180, [0; 0; 0; 0]);
+  ] in
+  let nested_array = [
+    ("and_net", 50, "min_caml_and_net_1");
+    ("or_net_1", 1, "min_caml_and_net_1");
+    ("or_net", 1, "min_caml_or_net_1");
+  ] in
+  let nested_tuple = [
+    ("light_dirvec", ["min_caml_light_dirvec_v3"; "min_caml_light_dirvec_consts"]);
   ] in
   let global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 int_array in
   let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 float_array in

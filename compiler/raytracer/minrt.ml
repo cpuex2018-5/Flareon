@@ -31,9 +31,9 @@
 (* 鏡面ハイライト強度 (標準=255) *)
 (* let beam = create_array 1 255.0 in *)
 (* AND ネットワークを保持 *)
-let and_net = create_array 50 (create_array 1 (-1)) in
+(* let and_net = create_array 50 (create_array 1 (-1)) in *)
 (* OR ネットワークを保持 *)
-let or_net = create_array 1 (create_array 1 (and_net.(0))) in
+(* let or_net = create_array 1 (create_array 1 (and_net.(0))) in *)
 
 (* 以下、交差判定ルーチンの返り値格納用 *)
 (* solver の交点 の t の値 *)
