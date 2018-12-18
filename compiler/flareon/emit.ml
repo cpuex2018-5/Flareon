@@ -77,15 +77,13 @@ and g' buf e =
   | NonTail(x), Sll(y, V(z)) -> Printf.bprintf buf "\tsll\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), Sll(y, C(z)) -> Printf.bprintf buf "\tslli\t%s, %s, %d\n" (reg x) (reg y) z
   | NonTail(x), Lw(y, L(Id.L(l))) ->
-    Printf.bprintf buf "\taddli\t%s, %s, %s\n" (reg reg_tmp) (reg y) l;
-    Printf.bprintf buf "\tlw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
+    Printf.bprintf buf "\tlwl\t%s, %s(%s)\n" (reg x) l (reg y)
   | NonTail(x), Lw(y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tlw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(x), Lw(y, C(z)) -> Printf.bprintf buf "\tlw\t%s, %d(%s)\n" (reg x) z (reg y)
   | NonTail(_), Sw(x, y, L(Id.L(l))) ->
-    Printf.bprintf buf "\taddli\t%s, %s, %s\n"(reg reg_tmp) (reg y) l;
-    Printf.bprintf buf "\tsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
+    Printf.bprintf buf "\tswl\t%s, %s(%s)\n" (reg x) l (reg y)
   | NonTail(_), Sw(x, y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n"(reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
@@ -102,15 +100,13 @@ and g' buf e =
   | NonTail(x), FAbs(y) -> Printf.bprintf buf "\tfabs\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), FSqrt(y) -> Printf.bprintf buf "\tfsqrt\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), Flw(y, L(Id.L(l))) ->
-    Printf.bprintf buf "\taddli\t%s, %s, %s\n" (reg reg_tmp) (reg y) l;
-    Printf.bprintf buf "\tflw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
+    Printf.bprintf buf "\tflwl\t%s, %s(%s)\n" (reg x) l (reg y)
   | NonTail(x), Flw(y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tflw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
   | NonTail(x), Flw(y, C(z)) -> Printf.bprintf buf "\tflw\t%s, %d(%s)\n" (reg x) z (reg y)
   | NonTail(_), Fsw(x, y, L(Id.L(l))) ->
-    Printf.bprintf buf "\taddli\t%s, %s, %s\n" (reg reg_tmp) (reg y) l;
-    Printf.bprintf buf "\tfsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
+    Printf.bprintf buf "\tfswl\t%s, %s(%s)\n" (reg x) l (reg y)
   | NonTail(_), Fsw(x, y, V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tfsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
@@ -381,7 +377,7 @@ let f oc globals (Prog(data, fundefs, e)) =
   Printf.fprintf oc "\tb\tend\n";
   List.iter (fun fundef -> h oc fundef) fundefs;
   Printf.fprintf oc "\t.data\n";
-  print_globals oc globals;
+  (* print_globals oc globals; *)
   if data <> [] then
     List.iter
       (fun (Id.L(x), d) ->
