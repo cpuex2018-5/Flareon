@@ -50,8 +50,8 @@ float fsub(float x1_f,float x2_f){
     initial++;
   }
 
-  unsigned int e5 = (e4 > e1+1)?0:e4;
-  unsigned int f5 = (e4 > e1+1)?0:f4;
+  unsigned int e5 = (e4 > get_binaryf32(e1+1,0,8))?0:e4;
+  unsigned int f5 = (e4 > get_binaryf32(e1+1,0,8))?0:f4;
   unsigned int ret = (s1<<31) + (e5 << 23) + get_binaryf32(f5,0,23);
 
   union{ unsigned int f_i;float f_f;} true_value, ans;
