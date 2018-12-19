@@ -15,18 +15,22 @@ class BinGen {
 
             uint32_t fst = 0;  // instruction
             uint32_t snd = 0;  // instruction
+            uint32_t third = 0;
             uint32_t data = 0; // floating-point data
             void set_fst(uint32_t v) { fst = v; has_fst = true; }
             void set_snd(uint32_t v) { snd = v; has_snd = true; }
+            void set_third(uint32_t v) { third = v; has_third = true; }
             void set_data(uint32_t v) { data = v; has_data = true; }
-            bool is_empty() { return !has_fst && !has_snd && !has_data; }
+            bool is_empty() { return !has_fst && !has_snd && !has_third && !has_data; }
             bool is_inst() { return has_fst; }
-            bool is_double_inst() { return has_fst && has_snd; }
+            bool is_multiple_inst() { return has_fst && has_snd; }
+            bool is_triple_inst() { return has_fst && has_snd && has_third; }
             bool is_data() { return has_data; }
 
           private:
             bool has_fst = false;
             bool has_snd = false;
+            bool has_third = false;
             bool has_data = false;
         } Inst;
 
@@ -46,6 +50,7 @@ class BinGen {
 
         void Parse(std::string input, std::string &mnemo, std::vector<std::string> &arg);
         void ParseOffset(std::string arg, std::string* reg, uint32_t* offset);
+        void ParseOffsetLabel(std::string arg, std::string* reg, std::string* label);
 
         // Parses and evaluates the input. Returns the converted instructions (zero, one or two)
         Inst Convert(std::string input);

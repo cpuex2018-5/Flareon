@@ -55,7 +55,20 @@ void BinGen::ReadLabels(std::string input) {
         // The input wasn't a label.
 
         // Some pseudo-instructions will expand to two instrs
-        if (mnemo == "la" || mnemo == "lda" || mnemo == "ret" || mnemo == "call" || mnemo == "fli" || mnemo == "tail") {
+        if (mnemo == "la" || mnemo == "ret" || mnemo == "call" || mnemo == "fli" || mnemo == "tail") {
+            nline_ += 2;
+            return;
+        }
+        if (mnemo == "lwl" || mnemo == "swl" || mnemo == "flwl" || mnemo == "fswl") {
+            std::string reg, label;
+            ParseOffsetLabel(arg[1], &reg, &label);
+            assert(data_map_.count(label) > 0);
+            if (data_map_[label] > (1 << 11) - 1) {
+                nline_ += 3;
+                return;
+            }
+        }
+        if (mnemo == "lda" && SolveDataLabel(arg[1]) > (1 << 11) - 1) {
             nline_ += 2;
             return;
         }
@@ -114,13 +127,15 @@ void BinGen::Main(std::string input) {
         WriteData(inst.data);
         return;
     }
-
     WriteInst(inst.fst);
 
-    if (!inst.is_double_inst())
+    if (!inst.is_multiple_inst())
         return;
-
     WriteInst(inst.snd);
+
+    if (!inst.is_triple_inst())
+        return;
+    WriteInst(inst.third);
 }
 
 void BinGen::Finish() {
@@ -167,6 +182,13 @@ void BinGen::ParseOffset(std::string arg, std::string* reg, uint32_t* offset) {
     size_t pos_lpar = arg.find("(");
     size_t pos_rpar = arg.find(")");
     *offset = std::stoi(arg.substr(0, pos_lpar));
+    *reg = arg.substr(pos_lpar + 1, (pos_rpar - pos_lpar - 1));
+}
+
+void BinGen::ParseOffsetLabel(std::string arg, std::string* reg, std::string* label) {
+    size_t pos_lpar = arg.find("(");
+    size_t pos_rpar = arg.find(")");
+    *label = arg.substr(0, pos_lpar);
     *reg = arg.substr(pos_lpar + 1, (pos_rpar - pos_lpar - 1));
 }
 
@@ -304,9 +326,13 @@ BinGen::Inst BinGen::Convert(std::string input) {
     else if (mnemo == "lda") {
         assert(2 == arg.size());
         uint32_t tmp = SolveDataLabel(arg[1]);
-        inst.set_fst(lui(arg[0], ((tmp >> 12) + ((tmp >> 11) & 0x1)) & 0xfffff));
-        nline_++;
-        inst.set_snd(op_imm("addi", arg[0], arg[0], tmp & 0xfff));
+        if (tmp > (1 << 11) - 1) {
+            inst.set_fst(lui(arg[0], ((tmp >> 12) + ((tmp >> 11) & 0x1)) & 0xfffff));
+            nline_++;
+            inst.set_snd(op_imm("addi", arg[0], arg[0], tmp & 0xfff));
+        } else {
+            inst.set_fst(op_imm("addi", arg[0], "zero", tmp));
+        }
     }
 
     else if (mnemo == "li") {
@@ -379,6 +405,28 @@ BinGen::Inst BinGen::Convert(std::string input) {
         inst.set_fst(lui(tmp_reg, ((imm >> 12) + ((imm >> 11) & 1)) & 0xfffff));
         nline_++;
         inst.set_snd(flw(arg[0], tmp_reg, (imm & 0xfff)));
+    }
+
+    else if (mnemo == "lwl" || mnemo == "swl" || mnemo == "flwl" || mnemo == "fswl") {
+        assert(2 == arg.size());
+        std::string reg, label;
+        ParseOffsetLabel(arg[1], &reg, &label);
+        uint32_t imm = SolveDataLabel(label);
+        if (imm > (1 << 11) - 1) {
+            inst.set_fst(lui(arg[0], ((imm >> 12) + ((imm >> 11) & 0x1)) & 0xfffff));
+            nline_++;
+            inst.set_snd(op("add", arg[0], arg[0], reg));
+            nline_++;
+            if (mnemo == "lwl") inst.set_third(load("lw", arg[0], reg, imm & 0xfff));
+            if (mnemo == "swl") inst.set_third(store("sw", arg[0], reg, imm & 0xfff));
+            if (mnemo == "flwl") inst.set_third(flw(arg[0], reg, imm & 0xfff));
+            if (mnemo == "fswl") inst.set_third(fsw(arg[0], reg, imm & 0xfff));
+        } else {
+            if (mnemo == "lwl") inst.set_fst(load("lw", arg[0], reg, imm));
+            if (mnemo == "swl") inst.set_fst(store("sw", arg[0], reg, imm));
+            if (mnemo == "flwl") inst.set_fst(flw(arg[0], reg, imm));
+            if (mnemo == "fswl") inst.set_fst(fsw(arg[0], reg, imm));
+        }
     }
 
     else {

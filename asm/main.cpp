@@ -45,9 +45,9 @@ int main(int argc, char* argv[])
         std::cout << "ERROR: The input file should have suffix '.s'" << std::endl;
         return 0;
     }
-    std::string iolibname =
-        (infile.size() >= 7 && infile.substr(infile.size() - 7, 5) == "minrt") ?
-        "libcontest.S" : "libmincaml.S";
+
+    const bool is_minrt = infile.size() >= 7 && infile.substr(infile.size() - 7, 5) == "minrt";
+    std::string iolibname = is_minrt ?  "libcontest.S" : "libmincaml.S";
     std::string cmnlibname = "libcommon.S";
     std::ifstream ifs(infile), iolib(iolibname), cmnlib(cmnlibname);
     if (ifs.fail() || iolib.fail() || cmnlib.fail()) {
@@ -62,6 +62,11 @@ int main(int argc, char* argv[])
     BinGen bingen(std::move(ofs), std::move(coefs), is_verbose, is_debug, is_ascii);
 
     // Round 1: Skim through the assembly code and get the position of each label
+    if (is_minrt) {
+        std::ifstream glbifs(infile.substr(0, infile.size() - 7) + "globals.s");
+        while(getline(glbifs, str))
+            bingen.ReadLabels(str);
+    }
     while (getline(ifs, str))
         // Parse the input.
         bingen.ReadLabels(str);
@@ -81,6 +86,11 @@ int main(int argc, char* argv[])
     cmnlib.seekg(0, std::ios::beg);
 
     // Round 2: Replace the instructions with bytecodes
+    if (is_minrt) {
+        std::ifstream glbifs(infile.substr(0, infile.size() - 7) + "globals.s");
+        while(getline(glbifs, str))
+            bingen.Main(str);
+    }
     while (getline(ifs, str))
         bingen.Main(str);
     while (getline(iolib, str))

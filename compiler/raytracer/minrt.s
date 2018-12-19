@@ -567,11 +567,9 @@ read_nth_object_2727:
 	sw	a4, 4(a1)
 	lw	a5, 4(sp)
 	sw	a5, 0(a1)
-	lda	a5, min_caml_objects
-	lw	a6, 0(sp)
-	slli	a6, a6, 2
-	add	t6, a5, a6
-	sw	a1, 0(t6)
+	lw	a5, 0(sp)
+	slli	a5, a5, 2
+	swl	a1, min_caml_objects(a5)
 	li	t6, 3
 	bne	a4, t6, .read_nth_object_else_6
 	flw	fa0, 0(a2)
@@ -755,12 +753,10 @@ read_and_network_2737:
 	bne	a1, t6, .read_and_network_else_1
 	b	read_and_network_ret
 .read_and_network_else_1:
-	lda	a1, min_caml_and_net
-	lw	a2, 0(sp)
-	slli	a3, a2, 2
-	add	t6, a1, a3
-	sw	a0, 0(t6)
-	addi	a0, a2, 1
+	lw	a1, 0(sp)
+	slli	a2, a1, 2
+	swl	a0, min_caml_and_net(a2)
+	addi	a0, a1, 1
 	call	read_and_network_2737
 read_and_network_ret:
 	lw	ra, 4(sp)
@@ -1103,10 +1099,8 @@ solver_second_ret:
 solver_2781:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
-	lda	a3, min_caml_objects
 	slli	a0, a0, 2
-	add	t6, a3, a0
-	lw	a0, 0(t6)
+	lwl	a0, min_caml_objects(a0)
 	flw	fa0, 0(a2)
 	lw	a3, 20(a0)
 	lw	a4, 4(a0)
@@ -1344,10 +1338,8 @@ solver_second_fast_ret:
 solver_fast_2804:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
-	lda	a3, min_caml_objects
-	slli	a4, a0, 2
-	add	t6, a3, a4
-	lw	a3, 0(t6)
+	slli	a3, a0, 2
+	lwl	a3, min_caml_objects(a3)
 	flw	fa0, 0(a2)
 	lw	a4, 20(a3)
 	lw	a5, 4(a3)
@@ -1456,10 +1448,8 @@ solver_second_fast2_ret:
 solver_fast2_2822:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
-	lda	a2, min_caml_objects
-	slli	a3, a0, 2
-	add	t6, a2, a3
-	lw	a2, 0(t6)
+	slli	a2, a0, 2
+	lwl	a2, min_caml_objects(a2)
 	lw	a3, 40(a2)
 	lw	a4, 4(a2)
 	flw	fa0, 0(a3)
@@ -1720,10 +1710,8 @@ iter_setup_dirvec_constants_2834:
 	addi	sp, sp, -16
 	sw	ra, 12(sp)
 	blt	a1, zero, iter_setup_dirvec_constants_ret
-	lda	a2, min_caml_objects
-	slli	a3, a1, 2
-	add	t6, a2, a3
-	lw	a2, 0(t6)
+	slli	a2, a1, 2
+	lwl	a2, min_caml_objects(a2)
 	lw	a3, 4(a0)
 	lw	a4, 0(a0)
 	lw	a5, 4(a2)
@@ -1779,10 +1767,8 @@ setup_startp_constants_2839:
 	addi	sp, sp, -20
 	sw	ra, 16(sp)
 	blt	a1, zero, setup_startp_constants_ret
-	lda	a2, min_caml_objects
-	slli	a3, a1, 2
-	add	t6, a2, a3
-	lw	a2, 0(t6)
+	slli	a2, a1, 2
+	lwl	a2, min_caml_objects(a2)
 	lw	a3, 40(a2)
 	lw	a4, 20(a2)
 	lw	a5, 16(a2)
@@ -1945,10 +1931,8 @@ check_all_inside_2864:
 	li	a0, 1
 	b	check_all_inside_ret
 .check_all_inside_else_1:
-	lda	a3, min_caml_objects
 	slli	a2, a2, 2
-	add	t6, a3, a2
-	lw	a2, 0(t6)
+	lwl	a2, min_caml_objects(a2)
 	fsw	fa2, 0(sp)
 	fsw	fa1, 4(sp)
 	fsw	fa0, 8(sp)
@@ -2006,11 +1990,9 @@ shadow_check_and_group_2870:
 	xori	a0, a0, 1	# boolean not
 .shadow_check_and_group_cont_3:
 	bne	a0, zero, .shadow_check_and_group_else_4
-	lda	a0, min_caml_objects
-	lw	a1, 12(sp)
-	slli	a1, a1, 2
-	add	t6, a0, a1
-	lw	a0, 0(t6)
+	lw	a0, 12(sp)
+	slli	a0, a0, 2
+	lwl	a0, min_caml_objects(a0)
 	lw	a0, 24(a0)
 	bne	a0, zero, .shadow_check_and_group_else_5
 	li	a0, 0
@@ -2068,10 +2050,8 @@ shadow_check_one_or_group_2873:
 	li	a0, 0
 	b	shadow_check_one_or_group_ret
 .shadow_check_one_or_group_else_1:
-	lda	a3, min_caml_and_net
 	slli	a2, a2, 2
-	add	t6, a3, a2
-	lw	a2, 0(t6)
+	lwl	a2, min_caml_and_net(a2)
 	li	a3, 0
 	sw	a1, 0(sp)
 	sw	a0, 4(sp)
@@ -2183,11 +2163,9 @@ solve_each_element_2879:
 	mv	a2, a4
 	call	solver_2781
 	bne	a0, zero, .solve_each_element_else_3
-	lda	a0, min_caml_objects
-	lw	a1, 16(sp)
-	slli	a1, a1, 2
-	add	t6, a0, a1
-	lw	a0, 0(t6)
+	lw	a0, 16(sp)
+	slli	a0, a0, 2
+	lwl	a0, min_caml_objects(a0)
 	lw	a0, 24(a0)
 	bne	a0, zero, .solve_each_element_else_4
 	b	solve_each_element_ret
@@ -2279,10 +2257,8 @@ solve_one_or_network_2883:
 	bne	a3, t6, .solve_one_or_network_else_1
 	b	solve_one_or_network_ret
 .solve_one_or_network_else_1:
-	lda	a4, min_caml_and_net
 	slli	a3, a3, 2
-	add	t6, a4, a3
-	lw	a3, 0(t6)
+	lwl	a3, min_caml_and_net(a3)
 	li	a4, 0
 	sw	a2, 0(sp)
 	sw	a1, 4(sp)
@@ -2402,11 +2378,9 @@ solve_each_element_fast_2893:
 	mv	a0, a4
 	call	solver_fast2_2822
 	bne	a0, zero, .solve_each_element_fast_else_3
-	lda	a0, min_caml_objects
-	lw	a1, 16(sp)
-	slli	a1, a1, 2
-	add	t6, a0, a1
-	lw	a0, 0(t6)
+	lw	a0, 16(sp)
+	slli	a0, a0, 2
+	lwl	a0, min_caml_objects(a0)
 	lw	a0, 24(a0)
 	bne	a0, zero, .solve_each_element_fast_else_4
 	b	solve_each_element_fast_ret
@@ -2498,10 +2472,8 @@ solve_one_or_network_fast_2897:
 	bne	a3, t6, .solve_one_or_network_fast_else_1
 	b	solve_one_or_network_fast_ret
 .solve_one_or_network_fast_else_1:
-	lda	a4, min_caml_and_net
 	slli	a3, a3, 2
-	add	t6, a4, a3
-	lw	a3, 0(t6)
+	lwl	a3, min_caml_and_net(a3)
 	li	a4, 0
 	sw	a2, 0(sp)
 	sw	a1, 4(sp)
@@ -2610,8 +2582,8 @@ get_nvector_rect_2907:
 	fsw	fa0, 4(a2)
 	fsw	fa0, 8(a2)
 	addi	a1, a1, -1
-	slli	a3, a1, 2
-	add	t6, a0, a3
+	slli	a2, a1, 2
+	add	t6, a0, a2
 	flw	fa1, 0(t6)
 	feq	a0, fa1, fa0
 	bne	a0, zero, .get_nvector_rect_else_1
@@ -2628,8 +2600,7 @@ get_nvector_rect_2907:
 .get_nvector_rect_cont_2:
 	fneg	fa0, fa0
 	slli	a0, a1, 2
-	add	t6, a2, a0
-	fsw	fa0, 0(t6)
+	fswl	fa0, min_caml_nvector(a0)
 get_nvector_rect_ret:
 	lw	ra, 0(sp)
 	addi	sp, sp, 4
@@ -2996,10 +2967,8 @@ trace_reflections_2923:
 	addi	sp, sp, -40
 	sw	ra, 36(sp)
 	blt	a0, zero, trace_reflections_ret
-	lda	a2, min_caml_reflections
-	slli	a3, a0, 2
-	add	t6, a2, a3
-	lw	a2, 0(t6)
+	slli	a2, a0, 2
+	lwl	a2, min_caml_reflections(a2)
 	flw	fa2, 8(a2)
 	lw	a3, 4(a2)
 	lw	a2, 0(a2)
@@ -3119,10 +3088,8 @@ trace_ray_2928:
 .trace_ray_else_1:
 	lda	a0, min_caml_intersected_object_id
 	lw	a0, 0(a0)
-	lda	a1, min_caml_objects
-	slli	a2, a0, 2
-	add	t6, a1, a2
-	lw	a1, 0(t6)
+	slli	a1, a0, 2
+	lwl	a1, min_caml_objects(a1)
 	lw	a2, 28(a1)
 	lw	a3, 8(a1)
 	lw	a4, 4(a1)
@@ -3322,12 +3289,10 @@ trace_diffuse_ray_2934:
 	bne	a0, zero, .trace_diffuse_ray_else_1
 	b	trace_diffuse_ray_ret
 .trace_diffuse_ray_else_1:
-	lda	a0, min_caml_objects
-	lda	a1, min_caml_intersected_object_id
-	lw	a1, 0(a1)
-	slli	a1, a1, 2
-	add	t6, a0, a1
-	lw	a0, 0(t6)
+	lda	a0, min_caml_intersected_object_id
+	lw	a0, 0(a0)
+	slli	a0, a0, 2
+	lwl	a0, min_caml_objects(a0)
 	lw	a1, 4(sp)
 	lw	a1, 0(a1)
 	lw	a2, 28(a0)
@@ -3990,10 +3955,8 @@ pretrace_diffuse_rays_2988:
 	fsw	fa0, 0(a5)
 	fsw	fa0, 4(a5)
 	fsw	fa0, 8(a5)
-	lda	a6, min_caml_dirvecs
 	slli	a3, a3, 2
-	add	t6, a6, a3
-	lw	a3, 0(t6)
+	lwl	a3, min_caml_dirvecs(a3)
 	slli	a6, a1, 2
 	add	t6, a2, a6
 	lw	a2, 0(t6)
@@ -4493,10 +4456,8 @@ calc_dirvec_3028:
 	fdiv	fa0, fa0, fa2
 	fdiv	fa1, fa1, fa2
 	fdiv	fa2, fa3, fa2
-	lda	a0, min_caml_dirvecs
-	slli	a1, a1, 2
-	add	t6, a0, a1
-	lw	a0, 0(t6)
+	slli	a0, a1, 2
+	lwl	a0, min_caml_dirvecs(a0)
 	slli	a1, a2, 2
 	add	t6, a0, a1
 	lw	a1, 0(t6)
@@ -4718,70 +4679,65 @@ create_dirvec_elements_ret:
 	addi	sp, sp, 32
 	jr	ra
 create_dirvecs_3050:
-	addi	sp, sp, -36
-	sw	ra, 32(sp)
+	addi	sp, sp, -32
+	sw	ra, 28(sp)
 	blt	a0, zero, create_dirvecs_ret
-	lda	a1, min_caml_dirvecs
-	li	a2, 120
-	li	a3, 3
+	li	a1, 120
+	li	a2, 3
 	fli	fa0, l_data_1
 	fsw	fa0, 0(sp)
-	sw	a1, 4(sp)
-	sw	a0, 8(sp)
-	sw	a2, 12(sp)
-	mv	a0, a3
+	sw	a0, 4(sp)
+	sw	a1, 8(sp)
+	mv	a0, a2
 	call	min_caml_create_float_array
 	mv	a1, a0
 	lda	a0, min_caml_n_objects
 	lw	a2, 0(a0)
-	sw	a0, 16(sp)
-	sw	a1, 20(sp)
+	sw	a0, 12(sp)
+	sw	a1, 16(sp)
 	mv	a0, a2
 	call	min_caml_create_array
 	mv	a1, gp
 	addi	gp, gp, 8
 	sw	a0, 4(a1)
-	lw	a0, 20(sp)
+	lw	a0, 16(sp)
 	sw	a0, 0(a1)
-	lw	a0, 12(sp)
+	lw	a0, 8(sp)
 	call	min_caml_create_array
-	lw	a1, 8(sp)
+	lw	a1, 4(sp)
 	slli	a2, a1, 2
-	lw	a3, 4(sp)
-	add	t6, a3, a2
-	sw	a0, 0(t6)
+	swl	a0, min_caml_dirvecs(a2)
 	slli	a0, a1, 2
-	add	t6, a3, a0
-	lw	a0, 0(t6)
+	lwl	a0, min_caml_dirvecs(a0)
 	li	a2, 3
 	flw	fa0, 0(sp)
-	sw	a0, 24(sp)
+	sw	a0, 20(sp)
 	mv	a0, a2
 	call	min_caml_create_float_array
 	mv	a1, a0
-	lw	a0, 16(sp)
+	lw	a0, 12(sp)
 	lw	a0, 0(a0)
-	sw	a1, 28(sp)
+	sw	a1, 24(sp)
 	call	min_caml_create_array
 	mv	a1, gp
 	addi	gp, gp, 8
 	sw	a0, 4(a1)
-	lw	a0, 28(sp)
+	lw	a0, 24(sp)
 	sw	a0, 0(a1)
 	mv	a0, a1
-	lw	a1, 24(sp)
+	lw	a1, 20(sp)
 	sw	a0, 472(a1)
 	li	a0, 117
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
 	call	create_dirvec_elements_3047
-	lw	a0, 8(sp)
+	lw	a0, 4(sp)
 	addi	a0, a0, -1
 	call	create_dirvecs_3050
 create_dirvecs_ret:
-	lw	ra, 32(sp)
-	addi	sp, sp, 36
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
 	jr	ra
 init_dirvec_constants_3052:
 	addi	sp, sp, -20
@@ -4825,10 +4781,8 @@ init_vecset_constants_3055:
 	addi	sp, sp, -12
 	sw	ra, 8(sp)
 	blt	a0, zero, init_vecset_constants_ret
-	lda	a1, min_caml_dirvecs
-	slli	a2, a0, 2
-	add	t6, a1, a2
-	lw	a1, 0(t6)
+	slli	a1, a0, 2
+	lwl	a1, min_caml_dirvecs(a1)
 	lw	a2, 476(a1)
 	lda	a3, min_caml_n_objects
 	lw	a3, 0(a3)
@@ -4849,8 +4803,8 @@ init_vecset_constants_ret:
 	addi	sp, sp, 12
 	jr	ra
 setup_rect_reflection_3066:
-	addi	sp, sp, -104
-	sw	ra, 100(sp)
+	addi	sp, sp, -100
+	sw	ra, 96(sp)
 	slli	a0, a0, 2
 	lda	a2, min_caml_n_reflections
 	lw	a3, 0(a2)
@@ -4908,54 +4862,51 @@ setup_rect_reflection_3066:
 	mv	a0, a1
 	mv	a1, a2
 	call	iter_setup_dirvec_constants_2834
-	lda	a0, min_caml_reflections
-	mv	a1, gp
+	mv	a0, gp
 	addi	gp, gp, 12
 	flw	fa0, 28(sp)
-	fsw	fa0, 8(a1)
-	lw	a2, 52(sp)
-	sw	a2, 4(a1)
-	lw	a2, 24(sp)
-	sw	a2, 0(a1)
-	lw	a2, 20(sp)
-	slli	a3, a2, 2
-	add	t6, a0, a3
-	sw	a1, 0(t6)
-	addi	a1, a2, 1
-	lw	a3, 16(sp)
-	addi	a4, a3, 2
-	lw	a5, 12(sp)
-	flw	fa1, 4(a5)
-	li	a6, 3
+	fsw	fa0, 8(a0)
+	lw	a1, 52(sp)
+	sw	a1, 4(a0)
+	lw	a1, 24(sp)
+	sw	a1, 0(a0)
+	lw	a1, 20(sp)
+	slli	a2, a1, 2
+	swl	a0, min_caml_reflections(a2)
+	addi	a0, a1, 1
+	lw	a2, 16(sp)
+	addi	a3, a2, 2
+	lw	a4, 12(sp)
+	flw	fa1, 4(a4)
+	li	a5, 3
 	flw	fa2, 8(sp)
 	sw	a0, 56(sp)
-	sw	a1, 60(sp)
-	sw	a4, 64(sp)
-	fsw	fa1, 68(sp)
-	mv	a0, a6
+	sw	a3, 60(sp)
+	fsw	fa1, 64(sp)
+	mv	a0, a5
 	fmv	fa0, fa2
 	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 44(sp)
 	lw	a2, 0(a0)
-	sw	a1, 72(sp)
+	sw	a1, 68(sp)
 	mv	a0, a2
 	call	min_caml_create_array
 	mv	a1, gp
 	addi	gp, gp, 8
 	sw	a0, 4(a1)
-	lw	a0, 72(sp)
+	lw	a0, 68(sp)
 	sw	a0, 0(a1)
 	flw	fa0, 4(sp)
 	fsw	fa0, 0(a0)
-	flw	fa1, 68(sp)
+	flw	fa1, 64(sp)
 	fsw	fa1, 4(a0)
 	flw	fa1, 32(sp)
 	fsw	fa1, 8(a0)
 	lw	a0, 44(sp)
 	lw	a2, 0(a0)
 	addi	a2, a2, -1
-	sw	a1, 76(sp)
+	sw	a1, 72(sp)
 	mv	a0, a1
 	mv	a1, a2
 	call	iter_setup_dirvec_constants_2834
@@ -4963,50 +4914,48 @@ setup_rect_reflection_3066:
 	addi	gp, gp, 12
 	flw	fa0, 28(sp)
 	fsw	fa0, 8(a0)
-	lw	a1, 76(sp)
+	lw	a1, 72(sp)
 	sw	a1, 4(a0)
-	lw	a1, 64(sp)
-	sw	a1, 0(a0)
 	lw	a1, 60(sp)
+	sw	a1, 0(a0)
+	lw	a1, 56(sp)
 	slli	a1, a1, 2
-	lw	a2, 56(sp)
-	add	t6, a2, a1
-	sw	a0, 0(t6)
+	swl	a0, min_caml_reflections(a1)
 	lw	a0, 20(sp)
 	addi	a1, a0, 2
-	lw	a3, 16(sp)
-	addi	a3, a3, 3
-	lw	a4, 12(sp)
-	flw	fa1, 8(a4)
-	li	a4, 3
+	lw	a2, 16(sp)
+	addi	a2, a2, 3
+	lw	a3, 12(sp)
+	flw	fa1, 8(a3)
+	li	a3, 3
 	flw	fa2, 8(sp)
-	sw	a1, 80(sp)
-	sw	a3, 84(sp)
-	fsw	fa1, 88(sp)
-	mv	a0, a4
+	sw	a1, 76(sp)
+	sw	a2, 80(sp)
+	fsw	fa1, 84(sp)
+	mv	a0, a3
 	fmv	fa0, fa2
 	call	min_caml_create_float_array
 	mv	a1, a0
 	lw	a0, 44(sp)
 	lw	a2, 0(a0)
-	sw	a1, 92(sp)
+	sw	a1, 88(sp)
 	mv	a0, a2
 	call	min_caml_create_array
 	mv	a1, gp
 	addi	gp, gp, 8
 	sw	a0, 4(a1)
-	lw	a0, 92(sp)
+	lw	a0, 88(sp)
 	sw	a0, 0(a1)
 	flw	fa0, 4(sp)
 	fsw	fa0, 0(a0)
 	flw	fa0, 36(sp)
 	fsw	fa0, 4(a0)
-	flw	fa0, 88(sp)
+	flw	fa0, 84(sp)
 	fsw	fa0, 8(a0)
 	lw	a0, 44(sp)
 	lw	a0, 0(a0)
 	addi	a0, a0, -1
-	sw	a1, 96(sp)
+	sw	a1, 92(sp)
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
@@ -5015,22 +4964,20 @@ setup_rect_reflection_3066:
 	addi	gp, gp, 12
 	flw	fa0, 28(sp)
 	fsw	fa0, 8(a0)
-	lw	a1, 96(sp)
+	lw	a1, 92(sp)
 	sw	a1, 4(a0)
-	lw	a1, 84(sp)
-	sw	a1, 0(a0)
 	lw	a1, 80(sp)
+	sw	a1, 0(a0)
+	lw	a1, 76(sp)
 	slli	a1, a1, 2
-	lw	a2, 56(sp)
-	add	t6, a2, a1
-	sw	a0, 0(t6)
+	swl	a0, min_caml_reflections(a1)
 	lw	a0, 20(sp)
 	addi	a0, a0, 3
 	lw	a1, 0(sp)
 	sw	a0, 0(a1)
 setup_rect_reflection_ret:
-	lw	ra, 100(sp)
-	addi	sp, sp, 104
+	lw	ra, 96(sp)
+	addi	sp, sp, 100
 	jr	ra
 setup_surface_reflection_3069:
 	addi	sp, sp, -52
@@ -5104,20 +5051,18 @@ setup_surface_reflection_3069:
 	mv	a1, a0
 	mv	a0, t4
 	call	iter_setup_dirvec_constants_2834
-	lda	a0, min_caml_reflections
-	mv	a1, gp
+	mv	a0, gp
 	addi	gp, gp, 12
 	flw	fa0, 12(sp)
-	fsw	fa0, 8(a1)
-	lw	a2, 44(sp)
-	sw	a2, 4(a1)
-	lw	a2, 8(sp)
-	sw	a2, 0(a1)
-	lw	a2, 4(sp)
-	slli	a3, a2, 2
-	add	t6, a0, a3
-	sw	a1, 0(t6)
-	addi	a0, a2, 1
+	fsw	fa0, 8(a0)
+	lw	a1, 44(sp)
+	sw	a1, 4(a0)
+	lw	a1, 8(sp)
+	sw	a1, 0(a0)
+	lw	a1, 4(sp)
+	slli	a2, a1, 2
+	swl	a0, min_caml_reflections(a2)
+	addi	a0, a1, 1
 	lw	a1, 0(sp)
 	sw	a0, 0(a1)
 setup_surface_reflection_ret:
@@ -5128,10 +5073,8 @@ setup_reflections_3072:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
 	blt	a0, zero, setup_reflections_ret
-	lda	a1, min_caml_objects
-	slli	a2, a0, 2
-	add	t6, a1, a2
-	lw	a1, 0(t6)
+	slli	a1, a0, 2
+	lwl	a1, min_caml_objects(a1)
 	lw	a2, 28(a1)
 	lw	a3, 8(a1)
 	lw	a4, 4(a1)
@@ -5285,2075 +5228,4 @@ l_data_3:	# -1.000000
 l_data_2:	# 1.000000
 	.word	1065353216
 l_data_1:	# 0.000000
-	.word	0
-min_caml_n_objects:
-	.word	0
-min_caml_and_net_1:
-	.word	-1
-min_caml_dirvecs:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-min_caml_intsec_rectside:
-	.word	0
-min_caml_intersected_object_id:
-	.word	0
-min_caml_image_size:
-	.word	0
-	.word	0
-min_caml_image_center:
-	.word	0
-	.word	0
-min_caml_light_dirvec_consts:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-min_caml_n_reflections:
-	.word	0
-min_caml_screen:
-	.word	0
-	.word	0
-	.word	0
-min_caml_viewpoint:
-	.word	0
-	.word	0
-	.word	0
-min_caml_light:
-	.word	0
-	.word	0
-	.word	0
-min_caml_beam:
-	.word	1132396544
-min_caml_solver_dist:
-	.word	0
-min_caml_tmin:
-	.word	1315859240
-min_caml_intersection_point:
-	.word	0
-	.word	0
-	.word	0
-min_caml_nvector:
-	.word	0
-	.word	0
-	.word	0
-min_caml_texture_color:
-	.word	0
-	.word	0
-	.word	0
-min_caml_diffuse_ray:
-	.word	0
-	.word	0
-	.word	0
-min_caml_rgb:
-	.word	0
-	.word	0
-	.word	0
-min_caml_startp:
-	.word	0
-	.word	0
-	.word	0
-min_caml_startp_fast:
-	.word	0
-	.word	0
-	.word	0
-min_caml_scan_pitch:
-	.word	0
-min_caml_screenx_dir:
-	.word	0
-	.word	0
-	.word	0
-min_caml_screeny_dir:
-	.word	0
-	.word	0
-	.word	0
-min_caml_screenz_dir:
-	.word	0
-	.word	0
-	.word	0
-min_caml_ptrace_dirvec:
-	.word	0
-	.word	0
-	.word	0
-min_caml_light_dirvec_v3:
-	.word	0
-	.word	0
-	.word	0
-min_caml_and_net:
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-	.word	min_caml_and_net_1
-min_caml_or_net_1:
-	.word	min_caml_and_net_1
-min_caml_or_net:
-	.word	min_caml_or_net_1
-min_caml_light_dirvec:
-	.word	min_caml_light_dirvec_v3
-	.word	min_caml_light_dirvec_consts
-min_caml_objects:
-	.word	.objects_1
-	.word	.objects_2
-	.word	.objects_3
-	.word	.objects_4
-	.word	.objects_5
-	.word	.objects_6
-	.word	.objects_7
-	.word	.objects_8
-	.word	.objects_9
-	.word	.objects_10
-	.word	.objects_11
-	.word	.objects_12
-	.word	.objects_13
-	.word	.objects_14
-	.word	.objects_15
-	.word	.objects_16
-	.word	.objects_17
-	.word	.objects_18
-	.word	.objects_19
-	.word	.objects_20
-	.word	.objects_21
-	.word	.objects_22
-	.word	.objects_23
-	.word	.objects_24
-	.word	.objects_25
-	.word	.objects_26
-	.word	.objects_27
-	.word	.objects_28
-	.word	.objects_29
-	.word	.objects_30
-	.word	.objects_31
-	.word	.objects_32
-	.word	.objects_33
-	.word	.objects_34
-	.word	.objects_35
-	.word	.objects_36
-	.word	.objects_37
-	.word	.objects_38
-	.word	.objects_39
-	.word	.objects_40
-	.word	.objects_41
-	.word	.objects_42
-	.word	.objects_43
-	.word	.objects_44
-	.word	.objects_45
-	.word	.objects_46
-	.word	.objects_47
-	.word	.objects_48
-	.word	.objects_49
-	.word	.objects_50
-	.word	.objects_51
-	.word	.objects_52
-	.word	.objects_53
-	.word	.objects_54
-	.word	.objects_55
-	.word	.objects_56
-	.word	.objects_57
-	.word	.objects_58
-	.word	.objects_59
-	.word	.objects_60
-.objects_1:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_2:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_3:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_4:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_5:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_6:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_7:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_8:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_9:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_10:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_11:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_12:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_13:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_14:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_15:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_16:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_17:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_18:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_19:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_20:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_21:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_22:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_23:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_24:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_25:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_26:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_27:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_28:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_29:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_30:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_31:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_32:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_33:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_34:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_35:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_36:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_37:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_38:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_39:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_40:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_41:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_42:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_43:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_44:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_45:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_46:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_47:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_48:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_49:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_50:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_51:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_52:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_53:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_54:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_55:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_56:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_57:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_58:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_59:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.objects_60:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-min_caml_reflections:
-	.word	.reflections_1
-	.word	.reflections_2
-	.word	.reflections_3
-	.word	.reflections_4
-	.word	.reflections_5
-	.word	.reflections_6
-	.word	.reflections_7
-	.word	.reflections_8
-	.word	.reflections_9
-	.word	.reflections_10
-	.word	.reflections_11
-	.word	.reflections_12
-	.word	.reflections_13
-	.word	.reflections_14
-	.word	.reflections_15
-	.word	.reflections_16
-	.word	.reflections_17
-	.word	.reflections_18
-	.word	.reflections_19
-	.word	.reflections_20
-	.word	.reflections_21
-	.word	.reflections_22
-	.word	.reflections_23
-	.word	.reflections_24
-	.word	.reflections_25
-	.word	.reflections_26
-	.word	.reflections_27
-	.word	.reflections_28
-	.word	.reflections_29
-	.word	.reflections_30
-	.word	.reflections_31
-	.word	.reflections_32
-	.word	.reflections_33
-	.word	.reflections_34
-	.word	.reflections_35
-	.word	.reflections_36
-	.word	.reflections_37
-	.word	.reflections_38
-	.word	.reflections_39
-	.word	.reflections_40
-	.word	.reflections_41
-	.word	.reflections_42
-	.word	.reflections_43
-	.word	.reflections_44
-	.word	.reflections_45
-	.word	.reflections_46
-	.word	.reflections_47
-	.word	.reflections_48
-	.word	.reflections_49
-	.word	.reflections_50
-	.word	.reflections_51
-	.word	.reflections_52
-	.word	.reflections_53
-	.word	.reflections_54
-	.word	.reflections_55
-	.word	.reflections_56
-	.word	.reflections_57
-	.word	.reflections_58
-	.word	.reflections_59
-	.word	.reflections_60
-	.word	.reflections_61
-	.word	.reflections_62
-	.word	.reflections_63
-	.word	.reflections_64
-	.word	.reflections_65
-	.word	.reflections_66
-	.word	.reflections_67
-	.word	.reflections_68
-	.word	.reflections_69
-	.word	.reflections_70
-	.word	.reflections_71
-	.word	.reflections_72
-	.word	.reflections_73
-	.word	.reflections_74
-	.word	.reflections_75
-	.word	.reflections_76
-	.word	.reflections_77
-	.word	.reflections_78
-	.word	.reflections_79
-	.word	.reflections_80
-	.word	.reflections_81
-	.word	.reflections_82
-	.word	.reflections_83
-	.word	.reflections_84
-	.word	.reflections_85
-	.word	.reflections_86
-	.word	.reflections_87
-	.word	.reflections_88
-	.word	.reflections_89
-	.word	.reflections_90
-	.word	.reflections_91
-	.word	.reflections_92
-	.word	.reflections_93
-	.word	.reflections_94
-	.word	.reflections_95
-	.word	.reflections_96
-	.word	.reflections_97
-	.word	.reflections_98
-	.word	.reflections_99
-	.word	.reflections_100
-	.word	.reflections_101
-	.word	.reflections_102
-	.word	.reflections_103
-	.word	.reflections_104
-	.word	.reflections_105
-	.word	.reflections_106
-	.word	.reflections_107
-	.word	.reflections_108
-	.word	.reflections_109
-	.word	.reflections_110
-	.word	.reflections_111
-	.word	.reflections_112
-	.word	.reflections_113
-	.word	.reflections_114
-	.word	.reflections_115
-	.word	.reflections_116
-	.word	.reflections_117
-	.word	.reflections_118
-	.word	.reflections_119
-	.word	.reflections_120
-	.word	.reflections_121
-	.word	.reflections_122
-	.word	.reflections_123
-	.word	.reflections_124
-	.word	.reflections_125
-	.word	.reflections_126
-	.word	.reflections_127
-	.word	.reflections_128
-	.word	.reflections_129
-	.word	.reflections_130
-	.word	.reflections_131
-	.word	.reflections_132
-	.word	.reflections_133
-	.word	.reflections_134
-	.word	.reflections_135
-	.word	.reflections_136
-	.word	.reflections_137
-	.word	.reflections_138
-	.word	.reflections_139
-	.word	.reflections_140
-	.word	.reflections_141
-	.word	.reflections_142
-	.word	.reflections_143
-	.word	.reflections_144
-	.word	.reflections_145
-	.word	.reflections_146
-	.word	.reflections_147
-	.word	.reflections_148
-	.word	.reflections_149
-	.word	.reflections_150
-	.word	.reflections_151
-	.word	.reflections_152
-	.word	.reflections_153
-	.word	.reflections_154
-	.word	.reflections_155
-	.word	.reflections_156
-	.word	.reflections_157
-	.word	.reflections_158
-	.word	.reflections_159
-	.word	.reflections_160
-	.word	.reflections_161
-	.word	.reflections_162
-	.word	.reflections_163
-	.word	.reflections_164
-	.word	.reflections_165
-	.word	.reflections_166
-	.word	.reflections_167
-	.word	.reflections_168
-	.word	.reflections_169
-	.word	.reflections_170
-	.word	.reflections_171
-	.word	.reflections_172
-	.word	.reflections_173
-	.word	.reflections_174
-	.word	.reflections_175
-	.word	.reflections_176
-	.word	.reflections_177
-	.word	.reflections_178
-	.word	.reflections_179
-	.word	.reflections_180
-.reflections_1:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_2:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_3:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_4:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_5:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_6:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_7:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_8:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_9:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_10:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_11:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_12:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_13:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_14:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_15:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_16:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_17:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_18:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_19:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_20:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_21:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_22:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_23:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_24:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_25:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_26:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_27:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_28:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_29:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_30:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_31:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_32:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_33:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_34:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_35:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_36:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_37:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_38:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_39:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_40:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_41:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_42:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_43:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_44:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_45:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_46:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_47:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_48:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_49:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_50:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_51:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_52:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_53:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_54:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_55:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_56:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_57:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_58:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_59:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_60:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_61:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_62:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_63:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_64:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_65:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_66:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_67:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_68:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_69:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_70:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_71:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_72:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_73:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_74:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_75:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_76:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_77:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_78:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_79:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_80:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_81:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_82:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_83:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_84:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_85:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_86:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_87:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_88:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_89:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_90:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_91:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_92:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_93:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_94:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_95:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_96:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_97:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_98:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_99:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_100:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_101:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_102:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_103:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_104:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_105:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_106:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_107:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_108:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_109:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_110:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_111:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_112:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_113:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_114:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_115:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_116:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_117:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_118:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_119:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_120:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_121:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_122:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_123:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_124:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_125:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_126:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_127:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_128:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_129:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_130:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_131:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_132:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_133:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_134:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_135:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_136:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_137:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_138:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_139:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_140:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_141:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_142:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_143:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_144:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_145:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_146:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_147:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_148:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_149:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_150:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_151:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_152:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_153:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_154:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_155:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_156:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_157:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_158:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_159:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_160:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_161:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_162:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_163:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_164:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_165:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_166:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_167:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_168:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_169:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_170:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_171:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_172:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_173:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_174:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_175:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_176:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_177:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_178:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_179:
-	.word	0
-	.word	0
-	.word	0
-	.word	0
-.reflections_180:
-	.word	0
-	.word	0
-	.word	0
 	.word	0
