@@ -5,3 +5,5 @@ cd min-caml-asm
 ln -sf ../../compiler/test/{gcd.s,fib.s,ack.s} .
 ln -sf ../../compiler/shootout/mandelbrot.s .
 ln -sf ../../compiler/raytracer/minrt.s .
+ln -sf ../../compiler/raytracer/globals.s .
+cd ..
