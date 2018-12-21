@@ -253,35 +253,46 @@ and g'_tail_if buf rs1 rs2 e1 e2 b bn = (* bはラベルに使うだけで命令
     stackset := stackset_back;
     g buf (Tail, e2);
 and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
-  let does_e2_write =
-    match (dest, e2) with
+  let does_write e =
+    match (dest, e) with
     | _, Ans(Nop) -> false
     | NonTail(x), Ans(Mv(y)) | NonTail(x), Ans(FMv(y)) when x = y -> false
     | _ -> true
   in
-  match does_e2_write with
+  match does_write e2 with
   | false ->
     let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
     Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_cont;
-    let stackset_back = !stackset in
-    g buf (dest, e1);
     let stackset1 = !stackset in
-    Printf.bprintf buf "%s:\n" b_cont;
-    stackset := S.inter stackset1 stackset_back
-  | _ ->
-    let b_else = Id.genid ("." ^ !funcname ^ "_else") in
-    let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
-    Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_else;
-    let stackset_back = !stackset in
     g buf (dest, e1);
-    let stackset1 = !stackset in
-    Printf.bprintf buf "\tb\t%s\n" b_cont;
-    Printf.bprintf buf "%s:\n" b_else;
-    stackset := stackset_back;
-    g buf (dest, e2);
-    Printf.bprintf buf "%s:\n" b_cont;
     let stackset2 = !stackset in
-    stackset := S.inter stackset1 stackset2
+    Printf.bprintf buf "%s:\n" b_cont;
+    stackset := S.inter stackset2 stackset1
+  | _ ->
+    match does_write e1 with
+    | false ->
+      let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
+      Printf.bprintf buf "\t%s\t%s, %s, %s\n" b (reg rs1) (reg rs2) b_cont;
+      let stackset1 = !stackset in
+      g buf (dest, e2);
+      let stackset2 = !stackset in
+      Printf.bprintf buf "%s:\n" b_cont;
+      stackset := S.inter stackset1 stackset2
+    | true ->
+      let b_else = Id.genid ("." ^ !funcname ^ "_else") in
+      let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
+      Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_else;
+      let stackset_back = !stackset in
+      g buf (dest, e1);
+      let stackset1 = !stackset in
+      Printf.bprintf buf "\tb\t%s\n" b_cont;
+      Printf.bprintf buf "%s:\n" b_else;
+      stackset := stackset_back;
+      g buf (dest, e2);
+      Printf.bprintf buf "%s:\n" b_cont;
+      let stackset2 = !stackset in
+      stackset := S.inter stackset1 stackset2
+
 and g'_args buf x_reg_cl int_args float_args =
   let (_, yrs) =
     List.fold_left
