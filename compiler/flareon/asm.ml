@@ -61,18 +61,23 @@ let rec string_of_t ?(depth = 0) e =
   | Ans exp -> indent ^ string_of_exp ~depth:depth exp
   | Let((x, t), exp, e') -> indent ^ "LET " ^ x ^ " = " ^ string_of_exp ~depth:depth exp ^ " IN\n" ^ string_of_t ~depth:depth e'
 and string_of_exp ?(depth = 0) (exp : exp) : string =
-  let str_of_id_or_imm x =
-    match x with
+  let str_of_id_or_imm (x : id_or_imm) = match x with
     | C(f) -> string_of_int f
     | V(f) -> f
+  in
+  let str_of_id_imm_or_label (x : id_imm_or_label) = match x with
+    | C(f) -> string_of_int f
+    | V(f) -> f
+    | L(Id.L(f)) -> f
   in
   let indent = String.make (depth * 2) ' ' in
   let cmd =
     match exp with
     | Nop -> "Nop"
     | Li n         -> Printf.sprintf "Li %d" n
-    | FLi L(f)     -> Printf.sprintf "FLi %s" f
-    | SetL L(f)    -> Printf.sprintf "La %s" f
+    | FLi Id.L(f)  -> Printf.sprintf "FLi %s" f
+    | SetL Id.L(f) -> Printf.sprintf "La %s" f
+    | SetDL Id.L(f)-> Printf.sprintf "LDA %s" f
     | Mv(x)        -> Printf.sprintf "Mv %s" x
     | Not(x)       -> Printf.sprintf "Not %s" x
     | Neg(x)       -> Printf.sprintf "Neg %s" x
@@ -82,8 +87,8 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | Mul(x, y)    -> Printf.sprintf "Mul %s %s" x (str_of_id_or_imm y)
     | Div(x, y)    -> Printf.sprintf "Div %s %s" x (str_of_id_or_imm y)
     | Sll(x, y)    -> Printf.sprintf "Sll %s %s" x (str_of_id_or_imm y)
-    | Lw(x, y)     -> Printf.sprintf "Lw %s %s" x (str_of_id_or_imm y)
-    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" x (str_of_id_or_imm z) y
+    | Lw(x, y)     -> Printf.sprintf "Lw %s %s" x (str_of_id_imm_or_label y)
+    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" x (str_of_id_imm_or_label z) y
     | FMv(x)       -> Printf.sprintf "FMv %s" x
     | FNeg(x)      -> Printf.sprintf "FNeg %s" x
     | FAdd(x, y)   -> Printf.sprintf "FAdd %s %s" x y
@@ -94,8 +99,8 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | FLE(x, y)    -> Printf.sprintf "FLE %s %s" x y
     | FAbs(x)      -> Printf.sprintf "FAbs %s" x
     | FSqrt(x)     -> Printf.sprintf "FSqrt %s" x
-    | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (str_of_id_or_imm y)
-    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" x (str_of_id_or_imm z) y
+    | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (str_of_id_imm_or_label y)
+    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" x (str_of_id_imm_or_label z) y
     | Comment _    -> ""
     | IfEq(x, y, e1, e2)  -> Printf.sprintf "If %s = %s THEN %s ELSE %s" x (str_of_id_or_imm y) (string_of_t ~depth:depth e1) (string_of_t ~depth:depth e2)
     | IfLE(x, y, e1, e2)  -> Printf.sprintf "If %s <= %s THEN %s ELSE %s" x (str_of_id_or_imm y) (string_of_t ~depth:depth e1) (string_of_t ~depth:depth e2)
