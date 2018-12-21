@@ -67,22 +67,19 @@ class BinGen {
         uint32_t auipc(std::string rd, uint32_t imm);
         uint32_t jalr(std::string rd, std::string rs1, uint32_t imm);
 
-        // beq, bne, blt, bge, bltu, bgeu
+        // beq, bne, blt, bge
         uint32_t branch(std::string mnemo, std::string rs1, std::string rs2, uint32_t offset);
 
-        // lb, lh, lw, lbu, lhu
-        uint32_t load(std::string mnemo, std::string rd, std::string rs1, uint32_t offset);
+        uint32_t lw(std::string rd, std::string rs1, uint32_t offset);
+        uint32_t sw(std::string rs2, std::string rs1, uint32_t offset);
 
-        // sb, sh, sw
-        uint32_t store(std::string mnemo, std::string rs2, std::string rs1, uint32_t offset);
-
-        // addi, slti, sltiu, xori, ori, andi
+        // addi, xori, andi
         uint32_t op_imm(std::string mnemo, std::string rd, std::string rs1, uint32_t imm);
 
-        // slli, srli, srai
+        // slli, srai
         uint32_t op_imm_shift(std::string mnemo, std::string rd, std::string rs1, uint32_t imm);
 
-        // add, sub, sll, slt, sltu, xor, srl, sra, or, and
+        // add, sub, xor
         uint32_t op(std::string mnemo, std::string rd, std::string rs1, std::string rs2);
 
         uint32_t read(std::string rd);
@@ -91,13 +88,13 @@ class BinGen {
         uint32_t flw(std::string frd, std::string rs, uint32_t imm);
         uint32_t fsw(std::string frs2, std::string frs1, uint32_t imm);
 
-        // fsqrt.s, fabs.s, fneg.s, fmv.s, finv.s (2 operands)
+        // fsqrt, fabs, fneg, fmv, finv (2 operands)
         uint32_t f_op2(std::string mnemo, std::string frd, std::string frs);
 
-        // fadd.s, fsub.s, fmul.s, fdiv.s (3 operands)
+        // fadd, fsub, fmul, fdiv (3 operands)
         uint32_t f_op3(std::string mnemo, std::string frd, std::string frs1, std::string frs2);
 
-        // feq.s, flt.s, fle.s
+        // feq, flt, fle
         uint32_t f_cmp(std::string mnemo, std::string rd, std::string frs1, std::string frs2);
 
         uint32_t Pack(Fields fields);
