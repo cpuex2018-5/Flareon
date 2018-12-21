@@ -562,15 +562,14 @@ uint32_t BinGen::op_imm_shift (std::string mnemo, std::string rd, std::string rs
 uint32_t BinGen::op (std::string mnemo, std::string rd, std::string rs1, std::string rs2) {
     uint32_t funct3;
     if (mnemo == "add")  funct3 = 0b000;
-    if (mnemo == "sub")  funct3 = 0b000;
+    if (mnemo == "sub")  funct3 = 0b010;
     if (mnemo == "xor")  funct3 = 0b100;
-    uint32_t funct7 = (mnemo == "sub" || mnemo == "sra") ? 0b0100000 : 0b0000000;
     Fields fields { {7, 0b0110011},
                     {5, regmap_.at(rd)},
                     {3, funct3},
                     {5, regmap_.at(rs1)},
                     {5, regmap_.at(rs2)},
-                    {7, funct7} };
+                    {7, 0b0000000} };
     return Pack(fields);
 }
 
@@ -617,25 +616,24 @@ uint32_t BinGen::fsw(std::string frs2, std::string frs1, uint32_t imm) {
     return Pack(fields);
 }
 
-// fsqrt.s, fabs.s, fneg.s, fmv.s, finv.s (2 operands)
+// fsqrt, fabs, fneg, fmv, finv (2 operands)
 uint32_t BinGen::f_op2(std::string mnemo, std::string frd, std::string frs) {
-    uint32_t funct7 = (mnemo == "fsqrt") ? 0b0101100 : 0b0010000;
-    uint32_t funct3;
-    if (mnemo == "fsqrt") funct3 = RM;
-    if (mnemo == "fmv")   funct3 = 0b000;
-    if (mnemo == "fneg")  funct3 = 0b001;
-    if (mnemo == "fabs")  funct3 = 0b010;
-    if (mnemo == "finv")  funct3 = 0b011;
+    uint32_t funct7;
+    if (mnemo == "fsqrt") funct7 = 0b0101100;
+    if (mnemo == "fmv")   funct7 = 0b0010000;
+    if (mnemo == "fneg")  funct7 = 0b0010001;
+    if (mnemo == "fabs")  funct7 = 0b0010010;
+    if (mnemo == "finv")  funct7 = 0b0010011;
     Fields fields { {7, 0b1010011},
                     {5, fregmap_.at(frd)},
-                    {3, funct3},
+                    {3, 0b000},
                     {5, fregmap_.at(frs)},
                     {5, 0b00000},
                     {7, funct7} };
     return Pack(fields);
 }
 
-// fadd.s, fsub.s, fmul.s, fdiv.s (3 operands)
+// fadd, fsub, fmul, fdiv (3 operands)
 uint32_t BinGen::f_op3(std::string mnemo, std::string frd, std::string frs1, std::string frs2) {
     uint32_t funct7;
     if (mnemo == "fadd") funct7 = 0b0000000;
@@ -653,16 +651,16 @@ uint32_t BinGen::f_op3(std::string mnemo, std::string frd, std::string frs1, std
 
 // feq.s, flt.s, fle.s
 uint32_t BinGen::f_cmp(std::string mnemo, std::string rd, std::string frs1, std::string frs2) {
-    uint32_t funct3;
-    if (mnemo == "feq") funct3 = 0b010;
-    if (mnemo == "flt") funct3 = 0b001;
-    if (mnemo == "fle") funct3 = 0b000;
+    uint32_t funct7;
+    if (mnemo == "feq") funct7 = 0b1010010;
+    if (mnemo == "flt") funct7 = 0b1010001;
+    if (mnemo == "fle") funct7 = 0b1010000;
     Fields fields { {7, 0b1010011},
                     {5, regmap_.at(rd)},
-                    {3, funct3},
+                    {3, 0b0},
                     {5, fregmap_.at(frs1)},
                     {5, fregmap_.at(frs2)},
-                    {7, 0b1010000} };
+                    {7, funct7} };
     return Pack(fields);
 }
 
