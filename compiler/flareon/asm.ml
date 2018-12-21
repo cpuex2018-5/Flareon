@@ -59,7 +59,7 @@ let rec string_of_t ?(depth = 0) e =
   let indent = String.make (depth * 2) ' ' in
   match e with
   | Ans exp -> indent ^ string_of_exp ~depth:depth exp
-  | Let((x, t), exp, e') -> indent ^ "LET " ^ x ^ " = " ^ string_of_exp ~depth:depth exp ^ " IN\n" ^ string_of_t ~depth:depth e'
+  | Let((x, t), exp, e') -> indent ^ "LET " ^ x ^ " = " ^ string_of_exp ~depth:0 exp ^ " IN\n" ^ string_of_t ~depth:depth e'
 and string_of_exp ?(depth = 0) (exp : exp) : string =
   let str_of_id_or_imm (x : id_or_imm) = match x with
     | C(f) -> string_of_int f
@@ -102,9 +102,9 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (str_of_id_imm_or_label y)
     | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" x (str_of_id_imm_or_label z) y
     | Comment _    -> ""
-    | IfEq(x, y, e1, e2)  -> Printf.sprintf "If %s = %s THEN %s ELSE %s" x (str_of_id_or_imm y) (string_of_t ~depth:depth e1) (string_of_t ~depth:depth e2)
-    | IfLE(x, y, e1, e2)  -> Printf.sprintf "If %s <= %s THEN %s ELSE %s" x (str_of_id_or_imm y) (string_of_t ~depth:depth e1) (string_of_t ~depth:depth e2)
-    | IfGE(x, y, e1, e2)  -> Printf.sprintf "If %s >= %s THEN %s ELSE %s" x (str_of_id_or_imm y) (string_of_t ~depth:depth e1) (string_of_t ~depth:depth e2)
+    | IfEq(x, y, e1, e2)  -> Printf.sprintf "If %s = %s THEN\n%s ELSE\n%s"  x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfLE(x, y, e1, e2)  -> Printf.sprintf "If %s <= %s THEN\n%s ELSE\n%s" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfGE(x, y, e1, e2)  -> Printf.sprintf "If %s >= %s THEN\n%s ELSE\n%s" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
     | CallCls(f, args, fargs) -> Printf.sprintf "%s(%s, %s)" f (String.concat ", " args) (String.concat ", " fargs)
     | CallDir(L(f), args, fargs) -> Printf.sprintf "%s(%s, %s)" f (String.concat ", " args) (String.concat ", " fargs)
     | Save(x, y) -> Printf.sprintf "Save %s %s" x y
@@ -170,6 +170,17 @@ and fv = function
   | Let((x, t), exp, e) ->
     fv_exp exp @ remove_and_uniq (S.singleton x) (fv e)
 let fv e = remove_and_uniq S.empty (fv e)
+
+let rec has_call (e : t) =
+  match e with
+  | Ans(exp) -> is_call exp
+  | Let(xt, exp, e') -> match is_call exp with
+    | true  -> true
+    | false -> has_call e'
+and is_call (e : exp) = match e with
+  | CallCls _ | CallDir _ -> true
+  | IfEq(_, _, e1, e2) | IfLE(_, _, e1, e2) | IfGE(_, _, e1, e2) -> has_call e1 || has_call e2
+  | _ -> false
 
 let rec concat e1 xt e2 =
   match e1 with

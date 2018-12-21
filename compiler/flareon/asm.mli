@@ -77,6 +77,7 @@ val is_reg : Id.t -> bool
 
 val fv : t -> Id.t list
 val fv_exp : exp -> Id.t list
+val has_call : t -> bool
 val concat : t -> Id.t * Type.t -> t -> t
 
 val globals : global

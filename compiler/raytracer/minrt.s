@@ -3,19 +3,13 @@
 _min_caml_start: # main entry point
 	li	gp, 7408	# initialize gp
 #	main program starts
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	li	a0, 128
 	li	a1, 128
 	call	rt_3074
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 #	main program ends
 end:
 	b	end
 veccpy_2619:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa0, 0(a1)
 	fsw	fa0, 0(a0)
 	flw	fa0, 4(a1)
@@ -23,12 +17,8 @@ veccpy_2619:
 	flw	fa0, 8(a1)
 	fsw	fa0, 8(a0)
 veccpy_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 vecunit_sgn_2622:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa0, 0(a0)
 	flw	fa1, 0(a0)
 	fmul	fa0, fa0, fa1
@@ -66,12 +56,8 @@ vecunit_sgn_2622:
 	fmul	fa0, fa1, fa0
 	fsw	fa0, 8(a0)
 vecunit_sgn_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 veciprod_2625:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa0, 0(a0)
 	flw	fa1, 0(a1)
 	fmul	fa0, fa0, fa1
@@ -84,12 +70,8 @@ veciprod_2625:
 	fmul	fa1, fa1, fa2
 	fadd	fa0, fa0, fa1
 veciprod_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 veciprod2_2628:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa3, 0(a0)
 	fmul	fa0, fa3, fa0
 	flw	fa3, 4(a0)
@@ -99,12 +81,8 @@ veciprod2_2628:
 	fmul	fa1, fa1, fa2
 	fadd	fa0, fa0, fa1
 veciprod2_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 vecaccum_2633:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa1, 0(a0)
 	flw	fa2, 0(a1)
 	fmul	fa2, fa0, fa2
@@ -121,12 +99,8 @@ vecaccum_2633:
 	fadd	fa0, fa1, fa0
 	fsw	fa0, 8(a0)
 vecaccum_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 vecadd_2637:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa0, 0(a0)
 	flw	fa1, 0(a1)
 	fadd	fa0, fa0, fa1
@@ -140,12 +114,8 @@ vecadd_2637:
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 8(a0)
 vecadd_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 vecscale_2640:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa1, 0(a0)
 	fmul	fa1, fa1, fa0
 	fsw	fa1, 0(a0)
@@ -156,12 +126,8 @@ vecscale_2640:
 	fmul	fa0, fa1, fa0
 	fsw	fa0, 8(a0)
 vecscale_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 vecaccumv_2643:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa0, 0(a0)
 	flw	fa1, 0(a1)
 	flw	fa2, 0(a2)
@@ -181,8 +147,6 @@ vecaccumv_2643:
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 8(a0)
 vecaccumv_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 read_screen_settings_2720:
 	addi	sp, sp, -32
@@ -779,8 +743,6 @@ read_parameter_ret:
 	addi	sp, sp, 8
 	jr	ra
 solver_rect_surface_2741:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	slli	a5, a2, 2
 	add	t6, a1, a5
 	flw	fa3, 0(t6)
@@ -841,8 +803,6 @@ solver_rect_surface_2741:
 .solver_rect_surface_else_1:
 	li	a0, 0
 solver_rect_surface_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 solver_rect_2750:
 	addi	sp, sp, -24
@@ -932,8 +892,6 @@ solver_surface_ret:
 	addi	sp, sp, 28
 	jr	ra
 quadratic_2762:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	fmul	fa3, fa0, fa0
 	lw	a1, 36(a0)
 	lw	a2, 16(a0)
@@ -965,12 +923,8 @@ quadratic_2762:
 	fmul	fa0, fa0, fa1
 	fadd	fa0, fa2, fa0
 quadratic_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 bilinear_2767:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	fmul	fa6, fa0, fa3
 	lw	a1, 36(a0)
 	lw	a2, 16(a0)
@@ -1010,8 +964,6 @@ bilinear_2767:
 	fdiv	fa0, fa0, fa1
 	fadd	fa0, fa6, fa0
 bilinear_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 solver_second_2775:
 	addi	sp, sp, -36
@@ -1124,8 +1076,6 @@ solver_ret:
 	addi	sp, sp, 4
 	jr	ra
 solver_rect_fast_2785:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa3, 0(a2)
 	fsub	fa3, fa3, fa0
 	flw	fa4, 4(a2)
@@ -1237,12 +1187,8 @@ solver_rect_fast_2785:
 	fsw	fa3, 0(a0)
 	li	a0, 1
 solver_rect_fast_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 solver_surface_fast_2792:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	fli	fa3, l_data_1
 	flw	fa4, 0(a1)
 	fle	a0, fa3, fa4
@@ -1262,8 +1208,6 @@ solver_surface_fast_2792:
 .solver_surface_fast_else_1:
 	li	a0, 0
 solver_surface_fast_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 solver_second_fast_2798:
 	addi	sp, sp, -24
@@ -1373,8 +1317,6 @@ solver_fast_ret:
 	addi	sp, sp, 4
 	jr	ra
 solver_surface_fast2_2808:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	fli	fa0, l_data_1
 	flw	fa1, 0(a1)
 	fle	a0, fa0, fa1
@@ -1389,12 +1331,8 @@ solver_surface_fast2_2808:
 .solver_surface_fast2_else_1:
 	li	a0, 0
 solver_surface_fast2_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 solver_second_fast2_2815:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	flw	fa3, 0(a1)
 	fli	fa4, l_data_1
 	feq	a3, fa3, fa4
@@ -1438,8 +1376,6 @@ solver_second_fast2_2815:
 .solver_second_fast2_else_1:
 	li	a0, 0
 solver_second_fast2_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 solver_fast2_2822:
 	addi	sp, sp, -4
@@ -1823,8 +1759,6 @@ setup_startp_constants_ret:
 	addi	sp, sp, 20
 	jr	ra
 is_rect_outside_2844:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	lw	a1, 24(a0)
 	lw	a0, 16(a0)
 	flw	fa3, 0(a0)
@@ -1853,8 +1787,6 @@ is_rect_outside_2844:
 .is_rect_outside_else_5:
 	mv	a0, a1
 is_rect_outside_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 is_second_outside_2854:
 	addi	sp, sp, -8
@@ -2558,8 +2490,6 @@ judge_intersection_fast_ret:
 	addi	sp, sp, 8
 	jr	ra
 get_nvector_rect_2907:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	lda	a1, min_caml_intsec_rectside
 	lw	a1, 0(a1)
 	lda	a2, min_caml_nvector
@@ -2588,12 +2518,8 @@ get_nvector_rect_2907:
 	slli	a0, a1, 2
 	fswl	fa0, min_caml_nvector(a0)
 get_nvector_rect_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 get_nvector_plane_2909:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	lda	a1, min_caml_nvector
 	lw	a0, 16(a0)
 	flw	fa0, 0(a0)
@@ -2606,8 +2532,6 @@ get_nvector_plane_2909:
 	fneg	fa0, fa0
 	fsw	fa0, 8(a1)
 get_nvector_plane_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 get_nvector_second_2911:
 	addi	sp, sp, -4
@@ -3657,8 +3581,6 @@ do_without_neighbors_ret:
 	addi	sp, sp, 12
 	jr	ra
 neighbors_exist_2962:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	lda	a2, min_caml_image_size
 	lw	a3, 4(a2)
 	addi	a4, a1, 1
@@ -3682,12 +3604,8 @@ neighbors_exist_2962:
 .neighbors_exist_else_4:
 	li	a0, 1
 neighbors_exist_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 neighbors_are_available_2969:
-	addi	sp, sp, -4
-	sw	ra, 0(sp)
 	slli	a5, a0, 2
 	add	t6, a2, a5
 	lw	a5, 0(t6)
@@ -3743,8 +3661,6 @@ neighbors_are_available_2969:
 .neighbors_are_available_else_1:
 	li	a0, 0
 neighbors_are_available_ret:
-	lw	ra, 0(sp)
-	addi	sp, sp, 4
 	jr	ra
 try_exploit_neighbors_2975:
 	addi	sp, sp, -32

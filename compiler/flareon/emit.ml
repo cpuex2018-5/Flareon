@@ -318,14 +318,20 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   let buf = Buffer.create 128 in
   funcname := String.sub x 0 (String.rindex x '_');
   g buf (Tail, e);
-  let ss = stacksize () + 4 in
-  Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
-  Printf.fprintf oc "\tsw\tra, %d(sp)\n" (ss - 4);
+  let ss = stacksize () in
+  if (Asm.has_call e) then
+    (Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss - 4);
+     Printf.fprintf oc "\tsw\tra, %d(sp)\n" ss)
+  else if ss > 0 then
+    Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
   Id.resetCounter ();
   Buffer.output_buffer oc buf;
   Printf.fprintf oc "%s_ret:\n" !funcname;
-  Printf.fprintf oc "\tlw\tra, %d(sp)\n" (ss - 4);
-  Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
+  if (Asm.has_call e) then
+    (Printf.fprintf oc "\tlw\tra, %d(sp)\n" ss;
+     Printf.fprintf oc "\taddi\tsp, sp, %d\n" (ss + 4))
+  else if ss > 0 then
+    Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "\tjr\tra\n"
 
 let print_globals oc globals =
@@ -377,12 +383,12 @@ let f oc globals (Prog(data, fundefs, e)) =
   funcname := "main";
   Id.resetCounter ();
   g buf (NonTail("_R_0"), e);
-  let ss = stacksize () + 4 in
-  Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
-  Printf.fprintf oc "\tsw\tra, %d(sp)\n" (ss - 4);
+  let ss = stacksize () in
+  if ss > 0 then
+    Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
   Buffer.output_buffer oc buf;
-  Printf.fprintf oc "\tlw\tra, %d(sp)\n" (ss - 4);
-  Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
+  if ss > 0 then
+    Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "#\tmain program ends\n";
   Printf.fprintf oc "end:\n";
   Printf.fprintf oc "\tb\tend\n";

@@ -38,18 +38,17 @@ let lexbuf outchan l = (* compile the buffer and put it to outchan (caml2html: m
   (* KNormal.print_t e; *)
   let e = Alpha.f e in
   let e = iter !limit e in
-  (* let e = Lift.f e in
-     KNormal.print_t e; *)
+  (* let e = Lift.f e in *)
+  (*  KNormal.print_t e; *)
   let e = Closure.f !is_verbose e in
   print_endline "-----------After Closure.f-----------------";
-  (* Closure.print_prog e; *)
+  Closure.print_prog e;
   (* let e = TupleOpt.f e in *)
-  (* print_endline "-----------After TupleOpt.f-----------------"; *)
   (* Closure.print_prog e; *)
+  print_endline "-----------After Virtual.f-----------------";
   let e = Virtual.f e in
   let e = Simm.f e in
-  let e = Schedule.f Schedule.resource e in
-  print_endline "-----------Before RegAlloc.f-----------------";
+  (* let e = Schedule.f Schedule.resource e in *)
   Asm.print_prog e;
   let e = RegAlloc.f e in
   Emit.f outchan Asm.globals e
