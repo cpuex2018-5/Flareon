@@ -397,7 +397,7 @@ void exec(Simulator *sim,Op *op){
           //add
           sim -> registers[op->rd] = sim -> registers[op->rs1] + sim -> registers[op->rs2];
         }
-        else if(op->funct3 == 0b000 && op->funct7 == 0b0100000){
+        else if(op->funct3 == 0b010 && op->funct7 == 0b0000000){
           //sub
           sim -> registers[op->rd] = sim -> registers[op->rs1] - sim -> registers[op->rs2];
         }
@@ -558,7 +558,7 @@ void exec(Simulator *sim,Op *op){
             sim -> f_registers[op->rd] = fpu_val;
           }
         }
-        else if(op->funct7 == 0b1010000 && op->funct3 == 0b010){
+        else if(op->funct7 == 0b1010010 && op->funct3 == 0b000){
           //feq.s
           if(fpu_mode==0){
             if(sim->f_registers[op->rs1] == sim->f_registers[op->rs2]){
@@ -586,7 +586,6 @@ void exec(Simulator *sim,Op *op){
         }
         else if(op->funct7 == 0b1010000 && op->funct3 == 0b000){
           //fle.s
-          
           if(fpu_mode==0){
             if(sim->f_registers[op->rs1] <= sim->f_registers[op->rs2]){
               sim->registers[op->rd] = 1;
@@ -615,7 +614,7 @@ void exec(Simulator *sim,Op *op){
           //fmv.s
           sim -> f_registers[op->rd] = sim -> f_registers[op->rs1];
         }
-        else if(op->funct7 == 0b0010000 && op->rs2 == 0b00000 && op->funct3 == 0b001){
+        else if(op->funct7 == 0b0010001 && op->rs2 == 0b00000 && op->funct3 == 0b000){
           //fneg.s
           if(fpu_mode==0){
             sim -> f_registers[op->rd] = - (sim -> f_registers[op->rs1]);
@@ -625,7 +624,7 @@ void exec(Simulator *sim,Op *op){
             sim -> f_registers[op->rd] = fpu_val;
           }
         }
-        else if(op->funct7 == 0b0010000 && op->rs2 == 0b00000 && op->funct3 == 0b010){
+        else if(op->funct7 == 0b0010010 && op->rs2 == 0b00000 && op->funct3 == 0b000){
           //fabs.s
           if(fpu_mode==0){
             sim -> f_registers[op->rd] = fabs(sim->f_registers[op->rs1]);
@@ -635,7 +634,7 @@ void exec(Simulator *sim,Op *op){
             sim -> f_registers[op->rd] = fpu_val;
           }
         }
-        else if(op->funct7 == 0b0010000 && op->rs2 == 0b00000 && op->funct3 == 0b011){
+        else if(op->funct7 == 0b0010011 && op->rs2 == 0b00000 && op->funct3 == 0b000){
           //finv.s
           if(fpu_mode==0){
             sim -> f_registers[op->rd] = 1/sim->f_registers[op->rs1];
@@ -646,7 +645,7 @@ void exec(Simulator *sim,Op *op){
           }
         }
         else{
-          fprintf(stderr,"Unknown instruction at %lu\n", sim->pc);
+          fprintf(stderr,"Unknown instruction at %lu\n",sim->pc);
         }
         sim->pc = sim->pc+4;
         break;
