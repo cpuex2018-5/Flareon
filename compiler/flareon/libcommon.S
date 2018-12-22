@@ -296,16 +296,8 @@ min_caml_floor:
 	jr	ra
 
 min_caml_sin:
-	addi	sp, sp, -36
-	fsw	ft0, 32(sp)
-	fsw	ft1, 28(sp)
-	fsw	ft2, 24(sp)
-	fsw	ft3, 20(sp)
-	fsw	ft4, 16(sp)
-	sw	t2, 12(sp)
-	sw	s1, 8(sp)
-	sw	ra, 4(sp)
-	sw	fp, 0(sp)
+	addi	sp, sp, -4
+	sw	ra, 0(sp)
 	fli	ft0, L_0	# 0.0
 	fli	ft1, L_PI	# pi
 	fli	ft2, L_2	# 2.0
@@ -338,29 +330,13 @@ min_caml_sin:
 	beq	s1, zero, .sin_end
 	fneg	fa0, fa0	# FLAG == 1ならneg
 .sin_end:
-	lw	fp, 0(sp)
-	lw	ra, 4(sp)
-	lw	s1, 8(sp)
-	flw	ft0, 32(sp)
-	flw	ft1, 28(sp)
-	flw	ft2, 24(sp)
-	flw	ft3, 20(sp)
-	flw	ft4, 16(sp)
-	lw	t2, 12(sp)
-	addi	sp, sp, 36
+	lw	ra, 0(sp)
+	addi	sp, sp, 4
 	jr	ra
 
 min_caml_cos:
-	addi	sp, sp, -36
-	fsw	ft0, 32(sp)
-	fsw	ft1, 28(sp)
-	fsw	ft2, 24(sp)
-	fsw	ft3, 20(sp)
-	fsw	ft4, 16(sp)
-	sw	t2, 12(sp)
-	sw	s1, 8(sp)
-	sw	ra, 4(sp)
-	sw	fp, 0(sp)
+	addi	sp, sp, -4
+	sw	ra, 0(sp)
 	fli	ft1, L_PI	# pi
 	fli	ft2, L_2	# 2.0
 	li	s1, 0		# s1: FLAG
@@ -392,16 +368,8 @@ min_caml_cos:
 	beq	s1, zero, .cos_end
 	fneg	fa0, fa0	# FLAG == 1ならneg
 .cos_end:
-	lw	fp, 0(sp)
-	lw	ra, 4(sp)
-	lw	s1, 8(sp)
-	flw	ft0, 32(sp)
-	flw	ft1, 28(sp)
-	flw	ft2, 24(sp)
-	flw	ft3, 20(sp)
-	flw	ft4, 16(sp)
-	lw	t2, 12(sp)
-	addi	sp, sp, 36
+	lw	ra, 0(sp)
+	addi	sp, sp, 4
 	jr	ra
 
 .kernel_atan:
@@ -435,12 +403,7 @@ min_caml_cos:
 	jr	ra
 
 min_caml_atan:
-	addi	sp, sp, -24
-	fsw	ft0, 20(sp)
-	fsw	ft1, 16(sp)
-	fsw	ft2, 12(sp)
-	fsw	ft3, 8(sp)
-	sw	s1, 4(sp)
+	addi	sp, sp, -4
 	sw	ra, 0(sp)
 	fli	ft0, L_Atan1
 	fli	ft1, L_0
@@ -477,13 +440,8 @@ min_caml_atan:
 	bne	s1, zero, .atan_end
 	fneg	fa0, fa0
 .atan_end:
-	flw	ft0, 20(sp)
-	flw	ft1, 16(sp)
-	flw	ft2, 12(sp)
-	flw	ft3, 8(sp)
-	lw	s1, 4(sp)
 	lw	ra, 0(sp)
-	addi	sp, sp, 24
+	addi	sp, sp, 4
 	jr	ra
 
 min_caml_float_of_int: # int -> float

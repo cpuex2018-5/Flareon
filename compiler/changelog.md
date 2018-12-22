@@ -28,15 +28,20 @@ lda rd, symbol -> lui rd, symbol[31:12]
 ## 12/16
 * `and_net`, `or_net`, `dir_vecs`, `light_dirvec`, `reflections` 以外のglobal変数をヒープに置いた
     * 動的命令数は2940636593 (inline=15) になった
-* `and_net` は `int array array` なのでアセンブリを次のようにするんじゃないかなぁと思っていましたがなんかうまくいかなくて困っている
-    * そもそも`-1`に対応するcoeファイルの行が0xffffffffになってない気もしたのでアセンブラにもバグがありそう(けどcoeを手で編集しても動かなかった)
-```
-min_caml_and_net_1:
-    .word   -1
-min_caml_and_net:
-    .word   min_caml_and_net_1
-    .word   min_caml_and_net_1
-    .word   min_caml_and_net_1
-    .word   min_caml_and_net_1
-    (...これが50行)
-```
+
+## 12/17
+* `and_net`, `or_net` を含め全てのglobal変数をヒープに置いた
+    * 結局バグっていたのはアセンブラだった(データが-1の時の扱いが正しくなかった)
+
+## 12/19
+* globals.mlをコンパイルした結果をglobals.sに分離、アセンブラでリンクさせるようにした
+* `lwl`, `swl`, `flwl`, `fswl` というpseudo-instructionを追加した
+    * offsetとして数字ではなくlabelをとる命令
+
+## 12/21
+* 使われていない命令をアセンブラが解釈しないようにした
+* 関数が別の関数呼び出しを含まない時に`ra` をsaveしないようにした
+
+## 12/22
+* sin, cos, atanでのレジスタのセーブをなくした(callee-saveということで)
+* 他のライブラリ関数はどうしよう、、、
