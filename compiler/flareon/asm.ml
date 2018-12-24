@@ -3,6 +3,7 @@ external castToInt : float -> int32 = "castToInt"
 
 type id_or_imm = V of Id.t | C of int
 type id_imm_or_label = V of Id.t | C of int | L of Id.l
+type id_or_fimm = V of Id.t | FZero
 type t = (* 命令の列 (caml2html: sparcasm_t) *)
   | Ans of exp
   | Let of (Id.t * Type.t) * exp * t
@@ -29,12 +30,12 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
-  | FEq of Id.t * Id.t
-  | FLE of Id.t * Id.t
+  | FEq of Id.t * id_or_fimm
+  | FLE of id_or_fimm * id_or_fimm
   | FAbs of Id.t
   | FSqrt of Id.t
   | Flw of Id.t * id_imm_or_label
-  | Fsw of Id.t * Id.t * id_imm_or_label
+  | Fsw of id_or_fimm * Id.t * id_imm_or_label
   | Comment of string
   (* virtual instructions *)
   | IfEq of Id.t * id_or_imm * t * t
@@ -70,6 +71,10 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | V(f) -> f
     | L(Id.L(f)) -> f
   in
+  let str_of_id_or_fimm (x : id_or_fimm) = match x with
+    | V(f) -> f
+    | FZero -> "0.0"
+  in
   let indent = String.make (depth * 2) ' ' in
   let cmd =
     match exp with
@@ -95,12 +100,12 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | FSub(x, y)   -> Printf.sprintf "FSub %s %s" x y
     | FMul(x, y)   -> Printf.sprintf "FMul %s %s" x y
     | FDiv(x, y)   -> Printf.sprintf "FDiv %s %s" x y
-    | FEq(x, y)    -> Printf.sprintf "FEq %s %s" x y
-    | FLE(x, y)    -> Printf.sprintf "FLE %s %s" x y
+    | FEq(x, y)    -> Printf.sprintf "FEq %s %s" x (str_of_id_or_fimm y)
+    | FLE(x, y)    -> Printf.sprintf "FLE %s %s" (str_of_id_or_fimm x) (str_of_id_or_fimm y)
     | FAbs(x)      -> Printf.sprintf "FAbs %s" x
     | FSqrt(x)     -> Printf.sprintf "FSqrt %s" x
     | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (str_of_id_imm_or_label y)
-    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" x (str_of_id_imm_or_label z) y
+    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" (str_of_id_or_fimm x) (str_of_id_imm_or_label z) y
     | Comment _    -> ""
     | IfEq(x, y, e1, e2)  -> Printf.sprintf "If %s = %s THEN\n%s ELSE\n%s"  x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
     | IfLE(x, y, e1, e2)  -> Printf.sprintf "If %s <= %s THEN\n%s ELSE\n%s" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
@@ -133,7 +138,7 @@ let regs = (* 26個 *)
 let fregs =
   [| "%fa0"; "%fa1"; "%fa2"; "%fa3"; "%fa4"; "%fa5"; "%fa6"; "%fa7";
      "%fs1"; "%fs2"; "%fs3"; "%fs4"; "%fs5"; "%fs6"; "%fs7"; "%fs8"; "%fs9"; "%fs10"; "%fs11";
-     "%ft1"; "%ft2"; "%ft3"; "%ft4"; "%ft5"; "%ft6"; "%ft7"; "%ft8"; "%ft9"; "%ft10"; "%ft11" |]
+     "%ft1"; "%ft2"; "%ft3"; "%ft4"; "%ft5"; "%ft6"; "%ft7"; "%ft8"; "%ft9"; "%ft10" |]
 let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
 let reg_cl = "%s11" (* closure address *)
@@ -142,7 +147,7 @@ let reg_fsw = fregs.(Array.length fregs - 1) (* temporary for swap *)
 let reg_sp = "%sp" (* stack pointer *)
 let reg_fp = "%fp" (* frame pointer *)
 let reg_link = "%ra" (* link register *)
-let reg_hp = "%gp" (* heap pointer *) (* TODO *)
+let reg_hp = "%gp" (* heap pointer *)
 let reg_tmp = "%t6" (* [XX] ad hoc *)
 let is_reg x = (x.[0] = '%')
 
@@ -155,13 +160,17 @@ let rec remove_and_uniq xs = function
 (* free variables in the order of use (for spilling) (caml2html: sparcasm_fv) *)
 let fv_id_or_imm (e : id_or_imm) = match e with V(x) -> [x] | _ -> []
 let fv_id_imm_or_label (e : id_imm_or_label) = match e with V(x) -> [x] | _ -> []
+let fv_id_or_fimm (e : id_or_fimm) = match e with V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Li(_) | FLi(_) | SetL(_) | SetDL(_) | Comment(_) | Restore(_) -> []
   | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) | FAbs(x) | FSqrt(x) -> [x]
   | Xor(x, y') | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | Sll(x, y') -> x :: fv_id_or_imm y'
   | Lw(x, y') | Flw(x, y') -> x :: fv_id_imm_or_label y'
-  | Sw(x, y, z') | Fsw(x, y, z') -> x :: y :: fv_id_imm_or_label z'
-  | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | FEq(x, y) | FLE(x, y) -> [x; y]
+  | Sw(x, y, z') | Fsw(V(x), y, z') -> x :: y :: fv_id_imm_or_label z'
+  | Fsw(FZero, y, z') -> y :: fv_id_imm_or_label z'
+  | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
+  | FEq(x, y) -> x :: (fv_id_or_fimm y)
+  | FLE(x, y) -> (fv_id_or_fimm x) @ (fv_id_or_fimm y)
   | IfEq(x, y', e1, e2) | IfLE(x, y', e1, e2) | IfGE(x, y', e1, e2) ->  x :: fv_id_or_imm y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
   | CallCls(x, ys, zs) -> x :: ys @ zs
   | CallDir(_, ys, zs) -> ys @ zs

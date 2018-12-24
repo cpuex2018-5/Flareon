@@ -88,8 +88,9 @@ let find x t regenv =
   if is_reg x then x else
     try M.find x regenv
     with Not_found -> raise (NoReg(x, t))
-let find' (x' : id_or_imm) regenv : id_or_imm = match x' with | V(x) -> V(find x Type.Int regenv) | _ -> x'
-let find'' (x' : id_imm_or_label) regenv : id_imm_or_label = match x' with | V(x) -> V(find x Type.Int regenv) | _ -> x'
+let find'   (x : id_or_imm) regenv : id_or_imm = match x with | V(x) -> V(find x Type.Int regenv) | _ -> x
+let find'_l (x : id_imm_or_label) regenv : id_imm_or_label = match x with | V(x) -> V(find x Type.Int regenv) | _ -> x
+let find'_f (x : id_or_fimm) regenv : id_or_fimm = match x with | V(x) -> V(find x Type.Float regenv) | _ -> x
 
 let rec g dest cont regenv = function (* 命令列のレジスタ割り当て (caml2html: regalloc_g) *)
   | Ans(exp) -> g'_and_restore dest cont regenv exp
@@ -124,20 +125,20 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
   | Mul(x, y') -> (Ans(Mul(find x Type.Int regenv, find' y' regenv)), regenv)
   | Div(x, y') -> (Ans(Div(find x Type.Int regenv, find' y' regenv)), regenv)
   | Sll(x, y') -> (Ans(Sll(find x Type.Int regenv, find' y' regenv)), regenv)
-  | Lw(x, y') -> (Ans(Lw(find x Type.Int regenv, find'' y' regenv)), regenv)
-  | Sw(x, y, z') -> (Ans(Sw(find x Type.Int regenv, find y Type.Int regenv, find'' z' regenv)), regenv)
+  | Lw(x, y') -> (Ans(Lw(find x Type.Int regenv, find'_l y' regenv)), regenv)
+  | Sw(x, y, z') -> (Ans(Sw(find x Type.Int regenv, find y Type.Int regenv, find'_l z' regenv)), regenv)
   | FMv(x) -> (Ans(FMv(find x Type.Float regenv)), regenv)
   | FNeg(x) -> (Ans(FNeg(find x Type.Float regenv)), regenv)
   | FAdd(x, y) -> (Ans(FAdd(find x Type.Float regenv, find y Type.Float regenv)), regenv)
   | FSub(x, y) -> (Ans(FSub(find x Type.Float regenv, find y Type.Float regenv)), regenv)
   | FMul(x, y) -> (Ans(FMul(find x Type.Float regenv, find y Type.Float regenv)), regenv)
   | FDiv(x, y) -> (Ans(FDiv(find x Type.Float regenv, find y Type.Float regenv)), regenv)
-  | FEq(x, y) -> (Ans(FEq(find x Type.Float regenv, find y Type.Float regenv)), regenv)
-  | FLE(x, y) -> (Ans(FLE(find x Type.Float regenv, find y Type.Float regenv)), regenv)
+  | FEq(x, y) -> (Ans(FEq(find x Type.Float regenv, find'_f y regenv)), regenv)
+  | FLE(x, y) -> (Ans(FLE(find'_f x regenv, find'_f y regenv)), regenv)
   | FAbs(x) -> (Ans(FAbs(find x Type.Float regenv)), regenv)
   | FSqrt(x) -> (Ans(FSqrt(find x Type.Float regenv)), regenv)
-  | Flw(x, y') -> (Ans(Flw(find x Type.Int regenv, find'' y' regenv)), regenv)
-  | Fsw(x, y, z') -> (Ans(Fsw(find x Type.Float regenv, find y Type.Int regenv, find'' z' regenv)), regenv)
+  | Flw(x, y') -> (Ans(Flw(find x Type.Int regenv, find'_l y' regenv)), regenv)
+  | Fsw(x, y, z') -> (Ans(Fsw(find'_f x regenv, find y Type.Int regenv, find'_l z' regenv)), regenv)
   | IfEq(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfEq(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfGE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfGE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2

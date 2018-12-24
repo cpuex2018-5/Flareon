@@ -1,5 +1,6 @@
 type id_or_imm = V of Id.t | C of int
 type id_imm_or_label = V of Id.t | C of int | L of Id.l
+type id_or_fimm = V of Id.t | FZero
 type t =
   | Ans of exp
   | Let of (Id.t * Type.t) * exp * t
@@ -26,12 +27,12 @@ and exp =
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
-  | FEq of Id.t * Id.t
-  | FLE of Id.t * Id.t
+  | FEq of Id.t * id_or_fimm
+  | FLE of id_or_fimm * id_or_fimm
   | FAbs of Id.t
   | FSqrt of Id.t
   | Flw of Id.t * id_imm_or_label
-  | Fsw of Id.t * Id.t * id_imm_or_label
+  | Fsw of id_or_fimm * Id.t * id_imm_or_label
   | Comment of string
   (* virtual instructions *)
   | IfEq of Id.t * id_or_imm * t * t
