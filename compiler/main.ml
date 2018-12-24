@@ -30,7 +30,6 @@ let rec iter n e = (* optimization (caml2html: main_iter) *)
 
 let lexbuf outchan l = (* compile the buffer and put it to outchan (caml2html: main_lexbuf) *)
   Id.counter := 0;
-  Typing.extenv := M.empty;
   let e = Parser.exp Lexer.token l in
   let e = Typing.f e in
   let e = KNormal.f e in

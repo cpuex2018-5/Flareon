@@ -102,9 +102,9 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (str_of_id_imm_or_label y)
     | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" x (str_of_id_imm_or_label z) y
     | Comment _    -> ""
-    | IfEq(x, y, e1, e2)  -> Printf.sprintf "If %s = %s THEN\n%s ELSE\n%s"  x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
-    | IfLE(x, y, e1, e2)  -> Printf.sprintf "If %s <= %s THEN\n%s ELSE\n%s" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
-    | IfGE(x, y, e1, e2)  -> Printf.sprintf "If %s >= %s THEN\n%s ELSE\n%s" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfEq(x, y, e1, e2)  -> Printf.sprintf "(If %s = %s THEN\n%s ELSE\n%s)"  x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfLE(x, y, e1, e2)  -> Printf.sprintf "(If %s <= %s THEN\n%s ELSE\n%s)" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfGE(x, y, e1, e2)  -> Printf.sprintf "(If %s >= %s THEN\n%s ELSE\n%s)" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
     | CallCls(f, args, fargs) -> Printf.sprintf "%s(%s, %s)" f (String.concat ", " args) (String.concat ", " fargs)
     | CallDir(L(f), args, fargs) -> Printf.sprintf "%s(%s, %s)" f (String.concat ", " args) (String.concat ", " fargs)
     | Save(x, y) -> Printf.sprintf "Save %s %s" x y
@@ -181,6 +181,9 @@ and is_call (e : exp) = match e with
   | CallCls _ | CallDir _ -> true
   | IfEq(_, _, e1, e2) | IfLE(_, _, e1, e2) | IfGE(_, _, e1, e2) -> has_call e1 || has_call e2
   | _ -> false
+
+let rec is_mincaml (n : string) =
+  String.length n >= 9 && String.sub n 0 9 = "min_caml_"
 
 let rec concat e1 xt e2 =
   match e1 with

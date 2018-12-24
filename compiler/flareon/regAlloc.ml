@@ -1,9 +1,17 @@
 open Asm
 
 (* for register coalescing *)
-(* [XXX] Callがあったら、そこから先は無意味というか逆効果なので追わない。
-         そのために「Callがあったかどうか」を返り値の第1要素に含める。 *)
-let rec target' src (dest, t) = function
+(* 変数srcが以後の命令列で特定のレジスタで使われることがわかればそのようなレジスタのリストを返す (register targeting) *)
+let rec target src dest = function
+  | Ans(exp) -> target' src dest exp
+  | Let(xt, exp, e) ->
+    let c1, rs1 = target' src xt exp in
+    if c1 then true, rs1 else
+      let c2, rs2 = target src dest e in
+      c2, rs1 @ rs2
+and target' src (dest, t) = function
+  (* [XXX] Callがあったら、そこから先は無意味というか逆効果なので追わない。
+           そのために「Callがあったかどうか」を返り値の第1要素に含める。 *)
   | Mv(x) when x = src && is_reg dest ->
     assert (t <> Type.Unit);
     assert (t <> Type.Float);
@@ -19,17 +27,10 @@ let rec target' src (dest, t) = function
     true, (target_args src regs 0 ys @
            target_args src fregs 0 zs @
            if x = src then [reg_cl] else [])
-  | CallDir(_, ys, zs) ->
+  | CallDir(Id.L(x), ys, zs) ->
     true, (target_args src regs 0 ys @
            target_args src fregs 0 zs)
   | _ -> false, []
-and target src dest = function (* register targeting (caml2html: regalloc_target) *)
-  | Ans(exp) -> target' src dest exp
-  | Let(xt, exp, e) ->
-    let c1, rs1 = target' src xt exp in
-    if c1 then true, rs1 else
-      let c2, rs2 = target src dest e in
-      c2, rs1 @ rs2
 and target_args src all n = function (* auxiliary function for Call *)
   | [] -> []
   | y :: ys when src = y -> all.(n) :: target_args src all (n + 1) ys
@@ -50,7 +51,7 @@ let rec alloc dest cont regenv x t =
   if is_reg x then Alloc(x) else
     let free = fv cont in
     try
-      let (c, prefer) = target x dest cont in
+      let (_, prefer) = target x dest cont in
       let live = (* 生きているレジスタ *)
         List.fold_left
           (fun live y ->
@@ -141,16 +142,16 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
   | IfEq(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfEq(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfGE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfGE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
-  | CallCls(x, ys, zs) as exp ->
+  | CallCls(x, ys, zs) ->
     if List.length ys > Array.length regs - 2 || List.length zs > Array.length fregs - 1 then
       failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
     else
-      g'_call dest cont regenv exp (fun ys zs -> CallCls(find x Type.Int regenv, ys, zs)) ys zs
-  | CallDir(Id.L(x), ys, zs) as exp ->
+      g'_call dest cont regenv (fun ys zs -> CallCls(find x Type.Int regenv, ys, zs)) ys zs
+  | CallDir(Id.L(x), ys, zs) ->
     if List.length ys > Array.length regs - 1 || List.length zs > Array.length fregs - 1 then
       failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
     else
-      g'_call dest cont regenv exp (fun ys zs -> CallDir(Id.L(x), ys, zs)) ys zs
+      g'_call dest cont regenv (fun ys zs -> CallDir(Id.L(x), ys, zs)) ys zs
   | Save(x, y) -> assert false
 and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (caml2html: regalloc_if) *)
   let (e1', regenv1) = g dest cont regenv e1 in
@@ -174,7 +175,7 @@ and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (
      (Ans(constr e1' e2'))
      (fv cont),
    regenv')
-and g'_call dest cont regenv exp constr ys zs = (* 関数呼び出しのレジスタ割り当て (caml2html: regalloc_call) *)
+and g'_call dest cont regenv constr ys zs = (* 関数呼び出しのレジスタ割り当て (caml2html: regalloc_call) *)
   (List.fold_left
      (fun e x ->
         if x = fst dest || not (M.mem x regenv) then e else
