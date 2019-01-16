@@ -298,7 +298,6 @@ min_caml_floor:
 min_caml_sin:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
-	fli	ft0, L_0	# 0.0
 	fli	ft1, L_PI	# pi
 	fli	ft2, L_2	# 2.0
 	fle	s1, fzero, fa0	# s1: FLAG

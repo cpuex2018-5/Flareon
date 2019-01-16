@@ -12,7 +12,7 @@ let rec g env lenv fenv = function (* 命令列の12bit即値最適化 *)
         e')
   | Let((x, t), FLi(f), e) when f = !label_0 ->
     let e' = g env lenv (x :: fenv) e in
-    if List.mem x (fv e') then Let((x, t), FLi(f), e') else e'
+    if List.mem x (fv e') then Let((x, t), FMv("%fzero"), e') else e'
   | Let(xt, Sll(y, C(i)), e) when M.mem y env -> (* for array access *)
     (* Format.eprintf "erased redundant Sll on %s@." x; *)
     g env lenv fenv (Let(xt, Li((M.find y env) lsl i), e))
@@ -63,6 +63,6 @@ let h { name = l; args = xs; fargs = ys; body = e; ret = t } = (* トップレ�
 
 let f (Prog(data, fundefs, e)) = (* プログラム全体の12bit即値最適化 *)
   (try
-     label_0 := fst (List.find (fun (l, d) -> d = 0.0) data);
+     label_0 := fst (List.find (fun (l, d) -> d = 0.0) data)
    with Not_found -> ());
   Prog(data, List.map h fundefs, g M.empty M.empty [] e)

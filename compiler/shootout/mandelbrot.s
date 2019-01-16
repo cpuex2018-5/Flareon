@@ -69,7 +69,7 @@ xloop_49:
 	fli	fa1, l_data_5
 	fsub	fa5, fa0, fa1
 	li	a0, 100
-	fli	fa0, l_data_6
+	fmv	fa0, fzero
 	flw	fa4, 8(sp)
 	fmv	fa3, fa0
 	fmv	fa2, fa0

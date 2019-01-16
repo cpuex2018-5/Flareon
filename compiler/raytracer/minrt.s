@@ -197,7 +197,7 @@ read_screen_settings_2720:
 	fsw	fa3, 8(a0)
 	lda	a1, min_caml_screenx_dir
 	fsw	fa2, 0(a1)
-	fli	fa3, l_data_1
+	fmv	fa3, fzero
 	fsw	fa3, 4(a1)
 	fneg	fa3, fa0
 	fsw	fa3, 8(a1)
@@ -408,7 +408,7 @@ read_nth_object_2727:
 	sw	a0, 12(sp)
 	call	min_caml_read_int
 	li	a1, 3
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	sw	a0, 16(sp)
 	fsw	fa0, 20(sp)
 	mv	a0, a1
@@ -1403,7 +1403,7 @@ setup_rect_table_2825:
 	addi	sp, sp, -16
 	sw	ra, 12(sp)
 	li	a2, 6
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(sp)
 	sw	a1, 4(sp)
 	sw	a0, 8(sp)
@@ -1490,7 +1490,7 @@ setup_surface_table_2828:
 	addi	sp, sp, -16
 	sw	ra, 12(sp)
 	li	a2, 4
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(sp)
 	sw	a1, 4(sp)
 	sw	a0, 8(sp)
@@ -1540,7 +1540,7 @@ setup_second_table_2831:
 	addi	sp, sp, -16
 	sw	ra, 12(sp)
 	li	a2, 5
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	sw	a1, 0(sp)
 	sw	a0, 4(sp)
 	mv	a0, a2
@@ -2472,7 +2472,7 @@ get_nvector_rect_2907:
 	lda	a1, min_caml_intsec_rectside
 	lw	a1, 0(a1)
 	lda	a2, min_caml_nvector
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(a2)
 	fsw	fa0, 4(a2)
 	fsw	fa0, 8(a2)
@@ -3799,7 +3799,7 @@ pretrace_diffuse_rays_2988:
 	beq	a5, zero, .pretrace_diffuse_rays_cont_1
 	lw	a3, 0(a3)
 	lda	a5, min_caml_diffuse_ray
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(a5)
 	fsw	fa0, 4(a5)
 	fsw	fa0, 8(a5)
@@ -3889,7 +3889,7 @@ pretrace_pixels_2991:
 	sw	a0, 28(sp)
 	call	vecunit_sgn_2622
 	lda	a0, min_caml_rgb
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(a0)
 	fsw	fa0, 4(a0)
 	fsw	fa0, 8(a0)
@@ -4107,7 +4107,7 @@ create_float5x3array_3014:
 	addi	sp, sp, -12
 	sw	ra, 8(sp)
 	li	a0, 3
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(sp)
 	call	min_caml_create_float_array
 	mv	a1, a0
@@ -4144,7 +4144,7 @@ create_pixel_3016:
 	addi	sp, sp, -32
 	sw	ra, 28(sp)
 	li	a0, 3
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	call	min_caml_create_float_array
 	sw	a0, 0(sp)
 	call	create_float5x3array_3014
@@ -4396,7 +4396,7 @@ calc_dirvecs_3036:
 	fli	fa2, l_data_31
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	flw	fa3, 4(sp)
 	lw	a1, 12(sp)
 	lw	a2, 8(sp)
@@ -4470,7 +4470,7 @@ create_dirvec_elements_3047:
 	sw	ra, 28(sp)
 	blt	a1, zero, create_dirvec_elements_ret
 	li	a2, 3
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(sp)
 	sw	a0, 4(sp)
 	sw	a1, 8(sp)
@@ -4530,7 +4530,7 @@ create_dirvecs_3050:
 	blt	a0, zero, create_dirvecs_ret
 	li	a1, 120
 	li	a2, 3
-	fli	fa0, l_data_1
+	fmv	fa0, fzero
 	fsw	fa0, 0(sp)
 	sw	a0, 4(sp)
 	sw	a1, 8(sp)
@@ -4668,7 +4668,7 @@ setup_rect_reflection_3066:
 	addi	a4, a0, 1
 	flw	fa4, 0(a1)
 	li	a5, 3
-	fli	fa5, l_data_1
+	fmv	fa5, fzero
 	sw	a2, 0(sp)
 	fsw	fa1, 4(sp)
 	fsw	fa5, 8(sp)
@@ -4865,7 +4865,7 @@ setup_surface_reflection_3069:
 	flw	fa1, 8(a1)
 	fsub	fa0, fa0, fa1
 	li	a0, 3
-	fli	fa1, l_data_1
+	fmv	fa1, fzero
 	fsw	fa0, 24(sp)
 	fsw	fa3, 28(sp)
 	fsw	fa2, 32(sp)
