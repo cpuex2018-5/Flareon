@@ -62,5 +62,7 @@ let h { name = l; args = xs; fargs = ys; body = e; ret = t } = (* トップレ�
   { name = l; args = xs; fargs = ys; body = g M.empty M.empty [] e; ret = t }
 
 let f (Prog(data, fundefs, e)) = (* プログラム全体の12bit即値最適化 *)
-  label_0 := fst (List.find (fun (l, d) -> d = 0.0) data);
+  (try
+     label_0 := fst (List.find (fun (l, d) -> d = 0.0) data);
+   with Not_found -> ());
   Prog(data, List.map h fundefs, g M.empty M.empty [] e)

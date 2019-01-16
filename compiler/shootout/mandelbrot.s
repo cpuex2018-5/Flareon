@@ -33,9 +33,9 @@ iloop_61:
 	b	iloop_ret
 .iloop_else_2:
 	addi	a0, a0, -1
-	fmv	ft11, fa2
+	fmv	ft10, fa2
 	fmv	fa2, fa0
-	fmv	fa0, ft11
+	fmv	fa0, ft10
 	call	iloop_61
 iloop_ret:
 	lw	ra, 0(sp)
