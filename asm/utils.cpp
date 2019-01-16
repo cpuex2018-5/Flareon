@@ -81,6 +81,7 @@ std::map<std::string, int> create_fregmap() {
         { "ft9", 29 },
         { "ft10", 30 },
         { "ft11", 31 },
+        { "fzero", 31 },
     };
     for (int i = 0; i < 32; i++) {
         std::string fregname = "f" + std::to_string(i);

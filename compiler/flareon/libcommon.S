@@ -301,7 +301,7 @@ min_caml_sin:
 	fli	ft0, L_0	# 0.0
 	fli	ft1, L_PI	# pi
 	fli	ft2, L_2	# 2.0
-	fle	s1, ft0, fa0	# s1: FLAG
+	fle	s1, fzero, fa0	# s1: FLAG
 	xori	s1, s1, 1
 	fabs	fa0, fa0
 	call	.reduction_2pi
@@ -406,8 +406,7 @@ min_caml_atan:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
 	fli	ft0, L_Atan1
-	fli	ft1, L_0
-	fle	s1, ft1, fa0	# s1: sign flag (s1 = 1 when positive)
+	fle	s1, fzero, fa0	# s1: sign flag (s1 = 1 when positive)
 	fabs	fa0, fa0
 	fle	t6, ft0, fa0	# 0.4375 <= fa0
 	bne	t6, zero, .atan_L0
@@ -472,8 +471,7 @@ min_caml_float_of_int: # int -> float
 min_caml_int_of_float: # float -> int
 	addi	sp, sp, -4
 	fsw	ft0, 0(sp)
-	fli	ft0, L_0
-	fle	t6, ft0, fa0
+	fle	t6, fzero, fa0
 	beq	zero, t6, .int_of_float_neg
 # positiveの場合
 	fli	ft0, L_8388608
@@ -498,8 +496,6 @@ min_caml_int_of_float: # float -> int
 	jr	ra
 
 	.data
-L_0:	# 0.0
-	.word	0
 L_1:	# 1.0
 	.word	1065353216
 L_2:	# 2.0

@@ -654,6 +654,7 @@ void exec(Simulator *sim,Op *op){
         sim->pc = sim -> pc + 4;
     }
     sim->registers[0]=0;
+    sim->f_registers[31]=0.0;
   }
   inst_counter++;
   print_regs(sim);
