@@ -109,17 +109,17 @@ and g' buf e =
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
   | NonTail(_), Save(x, y) when List.mem x allregs && not (S.mem y !stackset) ->
     save y;
-    Printf.bprintf buf "\tsw\t%s, %d(%s)\n" (reg x) (offset y) (reg reg_sp)
+    Printf.bprintf buf "\tsw\t%s, %d(%s)\t# save\n" (reg x) (offset y) (reg reg_sp)
   | NonTail(_), Save(x, y) when List.mem x allfregs && not (S.mem y !stackset) ->
     save y;
-    Printf.bprintf buf "\tfsw\t%s, %d(%s)\n" (reg x) (offset y) (reg reg_sp)
+    Printf.bprintf buf "\tfsw\t%s, %d(%s)\t# save\n" (reg x) (offset y) (reg reg_sp)
   | NonTail(_), Save(x, y) -> assert (S.mem y !stackset); ()
   (* 復帰の仮想命令の実装 (caml2html: emit_restore) *)
   | NonTail(x), Restore(y) when List.mem x allregs ->
-    Printf.bprintf buf "\tlw\t%s, %d(%s)\n" (reg x) (offset y) (reg reg_sp)
+    Printf.bprintf buf "\tlw\t%s, %d(%s)\t# restore\n" (reg x) (offset y) (reg reg_sp)
   | NonTail(x), Restore(y) ->
     assert (List.mem x allfregs);
-    Printf.bprintf buf "\tflw\t%s, %d(%s)\n" (reg x) (offset y) (reg reg_sp)
+    Printf.bprintf buf "\tflw\t%s, %d(%s)\t# restore\n" (reg x) (offset y) (reg reg_sp)
   (* 末尾だったら計算結果を%a0か%fa0にセットしてリターン (caml2html: emit_tailret) *)
   | Tail, (Nop | Sw _ | Fsw _ | Comment _ | Save _ as exp) ->
     g' buf (NonTail(Id.gentmp Type.Unit), exp);
