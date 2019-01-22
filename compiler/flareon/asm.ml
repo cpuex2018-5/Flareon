@@ -253,3 +253,18 @@ let global_size () =
   let global_size = global_size + List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 globals.tuple_array in
   let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 globals.sub_array in
   global_size
+
+let callee_save_funs =
+  (* callee-saveの関数 * saveされないレジスタ *)
+  [("min_caml_print_char", []);
+   ("min_caml_print_newline", []);
+   ("min_caml_print_int", ["%a0"]);
+   ("min_caml_print_hex", ["%a0"]);
+   ("min_caml_print_float", ["%fa0"]);
+   ("min_caml_read_int", ["%a0"]);
+   ("min_caml_read_float", ["%fa0"]);
+   ("min_caml_create_array", ["%a0"]);
+   ("min_caml_create_float_array", ["%a0"]);
+   ("min_caml_floor", ["%fa0"]);
+   ("min_caml_float_of_int", ["%a0"; "%fa0"]);
+   ("min_caml_int_of_float", ["%fa0"; "%a0"])]

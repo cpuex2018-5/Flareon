@@ -13,6 +13,9 @@ let mem var regenv =
 let remove var regenv =
   List.filter (fun (y, r) -> y <> var) regenv
 
+let remove_r reg regenv =
+  List.filter (fun (y, r) -> r <> reg) regenv
+
 (* for register coalescing *)
 (* 変数srcが以後の命令列で特定のレジスタで使われることがわかればそのようなレジスタのリストを返す (register targeting) *)
 let rec target src dest (e : Asm.t) : bool * Id.t list =
@@ -201,7 +204,7 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
        let fargs = List.map (fun z -> find z Type.Float regenv) fargs in
        let iargs = List.map (fun y -> find y Type.Int regenv) iargs in
        let e' = Ans(CallCls(find x Type.Int regenv, iargs, fargs)) in
-       g'_call dest cont regenv e' [(x, reg_cl)] iargs fargs)
+       g'_call dest cont regenv e' [(x, reg_cl)] x iargs fargs)
   | CallDir(Id.L(x), iargs, fargs) ->
     (match List.length iargs > Array.length regs - 1 || List.length fargs > Array.length fregs - 1 with
      | true  -> failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
@@ -209,7 +212,7 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
        let fargs = List.map (fun z -> find z Type.Float regenv) fargs in
        let iargs = List.map (fun y -> find y Type.Int regenv) iargs in
        let e' = Ans(CallDir(Id.L(x), iargs, fargs)) in
-       g'_call dest cont regenv e' [] iargs fargs)
+       g'_call dest cont regenv e' [] x iargs fargs)
   | Save(x, y) -> assert false
 and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (caml2html: regalloc_if) *)
   let (e1', regenv1) = g dest cont regenv e1 in
@@ -233,7 +236,7 @@ and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (
      (Ans(constr e1' e2'))
      (fv cont),
    regenv')
-and g'_call dest cont regenv e' x_reg_cl iargs fargs = (* 関数呼び出しのレジスタ割り当て (caml2html: regalloc_call) *)
+and g'_call dest cont regenv e' x_reg_cl f iargs fargs = (* 関数呼び出しのレジスタ割り当て (caml2html: regalloc_call) *)
   let (_, iargs') =
     List.fold_left
       (fun (i, yrs) y -> (i + 1, (y, regs.(i)) :: yrs))
@@ -256,15 +259,26 @@ and g'_call dest cont regenv e' x_reg_cl iargs fargs = (* 関数呼び出しの�
       (shuffle reg_sw iargs')
       e'
   in
-  let e' =
-    List.fold_left
-      (fun e x ->
-         if x = fst dest || not (mem x regenv) then e else
-           seq(Save(var2reg x regenv, x), e))
-      e'
-      (fv cont)
-  in
-  (e', [] (* new regenv *))
+  if mem f callee_save_funs then
+    (List.fold_left
+       (fun (e, regenv') arg ->
+          if List.exists (fun (y, r) -> r = arg && (List.mem y (fv cont))) regenv then
+            let e' = seq(Save(arg, reg2var arg regenv), e) in
+            let regenv' = remove_r arg regenv in
+            (e', regenv')
+          else (e, regenv'))
+       (e', regenv)
+       (snd (List.find (fun (n, _) -> n = f) callee_save_funs)))
+  else
+    let e' =
+      List.fold_left
+        (fun e x ->
+           if x = fst dest || not (mem x regenv) then e else
+             seq(Save(var2reg x regenv, x), e))
+        e'
+        (fv cont)
+    in
+    (e', [] (* new regenv *))
 
 let h { name = Id.L(x); args = ys; fargs = zs; body = e; ret = t } = (* 関数のレジスタ割り当て (caml2html: regalloc_h) *)
   let regenv = [(x, reg_cl)] in

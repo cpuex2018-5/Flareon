@@ -220,7 +220,8 @@ min_caml_div_rem:
 # 	jr	ra
 
 min_caml_floor:
-	addi	sp, sp, -12
+	addi	sp, sp, -16
+	sw	a0, 12(sp)
 	sw	t1, 8(sp)
 	fsw	ft1, 4(sp)
 	sw	ra, 0(sp)
@@ -232,10 +233,11 @@ min_caml_floor:
 	fli	ft1, L_1
 	fsub	fa0, fa0, ft1
 .floor_ret:
+	lw	a0, 12(sp)
 	lw	t1, 8(sp)
 	flw	ft1, 4(sp)
 	lw	ra, 0(sp)
-	addi	sp, sp, 12
+	addi	sp, sp, 16
 	jr	ra
 
 # sin/cos

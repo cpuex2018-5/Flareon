@@ -87,3 +87,4 @@ val concat : t -> Id.t * Type.t -> t -> t
 
 val globals : global
 val global_size : unit -> int
+val callee_save_funs : (string * string list) list
