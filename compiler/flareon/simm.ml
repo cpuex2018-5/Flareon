@@ -1,7 +1,5 @@
 open Asm
 
-let label_0 = ref (Id.L(""))
-
 let rec g env lenv fenv = function (* 命令列の12bit即値最適化 *)
   | Ans(exp) -> Ans(g' env lenv fenv exp)
   | Let((x, t), Li(i), e) when -2048 <= i && i < 2047 ->
@@ -10,9 +8,13 @@ let rec g env lenv fenv = function (* 命令列の12bit即値最適化 *)
     if List.mem x (fv e') then Let((x, t), Li(i), e') else
       ((* Format.eprintf "erased redundant Set to %s@." x; *)
         e')
-  | Let((x, t), FLi(f), e) when f = !label_0 ->
+  | Let((x, t), FMv("%fzero"), e) ->
     let e' = g env lenv (x :: fenv) e in
-    if List.mem x (fv e') then Let((x, t), FMv("%fzero"), e') else e'
+    if List.mem x (fv e') then
+      (print_t (Let((x, t), FMv("%fzero"), e'));
+       print_newline ();
+       Let((x, t), FMv("%fzero"), e'))
+    else e'
   | Let(xt, Sll(y, C(i)), e) when M.mem y env -> (* for array access *)
     (* Format.eprintf "erased redundant Sll on %s@." x; *)
     g env lenv fenv (Let(xt, Li((M.find y env) lsl i), e))
@@ -39,10 +41,9 @@ and g' env lenv fenv = function (* 各命令の12bit即値最適化 *)
   | Flw(x, V(y)) when M.mem y env -> Flw(x, C(M.find y env))
   | Flw(x, V(y)) when M.mem y lenv -> Flw(x, L(M.find y lenv))
   | Flw(x, V(y)) when M.mem x lenv -> Flw(y, L(M.find x lenv))
-  | Fsw(x, y, V(z)) when M.mem z env -> Fsw(x, y, C(M.find z env))
-  | Fsw(x, y, V(z)) when M.mem z lenv -> Fsw(x, y, L(M.find z lenv))
-  | Fsw(x, y, V(z)) when M.mem y lenv -> Fsw(x, z, L(M.find y lenv))
-  | Fsw(V(x), y, z) when List.mem x fenv -> Fsw(FZero, y, z)
+  | Fsw(V(x), y, V(z)) when M.mem z env  -> let x' = if List.mem x fenv then FZero else V(x) in Fsw(x', y, C(M.find z env))
+  | Fsw(V(x), y, V(z)) when M.mem z lenv -> let x' = if List.mem x fenv then FZero else V(x) in Fsw(x', y, L(M.find z lenv))
+  | Fsw(V(x), y, V(z)) when M.mem y lenv -> let x' = if List.mem x fenv then FZero else V(x) in Fsw(x', z, L(M.find y lenv))
   | FEq(x, V(y)) when List.mem x fenv -> FEq(y, FZero)
   | FEq(x, V(y)) when List.mem y fenv -> FEq(x, FZero)
   | FLE(V(x), y) when List.mem x fenv -> FLE(FZero, y)
@@ -62,7 +63,4 @@ let h { name = l; args = xs; fargs = ys; body = e; ret = t } = (* トップレ�
   { name = l; args = xs; fargs = ys; body = g M.empty M.empty [] e; ret = t }
 
 let f (Prog(data, fundefs, e)) = (* プログラム全体の12bit即値最適化 *)
-  (try
-     label_0 := fst (List.find (fun (l, d) -> d = 0.0) data)
-   with Not_found -> ());
   Prog(data, List.map h fundefs, g M.empty M.empty [] e)

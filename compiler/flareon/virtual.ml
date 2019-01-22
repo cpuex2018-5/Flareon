@@ -38,6 +38,8 @@ let expand xts ini addf addi =
 let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.Unit -> Ans(Nop)
   | Closure.Int(i) -> Ans(Li(i))
+  | Closure.Float(0.0) ->
+    Ans(FMv("%fzero"))
   | Closure.Float(d) ->
     let l =
       try
