@@ -78,6 +78,22 @@ let rec alloc dest cont regenv x t =
       Format.eprintf "spilling %s from %s@." y (M.find y regenv);
       Spill(y)
 
+(* Shuffle registers so that the old content will not be lost *)
+let rec shuffle sw xys =
+  (* remove identical moves *)
+  let xys = List.filter (fun (x, y) -> x <> y) xys in
+  (* find acyclic moves *)
+  match List.partition (fun (_, y) -> List.mem_assoc y xys) xys with
+  | [], [] -> []
+  | (x, y) :: xys, [] -> (* no acyclic moves; resolve a cyclic move *)
+    (* there are a tuple (y, b) in old xys *)
+    (y, sw) :: (x, y) :: shuffle sw (List.map
+                                       (function
+                                         | (y', z) when y = y' -> (sw, z)
+                                         | yz -> yz)
+                                       xys)
+  | xys, acyc -> acyc @ shuffle sw xys
+
 (* auxiliary function for g and g'_and_restore *)
 let add x r regenv =
   if is_reg x then (assert (x = r); regenv) else
@@ -143,16 +159,22 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
   | IfEq(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfEq(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
   | IfGE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfGE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
-  | CallCls(x, ys, zs) ->
-    if List.length ys > Array.length regs - 2 || List.length zs > Array.length fregs - 1 then
-      failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
-    else
-      g'_call dest cont regenv (fun ys zs -> CallCls(find x Type.Int regenv, ys, zs)) ys zs
-  | CallDir(Id.L(x), ys, zs) ->
-    if List.length ys > Array.length regs - 1 || List.length zs > Array.length fregs - 1 then
-      failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
-    else
-      g'_call dest cont regenv (fun ys zs -> CallDir(Id.L(x), ys, zs)) ys zs
+  | CallCls(x, iargs, fargs) ->
+    (match List.length iargs > Array.length regs - 2 || List.length fargs > Array.length fregs - 1 with
+     | true  -> failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
+     | false ->
+       let fargs = List.map (fun z -> find z Type.Float regenv) fargs in
+       let iargs = List.map (fun y -> find y Type.Int regenv) iargs in
+       let e' = Ans(CallCls(find x Type.Int regenv, iargs, fargs)) in
+       g'_call dest cont regenv e' [(x, reg_cl)] iargs fargs)
+  | CallDir(Id.L(x), iargs, fargs) ->
+    (match List.length iargs > Array.length regs - 1 || List.length fargs > Array.length fregs - 1 with
+     | true  -> failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
+     | false ->
+       let fargs = List.map (fun z -> find z Type.Float regenv) fargs in
+       let iargs = List.map (fun y -> find y Type.Int regenv) iargs in
+       let e' = Ans(CallDir(Id.L(x), iargs, fargs)) in
+       g'_call dest cont regenv e' [] iargs fargs)
   | Save(x, y) -> assert false
 and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (caml2html: regalloc_if) *)
   let (e1', regenv1) = g dest cont regenv e1 in
@@ -176,16 +198,38 @@ and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (
      (Ans(constr e1' e2'))
      (fv cont),
    regenv')
-and g'_call dest cont regenv constr ys zs = (* 関数呼び出しのレジスタ割り当て (caml2html: regalloc_call) *)
-  (List.fold_left
-     (fun e x ->
-        if x = fst dest || not (M.mem x regenv) then e else
-          seq(Save(M.find x regenv, x), e))
-     (Ans(constr
-            (List.map (fun y -> find y Type.Int regenv) ys)
-            (List.map (fun z -> find z Type.Float regenv) zs)))
-     (fv cont),
-   M.empty)
+and g'_call dest cont regenv e' x_reg_cl iargs fargs = (* 関数呼び出しのレジスタ割り当て (caml2html: regalloc_call) *)
+  let (_, iargs') =
+    List.fold_left
+      (fun (i, yrs) y -> (i + 1, (y, regs.(i)) :: yrs))
+      (0, x_reg_cl) (* <- initial value *)
+      iargs in
+  let (_, fargs') =
+    List.fold_left
+      (fun (d, zfrs) z -> (d + 1, (z, fregs.(d)) :: zfrs))
+      (0, [])
+      fargs in
+  (* fargs alloc *)
+  let e' = List.fold_right
+      (fun (y, r) e -> Let((r, Type.Float), FMv(y), e))
+      (shuffle reg_fsw fargs')
+      e'
+  in
+  (* iargs alloc *)
+  let e' = List.fold_right
+      (fun (y, r) e -> Let((r, Type.Int), Mv(y), e))
+      (shuffle reg_sw iargs')
+      e'
+  in
+  let e' : Asm.t =
+    List.fold_left
+      (fun e x ->
+         if x = fst dest || not (M.mem x regenv) then e else
+           seq(Save(M.find x regenv, x), e))
+      e'
+      (fv cont)
+  in
+  (e', M.empty (* new regenv *))
 
 let h { name = Id.L(x); args = ys; fargs = zs; body = e; ret = t } = (* 関数のレジスタ割り当て (caml2html: regalloc_h) *)
   let regenv = M.add x reg_cl M.empty in
@@ -222,5 +266,11 @@ let h { name = Id.L(x); args = ys; fargs = zs; body = e; ret = t } = (* 関数�
 let f (Prog(data, fundefs, e)) = (* プログラム全体のレジスタ割り当て (caml2html: regalloc_f) *)
   Format.eprintf "register allocation: may take some time (up to a few minutes, depending on the size of functions)@.";
   let fundefs' = List.map h fundefs in
-  let e', regenv' = g (Id.gentmp Type.Unit, Type.Unit) (Ans(Nop)) M.empty e in
+  let e', regenv' =
+    g
+      (Id.gentmp Type.Unit, Type.Unit) (* dest *)
+      (Ans(Nop)) (* cont *)
+      M.empty (* regenv *)
+      e
+  in
   Prog(data, fundefs', e')

@@ -26,22 +26,6 @@ let reg r =
   then String.sub r 1 (String.length r - 1)
   else r
 
-(* Shuffle registers so that the old content will not be lost *)
-let rec shuffle sw xys =
-  (* remove identical moves *)
-  let xys = List.filter (fun (x, y) -> x <> y) xys in
-  (* find acyclic moves *)
-  match List.partition (fun (_, y) -> List.mem_assoc y xys) xys with
-  | [], [] -> []
-  | (x, y) :: xys, [] -> (* no acyclic moves; resolve a cyclic move *)
-    (* there are a tuple (y, b) in old xys *)
-    (y, sw) :: (x, y) :: shuffle sw (List.map
-                                       (function
-                                         | (y', z) when y = y' -> (sw, z)
-                                         | yz -> yz)
-                                       xys)
-  | xys, acyc -> acyc @ shuffle sw xys
-
 let funcname = ref ""
 
 type dest = Tail | NonTail of Id.t (* 末尾かどうかを表すデータ型 (caml2html: emit_dest) *)
@@ -209,14 +193,11 @@ and g' buf e =
   (* INFO: caller-save regs: ra, t*, a* / callee-save regs: sp, fp, s* *)
   | Tail, CallCls(f, iargs, fargs) ->
     (* TODO: tレジスタから使うようにする(?) *)
-    g'_args buf [(f, reg_cl)] iargs fargs;
     Printf.bprintf buf "\tlw\tra, 0(%s)\n" (reg reg_cl);
     Printf.bprintf buf "\tjalr\tra, ra, 0\n";
   | Tail, CallDir(Id.L(f), iargs, fargs) ->
-    g'_args buf [] iargs fargs;
     Printf.bprintf buf "\tcall\t%s\n" f;
   | NonTail(a), CallCls(f, iargs, fargs) ->
-    g'_args buf [(f, reg_cl)] iargs fargs;
 (*
     let ss = stacksize() + 4 in
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" (-1 * ss);
@@ -233,7 +214,6 @@ and g' buf e =
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" ss;
 *)
   | (NonTail(a), CallDir(Id.L(f), iargs, fargs)) ->
-    g'_args buf [] iargs fargs;
 (*
     let ss = stacksize() + 4 in
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" (-1 * ss);
@@ -248,7 +228,7 @@ and g' buf e =
     Printf.bprintf buf "\tlw\tra, %d(sp)\n" (ss - 4);
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" ss;
 *)
-and g'_tail_if buf rs1 rs2 e1 e2 b bn = (* bはラベルに使うだけで命令には使わない *)
+and g'_tail_if buf rs1 rs2 e1 e2 b bn =
   match e2 with
   | Ans(Nop) ->
     Printf.bprintf buf "\t%s\t%s, %s, %s_ret\n" bn (reg rs1) (reg rs2) !funcname;
@@ -273,21 +253,19 @@ and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
   | false ->
     let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
     Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_cont;
-    let stackset1 = !stackset in
+    let stackset_back = !stackset in
     g buf (dest, e1);
-    let stackset2 = !stackset in
     Printf.bprintf buf "%s:\n" b_cont;
-    stackset := S.inter stackset2 stackset1
+    stackset := stackset_back;
   | _ ->
     match does_write e1 with
     | false ->
       let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
       Printf.bprintf buf "\t%s\t%s, %s, %s\n" b (reg rs1) (reg rs2) b_cont;
-      let stackset1 = !stackset in
+      let stackset_back = !stackset in
       g buf (dest, e2);
-      let stackset2 = !stackset in
       Printf.bprintf buf "%s:\n" b_cont;
-      stackset := S.inter stackset1 stackset2
+      stackset := stackset_back;
     | true ->
       let b_else = Id.genid ("." ^ !funcname ^ "_else") in
       let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
@@ -302,24 +280,6 @@ and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
       Printf.bprintf buf "%s:\n" b_cont;
       let stackset2 = !stackset in
       stackset := S.inter stackset1 stackset2
-
-and g'_args buf x_reg_cl int_args float_args =
-  let (_, yrs) =
-    List.fold_left
-      (fun (i, yrs) y -> (i + 1, (y, regs.(i)) :: yrs))
-      (0, x_reg_cl) (* <- initial value *)
-      int_args in
-  List.iter
-    (fun (y, r) -> Printf.bprintf buf "\tmv\t%s, %s\n" (reg r) (reg y))
-    (shuffle reg_sw yrs);
-  let (_, zfrs) =
-    List.fold_left
-      (fun (d, zfrs) z -> (d + 1, (z, fregs.(d)) :: zfrs))
-      (0, [])
-      float_args in
-  List.iter
-    (fun (z, fr) -> Printf.bprintf buf "\tfmv\t%s, %s\n" (reg fr) (reg z))
-    (shuffle reg_fsw zfrs)
 
 let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   Printf.fprintf oc "%s:\n" x;

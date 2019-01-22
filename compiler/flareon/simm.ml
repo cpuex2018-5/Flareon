@@ -10,11 +10,7 @@ let rec g env lenv fenv = function (* 命令列の12bit即値最適化 *)
         e')
   | Let((x, t), FMv("%fzero"), e) ->
     let e' = g env lenv (x :: fenv) e in
-    if List.mem x (fv e') then
-      (print_t (Let((x, t), FMv("%fzero"), e'));
-       print_newline ();
-       Let((x, t), FMv("%fzero"), e'))
-    else e'
+    if List.mem x (fv e') then Let((x, t), FMv("%fzero"), e') else e'
   | Let(xt, Sll(y, C(i)), e) when M.mem y env -> (* for array access *)
     (* Format.eprintf "erased redundant Sll on %s@." x; *)
     g env lenv fenv (Let(xt, Li((M.find y env) lsl i), e))
