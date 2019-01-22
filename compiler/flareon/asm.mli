@@ -76,6 +76,9 @@ val reg_hp : Id.t
 val reg_tmp : Id.t
 val is_reg : Id.t -> bool
 
+val fv_id_or_imm : id_or_imm -> Id.t list
+val fv_id_imm_or_label : id_imm_or_label -> Id.t list
+val fv_id_or_fimm : id_or_fimm -> Id.t list
 val fv : t -> Id.t list
 val fv_exp : exp -> Id.t list
 val has_call : t -> bool

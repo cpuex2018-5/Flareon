@@ -194,6 +194,7 @@ and is_call (e : exp) = match e with
 let rec is_mincaml (n : string) =
   String.length n >= 9 && String.sub n 0 9 = "min_caml_"
 
+(* let xt = e1 in e2 をつくる *)
 let rec concat e1 xt e2 =
   match e1 with
   | Ans(exp) -> Let(xt, exp, e2)
