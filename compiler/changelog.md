@@ -59,3 +59,5 @@ lda rd, symbol -> lui rd, symbol[31:12]
 
 ## 1/23
 * `create_array`, `create_float_array` で長さが固定長の部分をインライン&ループを展開
+* `floor` の改善
+* `float_of_int`, `int_of_float` はインラインさせると命令数が増えてしまった
