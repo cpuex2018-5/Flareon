@@ -89,14 +89,14 @@ int main(int argc, char* argv[])
     if (is_minrt) {
         std::ifstream glbifs(infile.substr(0, infile.size() - 7) + "globals.s");
         while(getline(glbifs, str))
-            bingen.Main(str);
+            bingen.Main(str, false);
     }
     while (getline(ifs, str))
-        bingen.Main(str);
+        bingen.Main(str, true);
     while (getline(iolib, str))
-        bingen.Main(str);
+        bingen.Main(str, true);
     while (getline(cmnlib, str))
-        bingen.Main(str);
+        bingen.Main(str, true);
 
     bingen.Finish();
 

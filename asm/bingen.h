@@ -43,7 +43,7 @@ class BinGen {
         void OnReadLabelsCompleted();
 
         // 2周目
-        void Main(std::string input);
+        void Main(std::string input, bool do_debug_print);
 
         // 終了処理
         void Finish();

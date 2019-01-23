@@ -102,11 +102,11 @@ void BinGen::OnReadLabelsCompleted(){
     data_mode_ = false;
 }
 
-void BinGen::Main(std::string input) {
+void BinGen::Main(std::string input, bool do_debug_print) {
     int old_nline = nline_;
     BinGen::Inst inst(Convert(input));
 
-    if (is_debug_) {
+    if (is_debug_ && do_debug_print) {
         if (inst.is_inst()) {
             std::printf("(%d)\t%s\n", old_nline * 4, input.c_str());
         } else {
