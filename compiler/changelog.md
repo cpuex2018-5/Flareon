@@ -56,3 +56,6 @@ lda rd, symbol -> lui rd, symbol[31:12]
     * 命令数は最終的に 2582106361 へ
 * 関数呼び出しの直前(レジスタ退避をした後)のmvを極力減らした
     * regAlloc.mlで、liveだけど関数呼び出し前に使われない変数はSpillさせる
+
+## 1/23
+* `create_array`, `create_float_array` で長さが固定長の部分をインライン&ループを展開

@@ -31,6 +31,7 @@ type t = (* formula after K-normalization (caml2html: knormal_t) *)
   | ExtArray of Id.t
   | ExtTuple of Id.t
   | ExtFunApp of Id.t * Id.t list
+  | MakeArray of Id.id_or_imm * (Id.t * Type.t)
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 (* [WEEK1 Q1] output pretty string for KNormal.t *)
@@ -74,6 +75,8 @@ let string_of_t (exp : t) =
     | ExtArray e -> indent ^ e
     | ExtTuple e -> indent ^ e
     | ExtFunApp (e, el) -> indent ^ e ^ " (" ^ (String.concat " " el) ^ ")\n"
+    | MakeArray(V(x), (y, _)) -> indent ^ Printf.sprintf "MakeArray(%s, %s)\n" x y
+    | MakeArray(C(x), (y, _)) -> indent ^ Printf.sprintf "MakeArray(%d, %s)\n" x y
   and
     str_of_fundef (f : fundef) (depth : int) =
     (fst f.name) ^ " (" ^ (String.concat ", " (List.map fst f.args)) ^ ") =\n" ^ (str_of_t f.body depth)
@@ -99,6 +102,7 @@ let rec fv = function (* free variable (caml2html: knormal_fv) *)
   | Tuple(xs) | ExtFunApp(_, xs) -> S.of_list xs
   | Put(x, y, z) -> S.of_list [x; y; z]
   | LetTuple(xs, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xs)))
+  | MakeArray(x, (y, _)) -> S.add y (S.of_list (Id.fv_id_or_imm x))
 
 (* substitute a free variable 'a' in 'e' with 'b' *)
 let rec id_subst (e : t) (a : Id.t) (b : Id.t) : t =
@@ -133,6 +137,8 @@ let rec id_subst (e : t) (a : Id.t) (b : Id.t) : t =
   | ExtArray e -> ExtArray (subst_ e)
   | ExtTuple e -> ExtTuple (subst_ e)
   | ExtFunApp (e, el) -> ExtFunApp (subst_ e, List.map subst_ el)
+  | MakeArray(Id.V(e1), (e2, t)) -> MakeArray(Id.V(subst_ e1), (subst_ e2, t))
+  | MakeArray(Id.C(n), (e2, t)) -> MakeArray(Id.C(n), (subst_ e2, t))
   | _ -> e
 and id_subst_fun (f : fundef) (a : Id.t) (b : Id.t) : fundef =
   let subst_ x = if x = a then b else x in
@@ -328,12 +334,7 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
       (fun x ->
          let _, t2 as g_e2 = g env e2 in
          insert_let g_e2
-           (fun y ->
-              let l =
-                match t2 with
-                | Type.Float -> "create_float_array"
-                | _ -> "create_array" in
-              ExtFunApp(l, [x; y]), Type.Array(t2)))
+           (fun y -> MakeArray(V(x), (y, t2)), Type.Array(t2)))
   | Syntax.Get(e1, e2, _) ->
     (match g env e1 with
      | _, Type.Array(t) as g_e1 ->

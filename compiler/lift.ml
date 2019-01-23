@@ -73,6 +73,7 @@ let rec fvs (e : KNormal.t) : S.t =
   | Get (a, i) -> S.of_list [a; i]
   | Put (a, i, x) -> S.of_list [a; i; x]
   | ExtFunApp (f, x) -> S.of_list x
+  | MakeArray(x, (y, _)) -> S.add y (S.of_list (Id.fv_id_or_imm x))
 
 (* bind free variables in functions *)
 let rec expandArg (e : KNormal.t) (env : Type.t M.t) : KNormal.t =

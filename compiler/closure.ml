@@ -30,6 +30,7 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | Put of Id.t * Id.t * Id.t
   | ExtArray of Id.l
   | ExtTuple of Id.l
+  | MakeArray of Id.id_or_imm * (Id.t * Type.t)
 type fundef = { name : Id.l * Type.t;
                 args : (Id.t * Type.t) list;
                 formal_fv : (Id.t * Type.t) list;
@@ -76,6 +77,8 @@ let rec str_of_t ?(no_indent = false) ?(endline = "\n") (exp : t) (depth : int) 
   | Put (e1, e2, e3) -> indent ^ e1 ^ "[ " ^ e2 ^ " ] <- " ^ e3 ^ endline
   | ExtArray Id.L(e) -> indent ^ e
   | ExtTuple Id.L(e) -> indent ^ e
+  | MakeArray(V(x), (y, _)) -> indent ^ Printf.sprintf "MakeArray(%s, %s)\n" x y
+  | MakeArray(C(x), (y, _)) -> indent ^ Printf.sprintf "MakeArray(%d, %s)\n" x y
 
 let string_of_t (exp : t) = str_of_t exp 0
 
@@ -121,6 +124,8 @@ let rec id_subst (e : t) (a : Id.t) (b : Id.t) : t =
   | LetTuple (l, e1, e2) -> LetTuple (List.map (fun (x, t) -> (subst_ x, t)) l, subst_ e1, id_subst e2 a b)
   | Get (e1, e2) -> Get (subst_ e1, subst_ e2)
   | Put (e1, e2, e3) -> Put (subst_ e1, subst_ e2, subst_ e3)
+  | MakeArray(Id.V(e1), (e2, t)) -> MakeArray(Id.V(subst_ e1), (subst_ e2, t))
+  | MakeArray(Id.C(n), (e2, t)) -> MakeArray(Id.C(n), (subst_ e2, t))
   | _ -> e
 
 let rec fv = function
@@ -136,6 +141,7 @@ let rec fv = function
   | AppDir(_, xs) | Tuple(xs) -> S.of_list xs
   | LetTuple(xts, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xts)))
   | Put(x, y, z) -> S.of_list [x; y; z]
+  | MakeArray(x, (y, _)) -> S.add y (S.of_list (Id.fv_id_or_imm x))
 
 let is_verbose = ref false
 let toplevel : fundef list ref = ref []
@@ -208,6 +214,7 @@ let rec g env known e =
   | KNormal.ExtArray(x) -> ExtArray(Id.L(x))
   | KNormal.ExtTuple(x) -> ExtTuple(Id.L(x))
   | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys)
+  | KNormal.MakeArray(x, y) -> MakeArray(x, y)
 
 let f b e =
   is_verbose := b;

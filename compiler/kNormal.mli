@@ -29,6 +29,7 @@ type t =
   | ExtArray of Id.t
   | ExtTuple of Id.t
   | ExtFunApp of Id.t * Id.t list
+  | MakeArray of Id.id_or_imm * (Id.t * Type.t)
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 val fv : t -> S.t

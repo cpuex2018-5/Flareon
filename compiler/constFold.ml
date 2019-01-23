@@ -51,6 +51,7 @@ let rec g env = function
       xts
       (findt y env)
   | LetTuple(xts, y, e) -> LetTuple(xts, y, g env e)
+  | MakeArray(V(x), yt) when memi x env -> MakeArray(C(findi x env), yt)
 (*
   | App("min_caml_sqrt", [x]) when memf x env -> Float(sqrt (findf x env))
   | App("min_caml_int_of_float", [x]) when memf x env -> Int(int_of_float (findf x env))

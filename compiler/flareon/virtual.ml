@@ -156,6 +156,26 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
      | _ -> assert false)
   | Closure.ExtArray(Id.L(x)) -> Ans(SetDL(Id.L("min_caml_" ^ x)))
   | Closure.ExtTuple(Id.L(x)) -> Ans(SetDL(Id.L("min_caml_" ^ x)))
+  | Closure.MakeArray(V(x), (y, Type.Float)) ->
+    g env (Closure.AppDir(Id.L("min_caml_create_float_array"), [x; y]))
+  | Closure.MakeArray(V(x), (y, _)) ->
+    g env (Closure.AppDir(Id.L("min_caml_create_array"), [x; y]))
+  | Closure.MakeArray(C(n), (y, Type.Float)) ->
+    let t = Id.genid "t" in
+    let e = Let((reg_hp, Type.Int), Add(reg_hp, C(n * 4)), Ans(Mv(t))) in
+    let e = Let((t, Type.Int), Mv(reg_hp), e) in
+    let rec inner_ n e =
+      if n = 0 then e else
+        inner_ (n - 1) (seq(Fsw(V(y), reg_hp, C((n - 1) * 4)), e))
+    in inner_ n e
+  | Closure.MakeArray(C(n), (y, _)) ->
+    let t = Id.genid "t" in
+    let e = Let((reg_hp, Type.Int), Add(reg_hp, C(n * 4)), Ans(Mv(t))) in
+    let e = Let((t, Type.Int), Mv(reg_hp), e) in
+    let rec inner_ n e =
+      if n = 0 then e else
+        inner_ (n - 1) (seq(Sw(y, reg_hp, C((n - 1) * 4)), e))
+    in inner_ n e
 
 (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
 let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.formal_fv = zts; Closure.body = e } =

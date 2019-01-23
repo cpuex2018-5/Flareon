@@ -49,5 +49,7 @@ let rec g env = function (* where alpha-conversion happens (caml2html: alpha_g) 
   | ExtArray(x) -> ExtArray(x)
   | ExtTuple(x) -> ExtTuple(x)
   | ExtFunApp(x, ys) -> ExtFunApp(x, List.map (fun y -> find y env) ys)
+  | MakeArray(V(x), (y, t)) -> MakeArray(V(find x env), (find y env, t))
+  | MakeArray(C(n), (y, t)) -> MakeArray(C(n), (find y env, t))
 
 let f = g M.empty
