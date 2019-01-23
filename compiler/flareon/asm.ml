@@ -138,7 +138,9 @@ let regs = (* 26個 *)
 let fregs =
   [| "%fa0"; "%fa1"; "%fa2"; "%fa3"; "%fa4"; "%fa5"; "%fa6"; "%fa7";
      "%fs1"; "%fs2"; "%fs3"; "%fs4"; "%fs5"; "%fs6"; "%fs7"; "%fs8"; "%fs9"; "%fs10"; "%fs11";
-     "%ft1"; "%ft2"; "%ft3"; "%ft4"; "%ft5"; "%ft6"; "%ft7"; "%ft8"; "%ft9"; "%ft10" |]
+     "%ft1"; "%ft2"; "%ft3"; "%ft4"; "%ft5"; "%ft6"; "%ft7"; "%ft8" |]
+(* ft9, ft10 : free for libs *)
+(* ft11 : fzero *)
 let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
 let reg_cl = "%s11" (* closure address *)
@@ -265,6 +267,9 @@ let callee_save_funs =
    ("min_caml_read_float", ["%fa0"]);
    ("min_caml_create_array", ["%a0"]);
    ("min_caml_create_float_array", ["%a0"]);
+   ("min_caml_atan", ["%fa0"; "%s1"; "%ft0"; "%ft8"]);
+   ("min_caml_sin", ["%fa0"; "%s1"; "%t2"; "%ft0"; "%ft7"; "%ft8"]);
+   ("min_caml_cos", ["%fa0"; "%s1"; "%t2"; "%ft0"; "%ft7"; "%ft8"]);
    ("min_caml_floor", ["%fa0"]);
    ("min_caml_float_of_int", ["%a0"; "%fa0"]);
    ("min_caml_int_of_float", ["%fa0"; "%a0"])]

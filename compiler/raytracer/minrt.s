@@ -148,8 +148,8 @@ vecaccumv_2643:
 vecaccumv_ret:
 	jr	ra
 read_screen_settings_2720:
-	addi	sp, sp, -32
-	sw	ra, 28(sp)
+	addi	sp, sp, -24
+	sw	ra, 20(sp)
 	lda	a0, min_caml_screen
 	call	min_caml_read_float
 	fsw	fa0, 0(a0)
@@ -160,142 +160,125 @@ read_screen_settings_2720:
 	call	min_caml_read_float
 	fli	fa1, l_data_3
 	fmul	fa0, fa0, fa1
-	sw	a0, 0(sp)	# save
-	fsw	fa1, 4(sp)	# save
+	fsw	fa0, 0(sp)	# save
+	call	min_caml_cos
+	fsw	fa0, 4(sp)	# save
+	flw	fa0, 0(sp)	# restore
+	call	min_caml_sin
 	fsw	fa0, 8(sp)	# save
-	call	min_caml_cos
-	fsw	fa0, 12(sp)	# save
-	flw	fa0, 8(sp)	# restore
-	call	min_caml_sin
-	fsw	fa0, 16(sp)	# save
 	call	min_caml_read_float
-	flw	fa1, 4(sp)	# restore
 	fmul	fa0, fa0, fa1
-	fsw	fa0, 20(sp)	# save
+	fsw	fa0, 12(sp)	# save
 	call	min_caml_cos
-	fsw	fa0, 24(sp)	# save
-	flw	fa0, 20(sp)	# restore
+	fsw	fa0, 16(sp)	# save
+	flw	fa0, 12(sp)	# restore
 	call	min_caml_sin
-	lda	a0, min_caml_screenz_dir
-	flw	fa1, 12(sp)	# restore
+	lda	a1, min_caml_screenz_dir
+	flw	fa1, 4(sp)	# restore
 	fmul	fa2, fa1, fa0
 	fli	fa3, l_data_4
 	fmul	fa2, fa2, fa3
-	fsw	fa2, 0(a0)
+	fsw	fa2, 0(a1)
 	fli	fa2, l_data_5
-	flw	fa4, 16(sp)	# restore
+	flw	fa4, 8(sp)	# restore
 	fmul	fa2, fa4, fa2
-	fsw	fa2, 4(a0)
-	flw	fa2, 24(sp)	# restore
+	fsw	fa2, 4(a1)
+	flw	fa2, 16(sp)	# restore
 	fmul	fa5, fa1, fa2
 	fmul	fa3, fa5, fa3
-	fsw	fa3, 8(a0)
-	lda	a1, min_caml_screenx_dir
-	fsw	fa2, 0(a1)
-	fsw	fzero, 4(a1)
-	fneg	fa3, fa0
 	fsw	fa3, 8(a1)
-	lda	a1, min_caml_screeny_dir
+	lda	a2, min_caml_screenx_dir
+	fsw	fa2, 0(a2)
+	fsw	fzero, 4(a2)
+	fneg	fa3, fa0
+	fsw	fa3, 8(a2)
+	lda	a2, min_caml_screeny_dir
 	fneg	fa3, fa4
 	fmul	fa0, fa3, fa0
-	fsw	fa0, 0(a1)
+	fsw	fa0, 0(a2)
 	fneg	fa0, fa1
-	fsw	fa0, 4(a1)
+	fsw	fa0, 4(a2)
 	fmul	fa0, fa3, fa2
-	fsw	fa0, 8(a1)
-	lda	a1, min_caml_viewpoint
-	lw	a2, 0(sp)	# restore
-	flw	fa0, 0(a2)
-	flw	fa1, 0(a0)
+	fsw	fa0, 8(a2)
+	lda	a2, min_caml_viewpoint
+	flw	fa0, 0(a0)
+	flw	fa1, 0(a1)
 	fsub	fa0, fa0, fa1
-	fsw	fa0, 0(a1)
-	flw	fa0, 4(a2)
-	flw	fa1, 4(a0)
+	fsw	fa0, 0(a2)
+	flw	fa0, 4(a0)
+	flw	fa1, 4(a1)
 	fsub	fa0, fa0, fa1
-	fsw	fa0, 4(a1)
-	flw	fa0, 8(a2)
-	flw	fa1, 8(a0)
+	fsw	fa0, 4(a2)
+	flw	fa0, 8(a0)
+	flw	fa1, 8(a1)
 	fsub	fa0, fa0, fa1
-	fsw	fa0, 8(a1)
+	fsw	fa0, 8(a2)
 read_screen_settings_ret:
-	lw	ra, 28(sp)
-	addi	sp, sp, 32
+	lw	ra, 20(sp)
+	addi	sp, sp, 24
 	jr	ra
 read_light_2722:
-	addi	sp, sp, -24
-	sw	ra, 20(sp)
+	addi	sp, sp, -16
+	sw	ra, 12(sp)
 	call	min_caml_read_int
 	call	min_caml_read_float
 	fli	fa1, l_data_3
 	fmul	fa0, fa0, fa1
 	fsw	fa0, 0(sp)	# save
-	fsw	fa1, 4(sp)	# save
 	call	min_caml_sin
 	lda	a0, min_caml_light
 	fneg	fa0, fa0
 	fsw	fa0, 4(a0)
 	call	min_caml_read_float
-	flw	fa1, 4(sp)	# restore
 	fmul	fa0, fa0, fa1
-	fsw	fa0, 8(sp)	# save
+	fsw	fa0, 4(sp)	# save
 	flw	fa0, 0(sp)	# restore
-	sw	a0, 12(sp)	# save
 	call	min_caml_cos
-	fsw	fa0, 16(sp)	# save
-	flw	fa0, 8(sp)	# restore
+	fsw	fa0, 8(sp)	# save
+	flw	fa0, 4(sp)	# restore
 	call	min_caml_sin
-	flw	fa1, 16(sp)	# restore
+	flw	fa1, 8(sp)	# restore
 	fmul	fa0, fa1, fa0
-	lw	a0, 12(sp)	# restore
 	fsw	fa0, 0(a0)
-	flw	fa0, 8(sp)	# restore
+	flw	fa0, 4(sp)	# restore
 	call	min_caml_cos
-	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa1, fa0
-	lw	a0, 12(sp)	# restore
 	fsw	fa0, 8(a0)
 	lda	a0, min_caml_beam
 	call	min_caml_read_float
 	fsw	fa0, 0(a0)
 read_light_ret:
-	lw	ra, 20(sp)
-	addi	sp, sp, 24
+	lw	ra, 12(sp)
+	addi	sp, sp, 16
 	jr	ra
 rotate_quadratic_matrix_2724:
-	addi	sp, sp, -32
-	sw	ra, 28(sp)
+	addi	sp, sp, -24
+	sw	ra, 20(sp)
 	flw	fa0, 0(a1)
-	sw	a0, 0(sp)	# save
-	sw	a1, 4(sp)	# save
+	call	min_caml_cos
+	fsw	fa0, 0(sp)	# save
+	flw	fa0, 0(a1)
+	call	min_caml_sin
+	fsw	fa0, 4(sp)	# save
+	flw	fa0, 4(a1)
 	call	min_caml_cos
 	fsw	fa0, 8(sp)	# save
-	lw	a0, 4(sp)	# restore
-	flw	fa0, 0(a0)
+	flw	fa0, 4(a1)
 	call	min_caml_sin
 	fsw	fa0, 12(sp)	# save
-	lw	a0, 4(sp)	# restore
-	flw	fa0, 4(a0)
+	flw	fa0, 8(a1)
 	call	min_caml_cos
 	fsw	fa0, 16(sp)	# save
-	lw	a0, 4(sp)	# restore
-	flw	fa0, 4(a0)
+	flw	fa0, 8(a1)
 	call	min_caml_sin
-	fsw	fa0, 20(sp)	# save
-	lw	a0, 4(sp)	# restore
-	flw	fa0, 8(a0)
-	call	min_caml_cos
-	fsw	fa0, 24(sp)	# save
-	lw	a0, 4(sp)	# restore
-	flw	fa0, 8(a0)
-	call	min_caml_sin
-	flw	fa1, 24(sp)	# restore
-	flw	fa2, 16(sp)	# restore
+	flw	fa1, 16(sp)	# restore
+	flw	fa2, 8(sp)	# restore
 	fmul	fa3, fa2, fa1
-	flw	fa4, 20(sp)	# restore
-	flw	fa5, 12(sp)	# restore
+	flw	fa4, 12(sp)	# restore
+	flw	fa5, 4(sp)	# restore
 	fmul	fa6, fa5, fa4
 	fmul	fa7, fa6, fa1
-	flw	fs1, 8(sp)	# restore
+	flw	fs1, 0(sp)	# restore
 	fmul	fs2, fs1, fa0
 	fsub	fa7, fa7, fs2
 	fmul	fs2, fs1, fa4
@@ -312,7 +295,6 @@ rotate_quadratic_matrix_2724:
 	fneg	fa1, fa4
 	fmul	fa4, fa5, fa2
 	fmul	fa2, fs1, fa2
-	lw	a0, 0(sp)	# restore
 	flw	fa5, 0(a0)
 	flw	fs1, 4(a0)
 	flw	fs2, 8(a0)
@@ -353,8 +335,7 @@ rotate_quadratic_matrix_2724:
 	fmul	fs7, fs7, fa2
 	fadd	fs6, fs6, fs7
 	fmul	fs6, fs5, fs6
-	lw	a0, 4(sp)	# restore
-	fsw	fs6, 0(a0)
+	fsw	fs6, 0(a1)
 	fmul	fa3, fa5, fa3
 	fmul	fa5, fa3, fs3
 	fmul	fs1, fs1, fs4
@@ -364,17 +345,17 @@ rotate_quadratic_matrix_2724:
 	fmul	fa2, fa1, fa2
 	fadd	fa0, fa0, fa2
 	fmul	fa0, fs5, fa0
-	fsw	fa0, 4(a0)
+	fsw	fa0, 4(a1)
 	fmul	fa0, fa3, fa7
 	fmul	fa2, fs1, fa6
 	fadd	fa0, fa0, fa2
 	fmul	fa1, fa1, fa4
 	fadd	fa0, fa0, fa1
 	fmul	fa0, fs5, fa0
-	fsw	fa0, 8(a0)
+	fsw	fa0, 8(a1)
 rotate_quadratic_matrix_ret:
-	lw	ra, 28(sp)
-	addi	sp, sp, 32
+	lw	ra, 20(sp)
+	addi	sp, sp, 24
 	jr	ra
 read_nth_object_2727:
 	addi	sp, sp, -36
@@ -1856,10 +1837,10 @@ shadow_check_and_group_2870:
 	fadd	fa0, fa0, fa3
 	li	a0, 0
 	lw	a1, 4(sp)	# restore
-	fmv	ft10, fa2
+	fmv	ft8, fa2
 	fmv	fa2, fa0
 	fmv	fa0, fa1
-	fmv	fa1, ft10
+	fmv	fa1, ft8
 	call	check_all_inside_2864
 	bne	a0, zero, .shadow_check_and_group_else_6
 	lw	a0, 0(sp)	# restore
@@ -2481,8 +2462,8 @@ get_nvector_second_ret:
 	addi	sp, sp, 4
 	jr	ra
 utexture_2916:
-	addi	sp, sp, -68
-	sw	ra, 64(sp)
+	addi	sp, sp, -40
+	sw	ra, 36(sp)
 	lw	a2, 32(a0)
 	lw	a3, 20(a0)
 	lw	a4, 16(a0)
@@ -2545,26 +2526,20 @@ utexture_2916:
 	flw	fa0, 4(a1)
 	fli	fa1, l_data_21
 	fmul	fa0, fa0, fa1
-	sw	a5, 8(sp)	# save
-	fsw	fa1, 12(sp)	# save
-	sw	a1, 16(sp)	# save
 	call	min_caml_sin
-	lw	a0, 16(sp)	# restore
-	flw	fa1, 4(a0)
-	fsw	fa0, 20(sp)	# save
-	flw	fa2, 12(sp)	# restore
-	fmul	fa0, fa1, fa2
+	flw	fa2, 4(a1)
+	fsw	fa0, 8(sp)	# save
+	fmul	fa0, fa2, fa1
 	call	min_caml_sin
-	flw	fa1, 20(sp)	# restore
+	flw	fa1, 8(sp)	# restore
 	fmul	fa0, fa1, fa0
 	fli	fa1, l_data_18
 	fmul	fa2, fa1, fa0
-	lw	a0, 8(sp)	# restore
-	fsw	fa2, 0(a0)
+	fsw	fa2, 0(a5)
 	fli	fa2, l_data_1
 	fsub	fa0, fa2, fa0
 	fmul	fa0, fa1, fa0
-	fsw	fa0, 4(a0)
+	fsw	fa0, 4(a5)
 	b	utexture_ret
 .utexture_else_9:
 	li	t6, 3
@@ -2581,28 +2556,26 @@ utexture_2916:
 	fsqrt	fa0, fa0
 	fli	fa1, l_data_20
 	fdiv	fa0, fa0, fa1
-	fsw	fa0, 24(sp)	# save
+	fsw	fa0, 12(sp)	# save
 	call	min_caml_floor
-	flw	fa1, 24(sp)	# restore
+	flw	fa1, 12(sp)	# restore
 	fsub	fa0, fa1, fa0
 	fli	fa1, l_data_14
 	fmul	fa0, fa0, fa1
-	sw	a5, 8(sp)	# save
-	fsw	fa0, 28(sp)	# save
+	fsw	fa0, 16(sp)	# save
 	call	min_caml_cos
-	fsw	fa0, 32(sp)	# save
-	flw	fa0, 28(sp)	# restore
+	fsw	fa0, 20(sp)	# save
+	flw	fa0, 16(sp)	# restore
 	call	min_caml_cos
-	flw	fa1, 32(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	fmul	fa0, fa1, fa0
 	fli	fa1, l_data_18
 	fmul	fa2, fa0, fa1
-	lw	a0, 8(sp)	# restore
-	fsw	fa2, 4(a0)
+	fsw	fa2, 4(a5)
 	fli	fa2, l_data_1
 	fsub	fa0, fa2, fa0
 	fmul	fa0, fa0, fa1
-	fsw	fa0, 8(a0)
+	fsw	fa0, 8(a5)
 	b	utexture_ret
 .utexture_else_11:
 	li	t6, 4
@@ -2625,12 +2598,6 @@ utexture_2916:
 	fli	fa3, l_data_12
 	fabs	fa4, fa0
 	fle	a0, fa3, fa4
-	sw	a5, 8(sp)	# save
-	fsw	fa3, 36(sp)	# save
-	fsw	fa2, 40(sp)	# save
-	sw	a4, 44(sp)	# save
-	sw	a3, 48(sp)	# save
-	sw	a1, 16(sp)	# save
 	bne	a0, zero, .utexture_else_13
 	fli	fa0, l_data_15
 	b	.utexture_cont_14
@@ -2643,24 +2610,19 @@ utexture_2916:
 	fli	fa1, l_data_14
 	fdiv	fa0, fa0, fa1
 .utexture_cont_14:
-	fsw	fa0, 52(sp)	# save
+	fsw	fa0, 24(sp)	# save
 	call	min_caml_floor
-	flw	fa1, 52(sp)	# restore
+	flw	fa1, 24(sp)	# restore
 	fsub	fa0, fa1, fa0
-	lw	a0, 16(sp)	# restore
-	flw	fa1, 4(a0)
-	lw	a0, 48(sp)	# restore
-	flw	fa2, 4(a0)
-	fsub	fa1, fa1, fa2
-	lw	a0, 44(sp)	# restore
-	flw	fa2, 4(a0)
-	fsqrt	fa2, fa2
-	fmul	fa1, fa1, fa2
-	flw	fa2, 40(sp)	# restore
-	fabs	fa3, fa2
-	flw	fa4, 36(sp)	# restore
-	fle	a0, fa4, fa3
-	fsw	fa0, 56(sp)	# save
+	flw	fa1, 4(a1)
+	flw	fa4, 4(a3)
+	fsub	fa1, fa1, fa4
+	flw	fa4, 4(a4)
+	fsqrt	fa4, fa4
+	fmul	fa1, fa1, fa4
+	fabs	fa4, fa2
+	fle	a0, fa3, fa4
+	fsw	fa0, 28(sp)	# save
 	bne	a0, zero, .utexture_else_15
 	fli	fa0, l_data_15
 	b	.utexture_cont_16
@@ -2673,13 +2635,13 @@ utexture_2916:
 	fli	fa1, l_data_14
 	fdiv	fa0, fa0, fa1
 .utexture_cont_16:
-	fsw	fa0, 60(sp)	# save
+	fsw	fa0, 32(sp)	# save
 	call	min_caml_floor
-	flw	fa1, 60(sp)	# restore
+	flw	fa1, 32(sp)	# restore
 	fsub	fa0, fa1, fa0
 	fli	fa1, l_data_16
 	fli	fa2, l_data_17
-	flw	fa3, 56(sp)	# restore
+	flw	fa3, 28(sp)	# restore
 	fsub	fa3, fa2, fa3
 	fmul	fa3, fa3, fa3
 	fsub	fa1, fa1, fa3
@@ -2694,11 +2656,10 @@ utexture_2916:
 	fmul	fa0, fa1, fa0
 	fli	fa1, l_data_19
 	fdiv	fa0, fa0, fa1
-	lw	a0, 8(sp)	# restore
-	fsw	fa0, 8(a0)
+	fsw	fa0, 8(a5)
 utexture_ret:
-	lw	ra, 64(sp)
-	addi	sp, sp, 68
+	lw	ra, 36(sp)
+	addi	sp, sp, 40
 	jr	ra
 add_light_2919:
 	addi	sp, sp, -12
@@ -3822,10 +3783,10 @@ pretrace_line_2998:
 	lw	a0, 0(a0)
 	addi	a1, a0, -1
 	lw	a0, 0(sp)	# restore
-	fmv	ft10, fa2
+	fmv	ft8, fa2
 	fmv	fa2, fa0
 	fmv	fa0, fa1
-	fmv	fa1, ft10
+	fmv	fa1, ft8
 	call	pretrace_pixels_2991
 pretrace_line_ret:
 	lw	ra, 8(sp)
@@ -4099,8 +4060,8 @@ create_pixelline_ret:
 	addi	sp, sp, 20
 	jr	ra
 adjust_position_3025:
-	addi	sp, sp, -20
-	sw	ra, 16(sp)
+	addi	sp, sp, -16
+	sw	ra, 12(sp)
 	fmul	fa0, fa0, fa0
 	fli	fa2, l_data_26
 	fadd	fa0, fa0, fa2
@@ -4108,22 +4069,20 @@ adjust_position_3025:
 	fli	fa2, l_data_1
 	fsw	fa0, 0(sp)	# save
 	fdiv	fa0, fa2, fa0
-	fsw	fa1, 4(sp)	# save
 	call	min_caml_atan
-	flw	fa1, 4(sp)	# restore
 	fmul	fa0, fa0, fa1
-	fsw	fa0, 8(sp)	# save
+	fsw	fa0, 4(sp)	# save
 	call	min_caml_sin
-	fsw	fa0, 12(sp)	# save
-	flw	fa0, 8(sp)	# restore
+	fsw	fa0, 8(sp)	# save
+	flw	fa0, 4(sp)	# restore
 	call	min_caml_cos
-	flw	fa1, 12(sp)	# restore
+	flw	fa1, 8(sp)	# restore
 	fdiv	fa0, fa1, fa0
 	flw	fa1, 0(sp)	# restore
 	fmul	fa0, fa0, fa1
 adjust_position_ret:
-	lw	ra, 16(sp)
-	addi	sp, sp, 20
+	lw	ra, 12(sp)
+	addi	sp, sp, 16
 	jr	ra
 calc_dirvec_3028:
 	addi	sp, sp, -32
