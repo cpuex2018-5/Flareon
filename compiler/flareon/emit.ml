@@ -46,32 +46,32 @@ and g' buf e =
   | NonTail(x), Mv(y) -> Printf.bprintf buf "\tmv\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), Not(y) -> Printf.bprintf buf "\txori\t%s, %s, 1\t# boolean not\n" (reg x) (reg y)
   | NonTail(x), Neg(y) -> Printf.bprintf buf "\tneg\t%s, %s\n" (reg x) (reg y)
-  | NonTail(x), Xor(y, V(z)) -> Printf.bprintf buf "\txor\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), Xor(y, C(z)) -> Printf.bprintf buf "\txori\t%s, %s, %d\n" (reg x) (reg y) z
-  | NonTail(x), Add(y, V(z)) -> Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), Add(y, C(z)) -> Printf.bprintf buf "\taddi\t%s, %s, %d\n" (reg x) (reg y) z
-  | NonTail(x), Sub(y, V(z)) -> Printf.bprintf buf "\tsub\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), Sub(y, C(z)) -> Printf.bprintf buf "\taddi\t%s, %s, %d\n" (reg x) (reg y) (-1 * z)
-  | NonTail(x), Mul(y, V(z)) -> Printf.bprintf buf "\tmul\t%s, %s, %s\n" (reg x) (reg y) (reg z)    (* アセンブラ非対応 *)
-  | NonTail(x), Mul(y, C(z)) when z = 4 -> Printf.bprintf buf "\tslli\t%s, %s, 2\n" (reg x) (reg y) (* built-in *)
-  | NonTail(x), Mul(y, C(z)) -> Printf.bprintf buf "\tmuli\t%s, %s, %d\n" (reg x) (reg y) z         (* アセンブラ非対応 *)
-  | NonTail(x), Div(y, V(z)) -> Printf.bprintf buf "\tdiv\t%s, %s, %s\n" (reg x) (reg y) (reg z)    (* アセンブラ非対応 *)
-  | NonTail(x), Div(y, C(z)) when z = 2 -> Printf.bprintf buf "\tsrai\t%s, %s, 1\n" (reg x) (reg y) (* built-in *)
-  | NonTail(x), Div(y, C(z)) -> Printf.bprintf buf "\tdivi\t%s, %s, %d\n" (reg x) (reg y) z         (* アセンブラ非対応 *)
-  | NonTail(x), Sll(y, V(z)) -> Printf.bprintf buf "\tsll\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), Sll(y, C(z)) -> Printf.bprintf buf "\tslli\t%s, %s, %d\n" (reg x) (reg y) z
-  | NonTail(x), Lw(y, L(Id.L(l))) ->
+  | NonTail(x), Xor(y, `V(z)) -> Printf.bprintf buf "\txor\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(x), Xor(y, `C(z)) -> Printf.bprintf buf "\txori\t%s, %s, %d\n" (reg x) (reg y) z
+  | NonTail(x), Add(y, `V(z)) -> Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(x), Add(y, `C(z)) -> Printf.bprintf buf "\taddi\t%s, %s, %d\n" (reg x) (reg y) z
+  | NonTail(x), Sub(y, `V(z)) -> Printf.bprintf buf "\tsub\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(x), Sub(y, `C(z)) -> Printf.bprintf buf "\taddi\t%s, %s, %d\n" (reg x) (reg y) (-1 * z)
+  | NonTail(x), Mul(y, `V(z)) -> Printf.bprintf buf "\tmul\t%s, %s, %s\n" (reg x) (reg y) (reg z)    (* アセンブラ非対応 *)
+  | NonTail(x), Mul(y, `C(z)) when z = 4 -> Printf.bprintf buf "\tslli\t%s, %s, 2\n" (reg x) (reg y) (* built-in *)
+  | NonTail(x), Mul(y, `C(z)) -> Printf.bprintf buf "\tmuli\t%s, %s, %d\n" (reg x) (reg y) z         (* アセンブラ非対応 *)
+  | NonTail(x), Div(y, `V(z)) -> Printf.bprintf buf "\tdiv\t%s, %s, %s\n" (reg x) (reg y) (reg z)    (* アセンブラ非対応 *)
+  | NonTail(x), Div(y, `C(z)) when z = 2 -> Printf.bprintf buf "\tsrai\t%s, %s, 1\n" (reg x) (reg y) (* built-in *)
+  | NonTail(x), Div(y, `C(z)) -> Printf.bprintf buf "\tdivi\t%s, %s, %d\n" (reg x) (reg y) z         (* アセンブラ非対応 *)
+  | NonTail(x), Sll(y, `V(z)) -> Printf.bprintf buf "\tsll\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(x), Sll(y, `C(z)) -> Printf.bprintf buf "\tslli\t%s, %s, %d\n" (reg x) (reg y) z
+  | NonTail(x), Lw(y, `L(Id.L(l))) ->
     Printf.bprintf buf "\tlwl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | NonTail(x), Lw(y, V(z)) ->
+  | NonTail(x), Lw(y, `V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tlw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
-  | NonTail(x), Lw(y, C(z)) -> Printf.bprintf buf "\tlw\t%s, %d(%s)\n" (reg x) z (reg y)
-  | NonTail(_), Sw(x, y, L(Id.L(l))) ->
+  | NonTail(x), Lw(y, `C(z)) -> Printf.bprintf buf "\tlw\t%s, %d(%s)\n" (reg x) z (reg y)
+  | NonTail(_), Sw(x, y, `L(Id.L(l))) ->
     Printf.bprintf buf "\tswl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | NonTail(_), Sw(x, y, V(z)) ->
+  | NonTail(_), Sw(x, y, `V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n"(reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
-  | NonTail(_), Sw(x, y, C(z)) -> Printf.bprintf buf "\tsw\t%s, %d(%s)\n" (reg x) z (reg y)
+  | NonTail(_), Sw(x, y, `C(z)) -> Printf.bprintf buf "\tsw\t%s, %d(%s)\n" (reg x) z (reg y)
   | NonTail(x), FMv(y) when x = y -> ()
   | NonTail(x), FMv(y) -> Printf.bprintf buf "\tfmv\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), FNeg(y) -> Printf.bprintf buf "\tfneg\t%s, %s\n" (reg x) (reg y)
@@ -79,32 +79,32 @@ and g' buf e =
   | NonTail(x), FSub(y, z) -> Printf.bprintf buf "\tfsub\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), FMul(y, z) -> Printf.bprintf buf "\tfmul\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | NonTail(x), FDiv(y, z) -> Printf.bprintf buf "\tfdiv\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), FEq(y, V(z)) -> Printf.bprintf buf "\tfeq\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), FEq(y, FZero) -> Printf.bprintf buf "\tfeq\t%s, %s, fzero\n" (reg x) (reg y)
-  | NonTail(x), FLE(V(y), V(z)) -> Printf.bprintf buf "\tfle\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | NonTail(x), FLE(V(y), FZero) -> Printf.bprintf buf "\tfle\t%s, %s, fzero\n" (reg x) (reg y)
-  | NonTail(x), FLE(FZero, V(z)) -> Printf.bprintf buf "\tfle\t%s, fzero, %s\n" (reg x) (reg z)
-  | NonTail(x), FLE(FZero, FZero) -> Printf.bprintf buf "\tfle\t%s, fzero, fzero\n" (reg x) (* won't happen *)
+  | NonTail(x), FEq(y, `V(z)) -> Printf.bprintf buf "\tfeq\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(x), FEq(y, `FZero) -> Printf.bprintf buf "\tfeq\t%s, %s, fzero\n" (reg x) (reg y)
+  | NonTail(x), FLE(`V(y), `V(z)) -> Printf.bprintf buf "\tfle\t%s, %s, %s\n" (reg x) (reg y) (reg z)
+  | NonTail(x), FLE(`V(y), `FZero) -> Printf.bprintf buf "\tfle\t%s, %s, fzero\n" (reg x) (reg y)
+  | NonTail(x), FLE(`FZero, `V(z)) -> Printf.bprintf buf "\tfle\t%s, fzero, %s\n" (reg x) (reg z)
+  | NonTail(x), FLE(`FZero, `FZero) -> Printf.bprintf buf "\tfle\t%s, fzero, fzero\n" (reg x) (* won't happen *)
   | NonTail(x), FAbs(y) -> Printf.bprintf buf "\tfabs\t%s, %s\n" (reg x) (reg y)
   | NonTail(x), FSqrt(y) -> Printf.bprintf buf "\tfsqrt\t%s, %s\n" (reg x) (reg y)
-  | NonTail(x), Flw(y, L(Id.L(l))) ->
+  | NonTail(x), Flw(y, `L(Id.L(l))) ->
     Printf.bprintf buf "\tflwl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | NonTail(x), Flw(y, V(z)) ->
+  | NonTail(x), Flw(y, `V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tflw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
-  | NonTail(x), Flw(y, C(z)) -> Printf.bprintf buf "\tflw\t%s, %d(%s)\n" (reg x) z (reg y)
-  | NonTail(_), Fsw(V(x), y, L(Id.L(l))) ->
+  | NonTail(x), Flw(y, `C(z)) -> Printf.bprintf buf "\tflw\t%s, %d(%s)\n" (reg x) z (reg y)
+  | NonTail(_), Fsw(`V(x), y, `L(Id.L(l))) ->
     Printf.bprintf buf "\tfswl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | NonTail(_), Fsw(FZero, y, L(Id.L(l))) ->
+  | NonTail(_), Fsw(`FZero, y, `L(Id.L(l))) ->
     Printf.bprintf buf "\tfswl\tfzero, %s(%s)\n" l (reg y)
-  | NonTail(_), Fsw(V(x), y, V(z)) ->
+  | NonTail(_), Fsw(`V(x), y, `V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tfsw\t%s, 0(%s)\n" (reg x) (reg reg_tmp)
-  | NonTail(_), Fsw(FZero, y, V(z)) ->
+  | NonTail(_), Fsw(`FZero, y, `V(z)) ->
     Printf.bprintf buf "\tadd\t%s, %s, %s\n" (reg reg_tmp) (reg y) (reg z);
     Printf.bprintf buf "\tfsw\tfzero, 0(%s)\n" (reg reg_tmp)
-  | NonTail(_), Fsw(V(x), y, C(z)) -> Printf.bprintf buf "\tfsw\t%s, %d(%s)\n" (reg x) z (reg y)
-  | NonTail(_), Fsw(FZero, y, C(z)) -> Printf.bprintf buf "\tfsw\tfzero, %d(%s)\n" z (reg y)
+  | NonTail(_), Fsw(`V(x), y, `C(z)) -> Printf.bprintf buf "\tfsw\t%s, %d(%s)\n" (reg x) z (reg y)
+  | NonTail(_), Fsw(`FZero, y, `C(z)) -> Printf.bprintf buf "\tfsw\tfzero, %d(%s)\n" z (reg y)
   | NonTail(_), Comment(s) -> Printf.bprintf buf "#\t%s\n" s
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
   | NonTail(_), Save(x, y) when List.mem x allregs && not (S.mem y !stackset) ->
@@ -134,9 +134,9 @@ and g' buf e =
      | _ -> assert false);
 
     (* IF内がfalseの場合にjump *)
-  | Tail, IfEq(x, V(y), e1, e2) ->
+  | Tail, IfEq(x, `V(y), e1, e2) ->
     g'_tail_if buf x y e1 e2 "beq" "bne"
-  | Tail, IfEq(x, C(y), e1, e2) ->
+  | Tail, IfEq(x, `C(y), e1, e2) ->
     (match y with
      | 0 ->
        (* 比較するものの一方が0のときは一命令減らせる *)
@@ -144,45 +144,45 @@ and g' buf e =
      | _ ->
        Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
        g'_tail_if buf x reg_tmp e1 e2 "beq" "bne")
-  | Tail, IfLE(x, V(y), e1, e2) ->
+  | Tail, IfLE(x, `V(y), e1, e2) ->
     g'_tail_if buf x y e1 e2 "ble" "bgt"
-  | Tail, IfLE(x, C(y), e1, e2) ->
+  | Tail, IfLE(x, `C(y), e1, e2) ->
     (match y with
      | 0 ->
        g'_tail_if buf x "zero" e1 e2 "ble" "bgt"
      | _ -> 
        Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
        g'_tail_if buf x reg_tmp e1 e2 "ble" "bgt")
-  | Tail, IfGE(x, V(y), e1, e2) ->
+  | Tail, IfGE(x, `V(y), e1, e2) ->
     g'_tail_if buf x y e1 e2 "bge" "blt"
-  | Tail, IfGE(x, C(y), e1, e2) ->
+  | Tail, IfGE(x, `C(y), e1, e2) ->
     (match y with
      | 0 ->
        g'_tail_if buf x "zero" e1 e2 "bge" "blt"
      | _ ->
        Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
        g'_tail_if buf x reg_tmp e1 e2 "bge" "blt")
-  | NonTail(z), IfEq(x, V(y), e1, e2) ->
+  | NonTail(z), IfEq(x, `V(y), e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "beq" "bne"
-  | NonTail(z), IfEq(x, C(y), e1, e2) ->
+  | NonTail(z), IfEq(x, `C(y), e1, e2) ->
     (match y with
      | 0 ->
        g'_non_tail_if buf (NonTail(z)) x "zero" e1 e2 "beq" "bne"
      | _ ->
        Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
        g'_non_tail_if buf (NonTail(z)) x reg_tmp e1 e2 "beq" "bne")
-  | NonTail(z), IfLE(x, V(y), e1, e2) ->
+  | NonTail(z), IfLE(x, `V(y), e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "ble" "bgt"
-  | NonTail(z), IfLE(x, C(y), e1, e2) ->
+  | NonTail(z), IfLE(x, `C(y), e1, e2) ->
     (match y with
      | 0 ->
        g'_non_tail_if buf (NonTail(z)) x "zero" e1 e2 "ble" "bgt"
      | _ ->
        Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
        g'_non_tail_if buf (NonTail(z)) x reg_tmp e1 e2 "ble" "bgt")
-  | NonTail(z), IfGE(x, V(y), e1, e2) ->
+  | NonTail(z), IfGE(x, `V(y), e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "bge" "blt"
-  | NonTail(z), IfGE(x, C(y), e1, e2) ->
+  | NonTail(z), IfGE(x, `C(y), e1, e2) ->
     (match y with
      | 0 ->
        g'_non_tail_if buf (NonTail(z)) x "zero" e1 e2 "bge" "blt"

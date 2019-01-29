@@ -1,6 +1,6 @@
-type id_or_imm = V of Id.t | C of int
-type id_imm_or_label = V of Id.t | C of int | L of Id.l
-type id_or_fimm = V of Id.t | FZero
+type id_or_imm = [`V of Id.t | `C of int]
+type id_imm_or_label = [`V of Id.t | `C of int | `L of Id.l]
+type id_or_fimm = [`V of Id.t | `FZero]
 type t =
   | Ans of exp
   | Let of (Id.t * Type.t) * exp * t
@@ -59,7 +59,6 @@ val string_of_t : ?depth:int -> t -> string
 val string_of_exp : ?depth:int -> exp -> string
 val print_prog : prog -> unit
 
-val fletd : Id.t * exp * t -> t (* shorthand of Let for float *)
 val seq : exp * t -> t (* shorthand of Let for unit *)
 
 val regs : Id.t array
@@ -76,9 +75,7 @@ val reg_hp : Id.t
 val reg_tmp : Id.t
 val is_reg : Id.t -> bool
 
-val fv_id_or_imm : id_or_imm -> Id.t list
-val fv_id_imm_or_label : id_imm_or_label -> Id.t list
-val fv_id_or_fimm : id_or_fimm -> Id.t list
+val fv_unwrap : [> `V of 'a] -> 'a list
 val fv : t -> Id.t list
 val fv_exp : exp -> Id.t list
 val has_call : t -> bool

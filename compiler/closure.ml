@@ -1,4 +1,4 @@
-type closure = { entry : Id.l; actual_fv : Id.t list }
+type closure = { entry : Id.l; fv : Id.t list }
 type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | Unit
   | Int of int
@@ -33,7 +33,7 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | MakeArray of Id.id_or_imm * (Id.t * Type.t)
 type fundef = { name : Id.l * Type.t;
                 args : (Id.t * Type.t) list;
-                formal_fv : (Id.t * Type.t) list;
+                fv : (Id.t * Type.t) list;
                 body : t }
 type prog = Prog of fundef list * t
 
@@ -66,7 +66,7 @@ let rec str_of_t ?(no_indent = false) ?(endline = "\n") (exp : t) (depth : int) 
      | IfEq _ | IfLE _ -> indent ^ "LET " ^ x ^ " =\n" ^ (str_of_t e1 (depth + 1)) ^ (indent ^ "IN\n") ^ (str_of_t e2 depth)
      | _ -> indent ^ "LET " ^ x ^ " = " ^ (str_of_t e1 ~no_indent:true ~endline:"" (depth + 1)) ^ " IN\n" ^ (str_of_t e2 depth))
   | Var x -> indent ^ "VAR " ^ x ^ endline
-  | MakeCls ((f, _), { entry = Id.L(l); actual_fv = xl }, e) ->
+  | MakeCls ((f, _), { entry = Id.L(l); fv = xl }, e) ->
     indent ^ "MAKECLS " ^ f  ^ " = <" ^ l ^ ", {" ^ (String.concat ", " xl) ^ "}> IN\n" ^ (str_of_t e depth)
   | AppCls (e1, e2) -> indent ^ e1 ^ " " ^ String.concat " " e2 ^ endline
   | AppDir (Id.L(e1), e2) -> indent ^ e1 ^ " " ^ String.concat " " e2 ^ endline
@@ -83,7 +83,7 @@ let rec str_of_t ?(no_indent = false) ?(endline = "\n") (exp : t) (depth : int) 
 let string_of_t (exp : t) = str_of_t exp 0
 
 let string_of_fundef (f : fundef) =
-  let { name = (Id.L(l), _); args = yts; formal_fv = zts; body = e } = f in
+  let { name = (Id.L(l), _); args = yts; fv = zts; body = e } = f in
   l ^ " (" ^ (String.concat ", " (List.map fst f.args)) ^ ") =\n" ^ (str_of_t e 1)
 
 let rec string_of_prog (Prog (fundefs, e)) =
@@ -116,8 +116,8 @@ let rec id_subst (e : t) (a : Id.t) (b : Id.t) : t =
     (* Note: after alpha-conversion, variable names won't collapse and x <> a is guaranteed *)
     Let ((x, t), id_subst e1 a b, id_subst e2 a b)
   | Var x -> Var (subst_ x)
-  | MakeCls ((x, t), { entry = l; actual_fv = zs }, e) ->
-    MakeCls (((subst_ x), t), { entry = l; actual_fv = (List.map subst_ zs) }, id_subst e a b)
+  | MakeCls ((x, t), { entry = l; fv = zs }, e) ->
+    MakeCls (((subst_ x), t), { entry = l; fv = (List.map subst_ zs) }, id_subst e a b)
   | AppCls (e1, e2) -> AppCls (subst_ e1, List.map subst_ e2)
   | AppDir (e1, e2) -> AppDir (e1, List.map subst_ e2)
   | Tuple e -> Tuple (List.map subst_ e)
@@ -136,7 +136,7 @@ let rec fv = function
   | IfEq(x, y, e1, e2)| IfLE(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
   | Var(x) -> S.singleton x
-  | MakeCls((x, t), { entry = l; actual_fv = ys }, e) -> S.remove x (S.union (S.of_list ys) (fv e))
+  | MakeCls((x, t), { entry = l; fv = ys }, e) -> S.remove x (S.union (S.of_list ys) (fv e))
   | AppCls(x, ys) -> S.of_list (x :: ys)
   | AppDir(_, xs) | Tuple(xs) -> S.of_list xs
   | LetTuple(xts, y, e) -> S.add y (S.diff (fv e) (S.of_list (List.map fst xts)))
@@ -192,12 +192,13 @@ let rec g env known e =
          toplevel := toplevel_backup;
          let e1' = g (M.add_list yts env') known e1 in
          known, e1') in
+    (* (e1'のfv) - (関数名および引数の集合) *)
     let zs = S.elements (S.diff (fv e1') (S.add x (S.of_list (List.map fst yts)))) in (* 自由変数のリスト *)
     let zts = List.map (fun z -> (z, M.find z env')) zs in (* ここで自由変数zの型を引くために引数envが必要 *)
-    toplevel := { name = (Id.L(x), t); args = yts; formal_fv = zts; body = e1' } :: !toplevel; (* トップレベル関数を追加 *)
+    toplevel := { name = (Id.L(x), t); args = yts; fv = zts; body = e1' } :: !toplevel; (* トップレベル関数を追加 *)
     let e2' = g env' known' e2 in
     if S.mem x (fv e2') then (* xが変数としてe2'に出現するか *)
-      MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2') (* 出現していたら削除しない *)
+      MakeCls((x, t), { entry = Id.L(x); fv = zs }, e2') (* 出現していたら削除しない *)
     else
       ((* if !is_verbose then
           Format.eprintf "eliminating closure(s) %s@." x; *)

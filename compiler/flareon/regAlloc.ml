@@ -62,7 +62,7 @@ let rec is_used_before_call reg e regenv : bool =
   | Let(_, exp, e) -> match exp with
     | CallCls _ | CallDir _ -> List.mem reg (fv_exp exp)
     | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) | IfGE(x, y, e1, e2) ->
-      List.mem reg (x :: fv_id_or_imm y) ||
+      List.mem reg (x :: fv_unwrap y) ||
       is_used_before_call reg e1 regenv || is_used_before_call reg e2 regenv
     | _ -> List.mem reg (fv_exp exp) || is_used_before_call reg e regenv
 
@@ -94,7 +94,7 @@ let rec alloc dest cont regenv x t =
       (if (List.for_all (fun r -> (S.mem r live)) prefer) && prefer <> [] &&
           (let x' = reg2var (List.hd prefer) regenv in not (is_used_before_call x' cont regenv)) then
          ((* Format.eprintf "Forcefully spilling %s@." (List.hd prefer); *)
-          Spill(reg2var (List.hd prefer) regenv))
+           Spill(reg2var (List.hd prefer) regenv))
        else
          let r : Id.t = (* そうでないレジスタを探す *)
            List.find
@@ -141,9 +141,8 @@ let find x t regenv =
   if is_reg x then x else
     try var2reg x regenv
     with Not_found -> raise (NoReg(x, t))
-let find'   (x : id_or_imm) regenv : id_or_imm = match x with | V(x) -> V(find x Type.Int regenv) | _ -> x
-let find'_l (x : id_imm_or_label) regenv : id_imm_or_label = match x with | V(x) -> V(find x Type.Int regenv) | _ -> x
-let find'_f (x : id_or_fimm) regenv : id_or_fimm = match x with | V(x) -> V(find x Type.Float regenv) | _ -> x
+let find'_i x regenv = match x with `V(x) -> `V(find x Type.Int regenv) | _ -> x
+let find'_f x regenv = match x with `V(x) -> `V(find x Type.Float regenv) | _ -> x
 
 let rec g dest cont regenv = function (* 命令列のレジスタ割り当て (caml2html: regalloc_g) *)
   | Ans(exp) -> g'_and_restore dest cont regenv exp
@@ -168,20 +167,20 @@ and g'_and_restore dest cont regenv exp = (* 使用される変数をスタッ�
   try g' dest cont regenv exp
   with NoReg(x, t) ->
     ((* Format.eprintf "restoring %s@." x; *)
-     g dest cont regenv (Let((x, t), Restore(x), Ans(exp))))
+      g dest cont regenv (Let((x, t), Restore(x), Ans(exp))))
 and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml2html: regalloc_gprime) *)
   | Nop | Li _ | SetL _ | SetDL _ | Comment _ | Restore _ | FLi _ as exp -> (Ans(exp), regenv)
   | Mv(x) -> (Ans(Mv(find x Type.Int regenv)), regenv)
   | Not(x) -> (Ans(Not(find x Type.Int regenv)), regenv)
   | Neg(x) -> (Ans(Neg(find x Type.Int regenv)), regenv)
-  | Xor(x, y') -> (Ans(Xor(find x Type.Int regenv, find' y' regenv)), regenv)
-  | Add(x, y') -> (Ans(Add(find x Type.Int regenv, find' y' regenv)), regenv)
-  | Sub(x, y') -> (Ans(Sub(find x Type.Int regenv, find' y' regenv)), regenv)
-  | Mul(x, y') -> (Ans(Mul(find x Type.Int regenv, find' y' regenv)), regenv)
-  | Div(x, y') -> (Ans(Div(find x Type.Int regenv, find' y' regenv)), regenv)
-  | Sll(x, y') -> (Ans(Sll(find x Type.Int regenv, find' y' regenv)), regenv)
-  | Lw(x, y') -> (Ans(Lw(find x Type.Int regenv, find'_l y' regenv)), regenv)
-  | Sw(x, y, z') -> (Ans(Sw(find x Type.Int regenv, find y Type.Int regenv, find'_l z' regenv)), regenv)
+  | Xor(x, y') -> (Ans(Xor(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Add(x, y') -> (Ans(Add(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Sub(x, y') -> (Ans(Sub(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Mul(x, y') -> (Ans(Mul(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Div(x, y') -> (Ans(Div(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Sll(x, y') -> (Ans(Sll(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Lw(x, y') -> (Ans(Lw(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Sw(x, y, z') -> (Ans(Sw(find x Type.Int regenv, find y Type.Int regenv, find'_i z' regenv)), regenv)
   | FMv(x) -> (Ans(FMv(find x Type.Float regenv)), regenv)
   | FNeg(x) -> (Ans(FNeg(find x Type.Float regenv)), regenv)
   | FAdd(x, y) -> (Ans(FAdd(find x Type.Float regenv, find y Type.Float regenv)), regenv)
@@ -192,19 +191,20 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
   | FLE(x, y) -> (Ans(FLE(find'_f x regenv, find'_f y regenv)), regenv)
   | FAbs(x) -> (Ans(FAbs(find x Type.Float regenv)), regenv)
   | FSqrt(x) -> (Ans(FSqrt(find x Type.Float regenv)), regenv)
-  | Flw(x, y') -> (Ans(Flw(find x Type.Int regenv, find'_l y' regenv)), regenv)
-  | Fsw(x, y, z') -> (Ans(Fsw(find'_f x regenv, find y Type.Int regenv, find'_l z' regenv)), regenv)
-  | IfEq(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfEq(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
-  | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
-  | IfGE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfGE(find x Type.Int regenv, find' y' regenv, e1', e2')) e1 e2
+  | Flw(x, y') -> (Ans(Flw(find x Type.Int regenv, find'_i y' regenv)), regenv)
+  | Fsw(x, y, z') -> (Ans(Fsw(find'_f x regenv, find y Type.Int regenv, find'_i z' regenv)), regenv)
+  | IfEq(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfEq(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2
+  | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2
+  | IfGE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfGE(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2
   | CallCls(x, iargs, fargs) ->
     (match List.length iargs > Array.length regs - 2 || List.length fargs > Array.length fregs - 1 with
      | true  -> failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
      | false ->
        let fargs = List.map (fun z -> find z Type.Float regenv) fargs in
        let iargs = List.map (fun y -> find y Type.Int regenv) iargs in
-       let e' = Ans(CallCls(find x Type.Int regenv, iargs, fargs)) in
-       g'_call dest cont regenv e' [(x, reg_cl)] x iargs fargs)
+       let x' = find x Type.Int regenv in
+       let e' = Ans(CallCls(x', iargs, fargs)) in
+       g'_call dest cont regenv e' [(x', reg_cl)] x iargs fargs)
   | CallDir(Id.L(x), iargs, fargs) ->
     (match List.length iargs > Array.length regs - 1 || List.length fargs > Array.length fregs - 1 with
      | true  -> failwith (Format.sprintf "cannot allocate registers for arugments to %s" x)
@@ -249,7 +249,7 @@ and g'_call dest cont regenv e' x_reg_cl f iargs fargs = (* 関数呼び出し�
       fargs in
   (* fargs alloc *)
   let e' = List.fold_right
-      (fun (y, r) e -> Let((r, Type.Float), FMv(y), e))
+      (fun (y, r) e -> Let((r, Type.Float), FMv(y), e)) (* [XXX] xが入っていることもあるので *)
       (shuffle reg_fsw fargs')
       e'
   in

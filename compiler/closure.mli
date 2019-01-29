@@ -1,4 +1,4 @@
-type closure = { entry : Id.l; actual_fv : Id.t list }
+type closure = { entry : Id.l; fv : Id.t list }
 type t =
   | Unit
   | Int of int
@@ -33,7 +33,7 @@ type t =
   | MakeArray of Id.id_or_imm * (Id.t * Type.t)
 type fundef = { name : Id.l * Type.t;
                 args : (Id.t * Type.t) list;
-                formal_fv : (Id.t * Type.t) list;
+                fv : (Id.t * Type.t) list;
                 body : t }
 type prog = Prog of fundef list * t
 

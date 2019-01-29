@@ -1,9 +1,9 @@
 (* PowerPC assembly with a few virtual instructions *)
 external castToInt : float -> int32 = "castToInt"
 
-type id_or_imm = V of Id.t | C of int
-type id_imm_or_label = V of Id.t | C of int | L of Id.l
-type id_or_fimm = V of Id.t | FZero
+type id_or_imm = [`V of Id.t | `C of int]
+type id_imm_or_label = [`V of Id.t | `C of int | `L of Id.l]
+type id_or_fimm = [`V of Id.t | `FZero]
 type t = (* 命令の列 (caml2html: sparcasm_t) *)
   | Ans of exp
   | Let of (Id.t * Type.t) * exp * t
@@ -62,18 +62,11 @@ let rec string_of_t ?(depth = 0) e =
   | Ans exp -> indent ^ string_of_exp ~depth:depth exp
   | Let((x, t), exp, e') -> indent ^ "LET " ^ x ^ " = " ^ string_of_exp ~depth:0 exp ^ " IN\n" ^ string_of_t ~depth:depth e'
 and string_of_exp ?(depth = 0) (exp : exp) : string =
-  let str_of_id_or_imm (x : id_or_imm) = match x with
-    | C(f) -> string_of_int f
-    | V(f) -> f
-  in
-  let str_of_id_imm_or_label (x : id_imm_or_label) = match x with
-    | C(f) -> string_of_int f
-    | V(f) -> f
-    | L(Id.L(f)) -> f
-  in
-  let str_of_id_or_fimm (x : id_or_fimm) = match x with
-    | V(f) -> f
-    | FZero -> "0.0"
+  let unwrap x = match x with
+    | `C(f) -> string_of_int f
+    | `V(f) -> f
+    | `L(Id.L(f)) -> f
+    | `FZero -> "0.0"
   in
   let indent = String.make (depth * 2) ' ' in
   let cmd =
@@ -86,30 +79,30 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | Mv(x)        -> Printf.sprintf "Mv %s" x
     | Not(x)       -> Printf.sprintf "Not %s" x
     | Neg(x)       -> Printf.sprintf "Neg %s" x
-    | Xor(x, y)    -> Printf.sprintf "Xor %s %s" x (str_of_id_or_imm y)
-    | Add(x, y)    -> Printf.sprintf "Add %s %s" x (str_of_id_or_imm y)
-    | Sub(x, y)    -> Printf.sprintf "Sub %s %s" x (str_of_id_or_imm y)
-    | Mul(x, y)    -> Printf.sprintf "Mul %s %s" x (str_of_id_or_imm y)
-    | Div(x, y)    -> Printf.sprintf "Div %s %s" x (str_of_id_or_imm y)
-    | Sll(x, y)    -> Printf.sprintf "Sll %s %s" x (str_of_id_or_imm y)
-    | Lw(x, y)     -> Printf.sprintf "Lw %s %s" x (str_of_id_imm_or_label y)
-    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" x (str_of_id_imm_or_label z) y
+    | Xor(x, y)    -> Printf.sprintf "Xor %s %s" x (unwrap y)
+    | Add(x, y)    -> Printf.sprintf "Add %s %s" x (unwrap y)
+    | Sub(x, y)    -> Printf.sprintf "Sub %s %s" x (unwrap y)
+    | Mul(x, y)    -> Printf.sprintf "Mul %s %s" x (unwrap y)
+    | Div(x, y)    -> Printf.sprintf "Div %s %s" x (unwrap y)
+    | Sll(x, y)    -> Printf.sprintf "Sll %s %s" x (unwrap y)
+    | Lw(x, y)     -> Printf.sprintf "Lw %s %s" x (unwrap y)
+    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" x (unwrap z) y
     | FMv(x)       -> Printf.sprintf "FMv %s" x
     | FNeg(x)      -> Printf.sprintf "FNeg %s" x
     | FAdd(x, y)   -> Printf.sprintf "FAdd %s %s" x y
     | FSub(x, y)   -> Printf.sprintf "FSub %s %s" x y
     | FMul(x, y)   -> Printf.sprintf "FMul %s %s" x y
     | FDiv(x, y)   -> Printf.sprintf "FDiv %s %s" x y
-    | FEq(x, y)    -> Printf.sprintf "FEq %s %s" x (str_of_id_or_fimm y)
-    | FLE(x, y)    -> Printf.sprintf "FLE %s %s" (str_of_id_or_fimm x) (str_of_id_or_fimm y)
+    | FEq(x, y)    -> Printf.sprintf "FEq %s %s" x (unwrap y)
+    | FLE(x, y)    -> Printf.sprintf "FLE %s %s" (unwrap x) (unwrap y)
     | FAbs(x)      -> Printf.sprintf "FAbs %s" x
     | FSqrt(x)     -> Printf.sprintf "FSqrt %s" x
-    | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (str_of_id_imm_or_label y)
-    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" (str_of_id_or_fimm x) (str_of_id_imm_or_label z) y
+    | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (unwrap y)
+    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" (unwrap x) (unwrap z) y
     | Comment _    -> ""
-    | IfEq(x, y, e1, e2)  -> Printf.sprintf "(If %s = %s THEN\n%s ELSE\n%s)"  x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
-    | IfLE(x, y, e1, e2)  -> Printf.sprintf "(If %s <= %s THEN\n%s ELSE\n%s)" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
-    | IfGE(x, y, e1, e2)  -> Printf.sprintf "(If %s >= %s THEN\n%s ELSE\n%s)" x (str_of_id_or_imm y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfEq(x, y, e1, e2)  -> Printf.sprintf "(If %s = %s THEN\n%s ELSE\n%s)"  x (unwrap y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfLE(x, y, e1, e2)  -> Printf.sprintf "(If %s <= %s THEN\n%s ELSE\n%s)" x (unwrap y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
+    | IfGE(x, y, e1, e2)  -> Printf.sprintf "(If %s >= %s THEN\n%s ELSE\n%s)" x (unwrap y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
     | CallCls(f, args, fargs) -> Printf.sprintf "%s(%s, %s)" f (String.concat ", " args) (String.concat ", " fargs)
     | CallDir(L(f), args, fargs) -> Printf.sprintf "%s(%s, %s)" f (String.concat ", " args) (String.concat ", " fargs)
     | Save(x, y) -> Printf.sprintf "Save %s %s" x y
@@ -128,7 +121,6 @@ let print_prog (Prog (_, fundefs, body)) =
   List.iter print_fundef fundefs;
   print_t body
 
-let fletd(x, e1, e2) = Let((x, Type.Float), e1, e2)
 let seq(e1, e2) = Let((Id.gentmp Type.Unit, Type.Unit), e1, e2)
 
 let regs = (* 26個 *)
@@ -160,20 +152,18 @@ let rec remove_and_uniq xs = function
   | x :: ys -> x :: remove_and_uniq (S.add x xs) ys
 
 (* free variables in the order of use (for spilling) (caml2html: sparcasm_fv) *)
-let fv_id_or_imm (e : id_or_imm) = match e with V(x) -> [x] | _ -> []
-let fv_id_imm_or_label (e : id_imm_or_label) = match e with V(x) -> [x] | _ -> []
-let fv_id_or_fimm (e : id_or_fimm) = match e with V(x) -> [x] | _ -> []
+let fv_unwrap e = match e with `V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Li(_) | FLi(_) | SetL(_) | SetDL(_) | Comment(_) | Restore(_) -> []
   | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) | FAbs(x) | FSqrt(x) -> [x]
-  | Xor(x, y') | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | Sll(x, y') -> x :: fv_id_or_imm y'
-  | Lw(x, y') | Flw(x, y') -> x :: fv_id_imm_or_label y'
-  | Sw(x, y, z') | Fsw(V(x), y, z') -> x :: y :: fv_id_imm_or_label z'
-  | Fsw(FZero, y, z') -> y :: fv_id_imm_or_label z'
+  | Xor(x, y') | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | Sll(x, y') -> x :: fv_unwrap y'
+  | Lw(x, y') | Flw(x, y') -> x :: fv_unwrap y'
+  | Sw(x, y, z') -> x :: y :: fv_unwrap z'
+  | Fsw(x, y, z') -> (fv_unwrap x) @ y :: fv_unwrap z'
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
-  | FEq(x, y) -> x :: (fv_id_or_fimm y)
-  | FLE(x, y) -> (fv_id_or_fimm x) @ (fv_id_or_fimm y)
-  | IfEq(x, y', e1, e2) | IfLE(x, y', e1, e2) | IfGE(x, y', e1, e2) ->  x :: fv_id_or_imm y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
+  | FEq(x, y) -> x :: (fv_unwrap y)
+  | FLE(x, y) -> (fv_unwrap x) @ (fv_unwrap y)
+  | IfEq(x, y', e1, e2) | IfLE(x, y', e1, e2) | IfGE(x, y', e1, e2) ->  x :: fv_unwrap y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
   | CallCls(x, ys, zs) -> x :: ys @ zs
   | CallDir(_, ys, zs) -> ys @ zs
 and fv = function

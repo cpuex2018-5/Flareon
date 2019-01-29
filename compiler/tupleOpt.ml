@@ -97,7 +97,7 @@ let flatten (e : t) (funnames : Id.l list) =
 
 (* 関数の引数に含まれるタプルを全てほどく *)
 let flatten_args (f : fundef) =
-  let { name = (x, t); args = yts; formal_fv = zs; body = e } = f in
+  let { name = (x, t); args = yts; fv = zs; body = e } = f in
   let rec inner_ (args : (Id.t * Type.t) list) e =
     match args with
     | [] -> ([], e)
@@ -113,7 +113,7 @@ let flatten_args (f : fundef) =
   let (yts', e') = inner_ yts e in
   (* 関数の型が変わることになるので変えておく *)
   let t' = match t with Type.Fun (xs, y) -> Type.Fun (List.map snd yts', y) | _ -> assert false in
-  { name = (x, t'); args = yts'; formal_fv = zs; body = e' }
+  { name = (x, t'); args = yts'; fv = zs; body = e' }
 
 (* 副作用があるかどうか(emit.mlを参考) *)
 let rec effect e =
@@ -164,7 +164,7 @@ let f (Prog (fundefs, e)) =
   let fundefs = List.map flatten_args fundefs in
   let funnames = List.map (fun f -> fst f.name) fundefs in
   let fundefs' = List.map
-      (fun { name = xt; args = yts; formal_fv = zts; body = e } ->
-         { name = xt; args = yts; formal_fv = zts; body = elim (flatten e funnames) }) fundefs in
+      (fun { name = xt; args = yts; fv = zts; body = e } ->
+         { name = xt; args = yts; fv = zts; body = elim (flatten e funnames) }) fundefs in
   let e' = elim (flatten e funnames) in
   Prog (fundefs', e')
