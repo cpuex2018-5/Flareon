@@ -25,10 +25,10 @@ ack_15:
 .ack_else_2:
 	addi	a2, a0, -1
 	addi	a1, a1, -1
-	sw	a2, 0(sp)
+	sw	a2, 0(sp)	# save
 	call	ack_15
 	mv	a1, a0
-	lw	a0, 0(sp)
+	lw	a0, 0(sp)	# restore
 	call	ack_15
 ack_ret:
 	lw	ra, 4(sp)

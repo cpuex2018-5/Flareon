@@ -16,16 +16,14 @@ fib_10:
 	bgt	a0, t6, .fib_else_1
 	b	fib_ret
 .fib_else_1:
-	addi	a1, a0, -1
-	sw	a0, 0(sp)
-	mv	a0, a1
+	sw	a0, 0(sp)	# save
+	addi	a0, a0, -1
 	call	fib_10
-	lw	a1, 0(sp)
-	addi	a1, a1, -2
-	sw	a0, 4(sp)
-	mv	a0, a1
+	sw	a0, 4(sp)	# save
+	lw	a1, 0(sp)	# restore
+	addi	a0, a1, -2
 	call	fib_10
-	lw	a1, 4(sp)
+	lw	a1, 4(sp)	# restore
 	add	a0, a1, a0
 fib_ret:
 	lw	ra, 8(sp)
