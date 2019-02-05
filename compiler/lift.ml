@@ -33,8 +33,8 @@ let rec eta (e : KNormal.t) : KNormal.t =
         (* When there are function arrays, give up eta conversion *)
           GiveUpEtaConv -> e)
      | _ -> Let ((x, t), eta e1, eta e2))
-  | LetRec ({ name = xt; args = yt; body = e1 }, e2) ->
-    LetRec ({ name = xt; args = yt; body = eta e1 }, eta e2)
+  | LetRec (e1, e2) ->
+    LetRec ({ e1 with body = eta e1.body }, eta e2)
   | LetTuple (xl, y, e) -> LetTuple (xl, y, eta e)
   | _ -> e
 
@@ -46,7 +46,7 @@ let rec helper (e : KNormal.t) (f : Id.t) (args : Id.t list) : KNormal.t =
   | IfLE(x, y, e1, e2) -> IfLE(x, y, helper e1 f args, helper e2 f args)
   | Let(xt, e1, e2) -> Let(xt, helper e1 f args, helper e2 f args)
   | Var v when v = f -> App(f, args)
-  | LetRec({ name = n; args = a; body = e1 }, e2) -> LetRec({ name = n; args = a; body = helper e1 f args }, helper e2 f args)
+  | LetRec(e1, e2) -> LetRec({ e1 with body = helper e1.body f args }, helper e2 f args)
   | App(g, x) when g = f -> App(f, x @ args)
   | LetTuple(xts, y, e) -> LetTuple(xts, y, helper e f args)
   | ExtFunApp(g, x) when g = f -> ExtFunApp(f, x @ args)

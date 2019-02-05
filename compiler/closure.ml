@@ -68,7 +68,7 @@ let rec str_of_t ?(no_indent = false) ?(endline = "\n") (exp : t) (depth : int) 
   | Var x -> indent ^ "VAR " ^ x ^ endline
   | MakeCls ((f, _), { entry = Id.L(l); fv = xl }, e) ->
     indent ^ "MAKECLS " ^ f  ^ " = <" ^ l ^ ", {" ^ (String.concat ", " xl) ^ "}> IN\n" ^ (str_of_t e depth)
-  | AppCls (e1, e2) -> indent ^ e1 ^ " " ^ String.concat " " e2 ^ endline
+  | AppCls (e1, e2) -> indent ^ "AppCls " ^ e1 ^ " " ^ String.concat " " e2 ^ endline
   | AppDir (Id.L(e1), e2) -> indent ^ e1 ^ " " ^ String.concat " " e2 ^ endline
   | Tuple e -> (indent ^ "( ") ^ String.concat ", " e ^ " )" ^ endline
   | LetTuple (l, e1, e2) -> indent ^ "LET (" ^ (String.concat ", " (List.map fst l)) ^ ") = " ^ e1 ^ " IN\n" ^
@@ -83,7 +83,7 @@ let rec str_of_t ?(no_indent = false) ?(endline = "\n") (exp : t) (depth : int) 
 let string_of_t (exp : t) = str_of_t exp 0
 
 let string_of_fundef (f : fundef) =
-  let { name = (Id.L(l), _); args = yts; fv = zts; body = e } = f in
+  let { name = (Id.L(l), _); args = _; fv = _; body = e } = f in
   l ^ " (" ^ (String.concat ", " (List.map fst f.args)) ^ ") =\n" ^ (str_of_t e 1)
 
 let rec string_of_prog (Prog (fundefs, e)) =

@@ -49,9 +49,9 @@ let rec g (env : letenv) (tenv : tupleenv) (exp : KNormal.t) : KNormal.t =
        (match may_have_side_effect e1 with
         | true  -> Let ((x, t), e1, g env tenv e2)
         | false -> Let ((x, t), e1, g ((e1, x) :: env) tenv e2)))
-  | LetRec({ name = n; args = a; body = e1 }, e2) ->
+  | LetRec(e1, e2) ->
     (* 関数を超えての共通部分式は削除しない *)
-    LetRec({ name = n; args = a; body = g [] [] e1 }, (g env tenv e2))
+    LetRec({ e1 with body = g [] [] e1.body }, (g env tenv e2))
   | LetTuple(xts, y, e) ->
     (match List.find_opt (fun (x, _) -> x = y) tenv with
      | None ->

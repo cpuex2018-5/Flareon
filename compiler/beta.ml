@@ -33,8 +33,8 @@ let rec g env = function
      | e1' ->
        let e2' = g env e2 in
        Let((x, t), e1', e2'))
-  | LetRec({ name = xt; args = yts; body = e1 }, e2) ->
-    LetRec({ name = xt; args = yts; body = g env e1 }, g env e2)
+  | LetRec(e1, e2) ->
+    LetRec({ e1 with body = g env e1.body }, g env e2)
   | Var(x) -> Var(find x env) (* replace variables (caml2html: beta_var) *)
   | Tuple(xs) -> Tuple(List.map (fun x -> find x env) xs)
   | LetTuple(xts, y, e) -> LetTuple(xts, find y env, g env e)
