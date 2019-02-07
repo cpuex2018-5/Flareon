@@ -12,8 +12,7 @@ end:
 fib_10:
 	addi	sp, sp, -12
 	sw	ra, 8(sp)
-	li	t6, 1
-	bgt	a0, t6, .fib_else_1
+	bgti	a0, 1, .fib_else_1
 	b	fib_ret
 .fib_else_1:
 	sw	a0, 0(sp)	# save

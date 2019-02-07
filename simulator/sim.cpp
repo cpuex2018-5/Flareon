@@ -214,10 +214,8 @@ void exec(Simulator *sim,Op *op){
             sim -> pc = sim -> pc + 4;
           }
         }
-        else if(op->funct3 == 0b110){//bltu
-          unsigned int u_rs1 = (unsigned int) sim->registers[op->rs1];
-          unsigned int u_rs2 = (unsigned int) sim->registers[op->rs2];
-          if(u_rs1 < u_rs2){
+        else if(op->funct3 == 0b010){//beqi
+          if(sim->registers[op->rs1] == op->rs2){
             sim -> pc = sim -> pc + s_imm;
             jump_counter[sim->pc]++;
           }
@@ -225,10 +223,8 @@ void exec(Simulator *sim,Op *op){
             sim -> pc = sim -> pc + 4;
           }
         }
-        else if(op->funct3 == 0b111){//bgeu
-          unsigned int u_rs1 = (unsigned int) sim->registers[op->rs1];
-          unsigned int u_rs2 = (unsigned int) sim->registers[op->rs2];
-          if(u_rs1 >= u_rs2){
+        else if(op->funct3 == 0b011){//bnei
+          if(sim->registers[op->rs1] != op->rs2){
             sim -> pc = sim -> pc + s_imm;
             jump_counter[sim->pc]++;
           }
@@ -236,6 +232,46 @@ void exec(Simulator *sim,Op *op){
             sim -> pc = sim -> pc + 4;
           }
         }
+        else if(op->funct3 == 0b110){//blti
+          if(sim->registers[op->rs1] < op->rs2){
+            sim -> pc = sim -> pc + s_imm;
+            jump_counter[sim->pc]++;
+          }
+          else{
+            sim -> pc = sim -> pc + 4;
+          }
+        }
+        else if(op->funct3 == 0b111){//bgti
+          if(sim->registers[op->rs1] > op->rs2){
+            sim -> pc = sim -> pc + s_imm;
+            jump_counter[sim->pc]++;
+          }
+          else{
+            sim -> pc = sim -> pc + 4;
+          }
+        }
+        // else if(op->funct3 == 0b110){//bltu
+        //   unsigned int u_rs1 = (unsigned int) sim->registers[op->rs1];
+        //   unsigned int u_rs2 = (unsigned int) sim->registers[op->rs2];
+        //   if(u_rs1 < u_rs2){
+        //     sim -> pc = sim -> pc + s_imm;
+        //     jump_counter[sim->pc]++;
+        //   }
+        //   else{
+        //     sim -> pc = sim -> pc + 4;
+        //   }
+        // }
+        // else if(op->funct3 == 0b111){//bgeu
+        //   unsigned int u_rs1 = (unsigned int) sim->registers[op->rs1];
+        //   unsigned int u_rs2 = (unsigned int) sim->registers[op->rs2];
+        //   if(u_rs1 >= u_rs2){
+        //     sim -> pc = sim -> pc + s_imm;
+        //     jump_counter[sim->pc]++;
+        //   }
+        //   else{
+        //     sim -> pc = sim -> pc + 4;
+        //   }
+        // }
         else{
           fprintf(stderr,"Unknown instruction at %lu\n", sim->pc);
         }

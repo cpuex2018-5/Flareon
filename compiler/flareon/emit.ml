@@ -134,61 +134,35 @@ and g' buf e =
      | _ -> assert false);
 
     (* IF内がfalseの場合にjump *)
-  | Tail, IfEq(x, `V(y), e1, e2) ->
+    (* branch with immedaiteはbeqi, bnei, blti, bgtiのみ *)
+  | Tail, IfEq(x, y, e1, e2) ->
     g'_tail_if buf x y e1 e2 "beq" "bne"
-  | Tail, IfEq(x, `C(y), e1, e2) ->
+  | Tail, IfLE(x, y, e1, e2) ->
+(*
     (match y with
-     | 0 ->
-       (* 比較するものの一方が0のときは一命令減らせる *)
-       g'_tail_if buf x "zero" e1 e2 "beq" "bne"
-     | _ ->
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
-       g'_tail_if buf x reg_tmp e1 e2 "beq" "bne")
-  | Tail, IfLE(x, `V(y), e1, e2) ->
+     | `V(y) -> g'_tail_if buf x (`V(y)) e1 e2 "ble" "bgt"
+     | `C(0) -> g'_tail_if buf x (`V("zero")) e1 e2 "ble" "bgt"
+     | `C(n) ->
+       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) n;
+       g'_tail_if buf x (`V(reg_tmp)) e1 e2 "ble" "bgt")
+*)
     g'_tail_if buf x y e1 e2 "ble" "bgt"
-  | Tail, IfLE(x, `C(y), e1, e2) ->
-    (match y with
-     | 0 ->
-       g'_tail_if buf x "zero" e1 e2 "ble" "bgt"
-     | _ -> 
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
-       g'_tail_if buf x reg_tmp e1 e2 "ble" "bgt")
-  | Tail, IfGE(x, `V(y), e1, e2) ->
+  | Tail, IfGE(x, y, e1, e2) ->
     g'_tail_if buf x y e1 e2 "bge" "blt"
-  | Tail, IfGE(x, `C(y), e1, e2) ->
-    (match y with
-     | 0 ->
-       g'_tail_if buf x "zero" e1 e2 "bge" "blt"
-     | _ ->
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
-       g'_tail_if buf x reg_tmp e1 e2 "bge" "blt")
-  | NonTail(z), IfEq(x, `V(y), e1, e2) ->
+  | NonTail(z), IfEq(x, y, e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "beq" "bne"
-  | NonTail(z), IfEq(x, `C(y), e1, e2) ->
+  | NonTail(z), IfLE(x, y, e1, e2) ->
+(*
     (match y with
-     | 0 ->
-       g'_non_tail_if buf (NonTail(z)) x "zero" e1 e2 "beq" "bne"
-     | _ ->
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
-       g'_non_tail_if buf (NonTail(z)) x reg_tmp e1 e2 "beq" "bne")
-  | NonTail(z), IfLE(x, `V(y), e1, e2) ->
+     | `V(y) -> g'_non_tail_if buf (NonTail(z)) x (`V(y)) e1 e2 "ble" "bgt"
+     | `C(0) -> g'_non_tail_if buf (NonTail(z)) x (`V("zero")) e1 e2 "ble" "bgt"
+     | `C(n) ->
+       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) n;
+       g'_non_tail_if buf (NonTail(z)) x (`V(reg_tmp)) e1 e2 "ble" "bgt")
+*)
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "ble" "bgt"
-  | NonTail(z), IfLE(x, `C(y), e1, e2) ->
-    (match y with
-     | 0 ->
-       g'_non_tail_if buf (NonTail(z)) x "zero" e1 e2 "ble" "bgt"
-     | _ ->
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
-       g'_non_tail_if buf (NonTail(z)) x reg_tmp e1 e2 "ble" "bgt")
-  | NonTail(z), IfGE(x, `V(y), e1, e2) ->
+  | NonTail(z), IfGE(x, y, e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "bge" "blt"
-  | NonTail(z), IfGE(x, `C(y), e1, e2) ->
-    (match y with
-     | 0 ->
-       g'_non_tail_if buf (NonTail(z)) x "zero" e1 e2 "bge" "blt"
-     | _ ->
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) y;
-       g'_non_tail_if buf (NonTail(z)) x reg_tmp e1 e2 "bge" "blt")
 
   (* INFO: caller-save regs: ra, t*, a* / callee-save regs: sp, fp, s* *)
   | Tail, CallCls(f, iargs, fargs) ->
@@ -228,14 +202,25 @@ and g' buf e =
     Printf.bprintf buf "\tlw\tra, %d(sp)\n" (ss - 4);
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" ss;
 *)
+and g'_branch buf mnemo rs1 rs2 label =
+  match rs2 with
+  | `V(rs2) ->
+    Printf.bprintf buf "\t%s\t%s, %s, %s\n" mnemo (reg rs1) (reg rs2) label
+  | `C(0) ->
+    Printf.bprintf buf "\t%s\t%s, zero, %s\n" mnemo (reg rs1) label
+  | `C(n) when 0 < n && n < 32 ->
+    Printf.bprintf buf "\t%si\t%s, %d, %s\n" mnemo (reg rs1) n label
+  | `C(n) ->
+    Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) n;
+    Printf.bprintf buf "\t%s\t%s, %s, %s\n" mnemo (reg rs1) (reg reg_tmp) label
 and g'_tail_if buf rs1 rs2 e1 e2 b bn =
   match e2 with
   | Ans(Nop) ->
-    Printf.bprintf buf "\t%s\t%s, %s, %s_ret\n" bn (reg rs1) (reg rs2) !funcname;
+    g'_branch buf bn rs1 rs2 (!funcname ^ "_ret");
     g buf (Tail, e1) (* if内がtrueの場合 = jumpしなかった場合 *)
   | _ ->
     let b_else = Id.genid ("." ^ !funcname ^ "_else") in
-    Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_else;
+    g'_branch buf bn rs1 rs2 b_else;
     let stackset_back = !stackset in
     g buf (Tail, e1); (* if内がtrueの場合 = jumpしなかった場合 *)
     Printf.bprintf buf "\tb\t%s_ret\n" !funcname;
@@ -249,37 +234,36 @@ and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
     | NonTail(x), Ans(Mv(y)) | NonTail(x), Ans(FMv(y)) when x = y -> false
     | _ -> true
   in
-  match does_write e2 with
-  | false ->
-    let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
-    Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_cont;
-    let stackset_back = !stackset in
-    g buf (dest, e1);
-    Printf.bprintf buf "%s:\n" b_cont;
-    stackset := stackset_back;
-  | _ ->
-    match does_write e1 with
-    | false ->
-      let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
-      Printf.bprintf buf "\t%s\t%s, %s, %s\n" b (reg rs1) (reg rs2) b_cont;
-      let stackset_back = !stackset in
-      g buf (dest, e2);
-      Printf.bprintf buf "%s:\n" b_cont;
-      stackset := stackset_back;
-    | true ->
-      let b_else = Id.genid ("." ^ !funcname ^ "_else") in
-      let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
-      Printf.bprintf buf "\t%s\t%s, %s, %s\n" bn (reg rs1) (reg rs2) b_else;
-      let stackset_back = !stackset in
-      g buf (dest, e1);
-      let stackset1 = !stackset in
-      Printf.bprintf buf "\tb\t%s\n" b_cont;
-      Printf.bprintf buf "%s:\n" b_else;
-      stackset := stackset_back;
-      g buf (dest, e2);
-      Printf.bprintf buf "%s:\n" b_cont;
-      let stackset2 = !stackset in
-      stackset := S.inter stackset1 stackset2
+  let unsymmetry = match rs2 with `C(_) -> b = "bge" || b = "ble" | _ -> false in
+  if not (does_write e2) then
+    (let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
+     g'_branch buf bn rs1 rs2 b_cont;
+     let stackset_back = !stackset in
+     g buf (dest, e1);
+     Printf.bprintf buf "%s:\n" b_cont;
+     stackset := stackset_back)
+  else
+  if not (does_write e1 || unsymmetry) then
+    (let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
+     g'_branch buf b rs1 rs2 b_cont; (* NOTE: b = "bgei" or "blei" shouldn't reach here *)
+     let stackset_back = !stackset in
+     g buf (dest, e2);
+     Printf.bprintf buf "%s:\n" b_cont;
+     stackset := stackset_back)
+  else
+    (let b_else = Id.genid ("." ^ !funcname ^ "_else") in
+     let b_cont = Id.genid ("." ^ !funcname ^ "_cont") in
+     g'_branch buf bn rs1 rs2 b_else;
+     let stackset_back = !stackset in
+     g buf (dest, e1);
+     let stackset1 = !stackset in
+     Printf.bprintf buf "\tb\t%s\n" b_cont;
+     Printf.bprintf buf "%s:\n" b_else;
+     stackset := stackset_back;
+     g buf (dest, e2);
+     Printf.bprintf buf "%s:\n" b_cont;
+     let stackset2 = !stackset in
+     stackset := S.inter stackset1 stackset2)
 
 let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   Printf.fprintf oc "%s:\n" x;

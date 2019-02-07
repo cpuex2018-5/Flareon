@@ -63,3 +63,8 @@ lda rd, symbol -> lui rd, symbol[31:12]
 * `float_of_int`, `int_of_float` はインラインさせると命令数が増えてしまった
 * ft9, ft10はlibでのみ使うようにする
 * sin, cos, atanでセーブするべきレジスタを指定&使うレジスタをft10などに退避させる
+
+## 2/6
+* branch with immedaiteの命令を入れた (`beqi`, `bnei`, `blti`, `bgti`)
+    * `blei`, `bgei` はそこまで使われていなかった(`blei`が0回、`bgei`が1回？)のと4つだと収まりが良いのでこの4つだけで良いとした
+    * 命令数 2517444239 -> 2479339409

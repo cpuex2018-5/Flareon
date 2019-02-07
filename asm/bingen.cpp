@@ -242,9 +242,14 @@ BinGen::Inst BinGen::Convert(std::string input) {
         assert(3 == arg.size());
         inst.set_fst(jalr(arg[0], arg[1], MyStoi(arg[2])));
     }
-    else if (mnemo == "beq" || mnemo == "bne" || mnemo == "blt" || mnemo == "bge" || mnemo == "bltu") {
+    else if (mnemo == "beq" || mnemo == "bne" || mnemo == "blt" || mnemo == "bge") {
         assert(3 == arg.size());
-        inst.set_fst(branch(mnemo,arg[0],arg[1], MyStoi(arg[2])));
+        inst.set_fst(branch(mnemo,arg[0], arg[1], MyStoi(arg[2])));
+
+    }
+    else if (mnemo == "beqi" || mnemo == "bnei" || mnemo == "blti" || mnemo == "bgti") {
+        assert(3 == arg.size());
+        inst.set_fst(branch_imm(mnemo,arg[0], std::stoi(arg[1], nullptr, 10), MyStoi(arg[2])));
 
     }
     else if (mnemo == "lw") {
@@ -501,6 +506,26 @@ uint32_t BinGen::branch (std::string mnemo, std::string rs1, std::string rs2, ui
                     {3, funct3},
                     {5, regmap_.at(rs1)},
                     {5, regmap_.at(rs2)},
+                    {6, (offset & 0x7e0) >> 5},
+                    {1, (offset & 0x1000) >> 12} };
+    return Pack(fields);
+}
+
+// beqi, bnei, blti, bgti
+uint32_t BinGen::branch_imm (std::string mnemo, std::string rs1, uint32_t imm, uint32_t offset) {
+    CheckImmediate(offset, 12, "branch_imm");
+    CheckImmediate(imm, 5, "branch_imm");
+    uint32_t funct3;
+    if (mnemo == "beqi") funct3 = 0b010;
+    if (mnemo == "bnei") funct3 = 0b011;
+    if (mnemo == "blti") funct3 = 0b110;
+    if (mnemo == "bgti") funct3 = 0b111;
+    Fields fields { {7, 0b1100011},
+                    {1, (offset & 0x800) >> 11},
+                    {4, (offset & 0x1e) >> 1},
+                    {3, funct3},
+                    {5, regmap_.at(rs1)},
+                    {5, imm},
                     {6, (offset & 0x7e0) >> 5},
                     {1, (offset & 0x1000) >> 12} };
     return Pack(fields);
