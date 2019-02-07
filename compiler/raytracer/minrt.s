@@ -482,17 +482,12 @@ read_nth_object_2727:
 	flw	fa0, 0(a2)
 	feq	a3, fa0, fzero
 	bne	a3, zero, .read_nth_object_else_7
-	bne	a3, zero, .read_nth_object_else_9
 	fle	a3, fa0, fzero
-	bne	a3, zero, .read_nth_object_else_11
+	bne	a3, zero, .read_nth_object_else_9
 	fli	fa1, l_data_1
-	b	.read_nth_object_cont_12
-.read_nth_object_else_11:
-	fli	fa1, l_data_2
-.read_nth_object_cont_12:
 	b	.read_nth_object_cont_10
 .read_nth_object_else_9:
-	fmv	fa1, fzero
+	fli	fa1, l_data_2
 .read_nth_object_cont_10:
 	fmul	fa0, fa0, fa0
 	fdiv	fa0, fa1, fa0
@@ -503,7 +498,23 @@ read_nth_object_2727:
 	fsw	fa0, 0(a2)
 	flw	fa0, 4(a2)
 	feq	a3, fa0, fzero
+	bne	a3, zero, .read_nth_object_else_11
+	fle	a3, fa0, fzero
 	bne	a3, zero, .read_nth_object_else_13
+	fli	fa1, l_data_1
+	b	.read_nth_object_cont_14
+.read_nth_object_else_13:
+	fli	fa1, l_data_2
+.read_nth_object_cont_14:
+	fmul	fa0, fa0, fa0
+	fdiv	fa0, fa1, fa0
+	b	.read_nth_object_cont_12
+.read_nth_object_else_11:
+	fmv	fa0, fzero
+.read_nth_object_cont_12:
+	fsw	fa0, 4(a2)
+	flw	fa0, 8(a2)
+	feq	a3, fa0, fzero
 	bne	a3, zero, .read_nth_object_else_15
 	fle	a3, fa0, fzero
 	bne	a3, zero, .read_nth_object_else_17
@@ -512,53 +523,27 @@ read_nth_object_2727:
 .read_nth_object_else_17:
 	fli	fa1, l_data_2
 .read_nth_object_cont_18:
+	fmul	fa0, fa0, fa0
+	fdiv	fa0, fa1, fa0
 	b	.read_nth_object_cont_16
 .read_nth_object_else_15:
-	fmv	fa1, fzero
+	fmv	fa0, fzero
 .read_nth_object_cont_16:
-	fmul	fa0, fa0, fa0
-	fdiv	fa0, fa1, fa0
-	b	.read_nth_object_cont_14
-.read_nth_object_else_13:
-	fmv	fa0, fzero
-.read_nth_object_cont_14:
-	fsw	fa0, 4(a2)
-	flw	fa0, 8(a2)
-	feq	a3, fa0, fzero
-	bne	a3, zero, .read_nth_object_else_19
-	bne	a3, zero, .read_nth_object_else_21
-	fle	a3, fa0, fzero
-	bne	a3, zero, .read_nth_object_else_23
-	fli	fa1, l_data_1
-	b	.read_nth_object_cont_24
-.read_nth_object_else_23:
-	fli	fa1, l_data_2
-.read_nth_object_cont_24:
-	b	.read_nth_object_cont_22
-.read_nth_object_else_21:
-	fmv	fa1, fzero
-.read_nth_object_cont_22:
-	fmul	fa0, fa0, fa0
-	fdiv	fa0, fa1, fa0
-	b	.read_nth_object_cont_20
-.read_nth_object_else_19:
-	fmv	fa0, fzero
-.read_nth_object_cont_20:
 	fsw	fa0, 8(a2)
 	b	.read_nth_object_cont_6
 .read_nth_object_else_5:
-	bnei	a6, 2, .read_nth_object_cont_25
+	bnei	a6, 2, .read_nth_object_cont_19
 	xori	a1, a3, 1	# boolean not
 	mv	a0, a2
 	call	vecunit_sgn_2622
-.read_nth_object_cont_25:
+.read_nth_object_cont_19:
 .read_nth_object_cont_6:
 	lw	a0, 28(sp)	# restore
-	beq	a0, zero, .read_nth_object_cont_26
+	beq	a0, zero, .read_nth_object_cont_20
 	lw	a0, 20(sp)	# restore
 	lw	a1, 24(sp)	# restore
 	call	rotate_quadratic_matrix_2724
-.read_nth_object_cont_26:
+.read_nth_object_cont_20:
 	li	a0, 1
 read_nth_object_ret:
 	lw	ra, 32(sp)

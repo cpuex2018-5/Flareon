@@ -38,5 +38,11 @@ let string_of_ids (l : t list) =
 let print_tlist (l : t list) =
   print_endline (string_of_ids l)
 
+let mem x (env : (t * 'a) list) =
+  List.exists (fun (y, _) -> x = y) env
+
+let mem3 x (env : (t * 'a * 'b) list) =
+  List.exists (fun (y, _, _) -> x = y) env
+
 type id_or_imm = V of t | C of int
 let fv_id_or_imm (e : id_or_imm) = match e with V(x) -> [x] | _ -> []

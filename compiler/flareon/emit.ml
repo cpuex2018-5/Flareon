@@ -138,28 +138,12 @@ and g' buf e =
   | Tail, IfEq(x, y, e1, e2) ->
     g'_tail_if buf x y e1 e2 "beq" "bne"
   | Tail, IfLE(x, y, e1, e2) ->
-(*
-    (match y with
-     | `V(y) -> g'_tail_if buf x (`V(y)) e1 e2 "ble" "bgt"
-     | `C(0) -> g'_tail_if buf x (`V("zero")) e1 e2 "ble" "bgt"
-     | `C(n) ->
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) n;
-       g'_tail_if buf x (`V(reg_tmp)) e1 e2 "ble" "bgt")
-*)
     g'_tail_if buf x y e1 e2 "ble" "bgt"
   | Tail, IfGE(x, y, e1, e2) ->
     g'_tail_if buf x y e1 e2 "bge" "blt"
   | NonTail(z), IfEq(x, y, e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "beq" "bne"
   | NonTail(z), IfLE(x, y, e1, e2) ->
-(*
-    (match y with
-     | `V(y) -> g'_non_tail_if buf (NonTail(z)) x (`V(y)) e1 e2 "ble" "bgt"
-     | `C(0) -> g'_non_tail_if buf (NonTail(z)) x (`V("zero")) e1 e2 "ble" "bgt"
-     | `C(n) ->
-       Printf.bprintf buf "\tli\t%s, %d\n" (reg reg_tmp) n;
-       g'_non_tail_if buf (NonTail(z)) x (`V(reg_tmp)) e1 e2 "ble" "bgt")
-*)
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "ble" "bgt"
   | NonTail(z), IfGE(x, y, e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "bge" "blt"
