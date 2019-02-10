@@ -282,11 +282,11 @@ always @(posedge clk) begin
                                             b_addr <= (e_program_counter + (reg_rs1>=reg_rs2?e_imm_b_1:4))/4; end// bge
                     3'b010: begin e_program_counter <= e_program_counter + (reg_rs1==e_imm_sham_1?e_imm_b_1:4);
                                             b_addr <= (e_program_counter + (reg_rs1==e_imm_sham_1?e_imm_b_1:4))/4; end// beqi
-                    3'b010: begin e_program_counter <= e_program_counter + (reg_rs1!=e_imm_sham_1?e_imm_b_1:4);
+                    3'b011: begin e_program_counter <= e_program_counter + (reg_rs1!=e_imm_sham_1?e_imm_b_1:4);
                                             b_addr <= (e_program_counter + (reg_rs1!=e_imm_sham_1?e_imm_b_1:4))/4; end// bnei
-                    3'b010: begin e_program_counter <= e_program_counter + (reg_rs1<e_imm_sham_1?e_imm_b_1:4);
+                    3'b110: begin e_program_counter <= e_program_counter + (reg_rs1<e_imm_sham_1?e_imm_b_1:4);
                                             b_addr <= (e_program_counter + (reg_rs1<e_imm_sham_1?e_imm_b_1:4))/4; end// blti
-                    3'b010: begin e_program_counter <= e_program_counter + (reg_rs1>e_imm_sham_1?e_imm_b_1:4);
+                    3'b111: begin e_program_counter <= e_program_counter + (reg_rs1>e_imm_sham_1?e_imm_b_1:4);
                                             b_addr <= (e_program_counter + (reg_rs1>e_imm_sham_1?e_imm_b_1:4))/4; end// bgti
                     default: e_program_counter <= e_program_counter;
                 endcase
