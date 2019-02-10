@@ -322,13 +322,13 @@ always @(posedge clk) begin
                         7'b0001000: freg_rd <= fmul_y;  //fmul
                         7'b0001100: freg_rd <= fdiv_y;  //fdiv
                         7'b0101100: freg_rd <= fsqrt_y; //fsqrt
-                        7'b1010010: reg_rd <= feq_y;    //feq
-                        7'b1010001: reg_rd <= flt_y;    //flt
-                        7'b1010000: reg_rd <= fle_y;    //fle
-                        7'b0010000: reg_rd <= freg_rs1; //fmv
-                        7'b0010001: reg_rd <= fneg_y; //fneg
-                        7'b0010010: reg_rd <= fabs_y; //fabs
-                        7'b0010011: reg_rd <= finv_y; //finv
+                        7'b1010010: freg_rd <= feq_y;    //feq
+                        7'b1010001: freg_rd <= flt_y;    //flt
+                        7'b1010000: freg_rd <= fle_y;    //fle
+                        7'b0010000: freg_rd <= freg_rs1; //fmv
+                        7'b0010001: freg_rd <= fneg_y; //fneg
+                        7'b0010010: freg_rd <= fabs_y; //fabs
+                        7'b0010011: freg_rd <= finv_y; //finv
                         default: freg_rd <= freg_rd;
                     endcase
                 end
