@@ -298,15 +298,11 @@ always @(posedge clk) begin
                 m_addr <= (reg_rs1 + e_imm_s_1)>>2; m_w_data <= reg_rs2; m_we <= 1;
             end
             else if (e_opcode_1 == OP_OP) begin
-                if (e_funct_1 == 3'b000) begin
-                    case(e_funct7_1)
-                        7'b0000000: reg_rd <= reg_rs1+reg_rs2; //add
-                        7'b0100000: reg_rd <= reg_rs1-reg_rs2; //sub
-                        default:    reg_rd <= reg_rs1-reg_rs2;
-                    endcase
-                end else if (e_funct_1 == 3'b100) begin //xor
-                    reg_rd <= reg_rs1 ^ reg_rs2;
-                end
+                case(e_funct_1)
+                    3'b000: reg_rd <= reg_rs1+reg_rs2; //add
+                    3'b010: reg_rd <= reg_rs1-reg_rs2; //sub
+                    default: reg_rd <= reg_rs1^reg_rs2; //xor
+                endcase
             end
             else if (e_opcode_1 == LOAD_FP) begin
                 m_addr <= (reg_rs1 + e_imm_i_1)>>2;
@@ -322,9 +318,9 @@ always @(posedge clk) begin
                         7'b0001000: freg_rd <= fmul_y;  //fmul
                         7'b0001100: freg_rd <= fdiv_y;  //fdiv
                         7'b0101100: freg_rd <= fsqrt_y; //fsqrt
-                        7'b1010010: freg_rd <= feq_y;    //feq
-                        7'b1010001: freg_rd <= flt_y;    //flt
-                        7'b1010000: freg_rd <= fle_y;    //fle
+                        7'b1010010: reg_rd <= feq_y;    //feq
+                        7'b1010001: reg_rd <= flt_y;    //flt
+                        7'b1010000: reg_rd <= fle_y;    //fle
                         7'b0010000: freg_rd <= freg_rs1; //fmv
                         7'b0010001: freg_rd <= fneg_y; //fneg
                         7'b0010010: freg_rd <= fabs_y; //fabs
@@ -460,6 +456,7 @@ always @(posedge clk) begin
             pre_b_addr <= b_addr;
         end
         e_registers[0] <= 0;
+        f_registers[31] <= 0;
     end
 end
 
