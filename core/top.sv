@@ -40,24 +40,27 @@ logic b_flag1;
 logic b_flag2;
 
 (* mark_debug = "true" *) logic [31:0] e_program_counter;
-logic [14:0] pre_b_addr;
+(* mark_debug = "true" *) logic [39:0] global_counter;
 (* mark_debug = "true" *) logic signed [31:0] e_registers[0:31];
 (* mark_debug = "true" *) logic [31:0] f_registers[0:31];
+
 logic signed [31:0] reg_rs1, reg_rs2, reg_rd;
 logic [31:0] freg_rs1, freg_rs2, freg_rd;
 logic [31:0] freg_rd_load, reg_rd_load;
 
-logic [6:0] e_funct7;
-logic [6:0] e_opcode;
-logic [2:0] e_funct;
-logic [4:0] e_rd, e_rs1, e_rs2;
+logic [6:0] e_funct7, e_funct7_1;
+logic [6:0] e_opcode, e_opcode_1, e_opcode_2, e_opcode_3;
+logic [2:0] e_funct, e_funct_1;
+logic [4:0] e_rd, e_rd_1, e_rd_2, e_rd_3;
+logic [4:0] e_rs1, e_rs1_1;
+logic [4:0] e_rs2, e_rs2_1;
 
-logic [31:0] e_imm_sham;
-logic [31:0] e_imm_i;
-logic [31:0] e_imm_s;
-logic [31:0] e_imm_u;
-logic [31:0] e_imm_b;
-logic [31:0] e_imm_j;
+logic [31:0] e_imm_sham, e_imm_sham_1;
+logic [31:0] e_imm_i, e_imm_i_1;
+logic [31:0] e_imm_s, e_imm_s_1;
+logic [31:0] e_imm_u, e_imm_u_1;
+logic [31:0] e_imm_b, e_imm_b_1;
+logic [31:0] e_imm_j, e_imm_j_1;
 
 logic [3:0] e_wait;
 
@@ -74,8 +77,7 @@ logic [31:0] fabs_y;
 logic [31:0] finv_y;
 
 logic [9:0] exe_remain;
-
-(* mark_debug = "true" *) logic [39:0] global_counter;
+logic [14:0] pre_b_addr;
 
 logic main_stage;
 logic fetch_stage;
@@ -182,13 +184,13 @@ always @(posedge clk) begin
         m_we <= 0;
         if (fetch_stage) begin
             if (global_counter != 0) begin
-                if (e_opcode == OP_LOAD) begin
-                    e_registers[e_rd] <= reg_rd_load;
-                end else if (e_opcode == LOAD_FP) begin
-                    f_registers[e_rd] <= freg_rd_load;
+                if (e_opcode_3 == OP_LOAD) begin
+                    e_registers[e_rd_3] <= reg_rd_load;
+                end else if (e_opcode_3 == LOAD_FP) begin
+                    f_registers[e_rd_3] <= freg_rd_load;
                 end else begin
-                    e_registers[e_rd] <= reg_rd;
-                    f_registers[e_rd] <= freg_rd;
+                    e_registers[e_rd_3] <= reg_rd;
+                    f_registers[e_rd_3] <= freg_rd;
                 end
             end
 
@@ -207,6 +209,19 @@ always @(posedge clk) begin
             freg_rd <= f_registers[e_rd];
             set_stage <= 0;
 
+            e_funct7_1 <= e_funct7;
+            e_opcode_1 <= e_opcode;
+            e_funct_1 <= e_funct;
+            e_rd_1 <= e_rd;
+            e_rs1_1 <= e_rs1;
+            e_rs2_1 <= e_rs2;
+            e_imm_sham_1 <= e_imm_sham;
+            e_imm_i_1 <= e_imm_i;
+            e_imm_s_1 <= e_imm_s;
+            e_imm_u_1 <= e_imm_u;
+            e_imm_b_1 <= e_imm_b;
+            e_imm_j_1 <= e_imm_j;
+
             case(e_opcode)
                 LOAD_FP: exe_remain <= 2;
                 OP_LOAD: exe_remain <= 2;
@@ -217,15 +232,19 @@ always @(posedge clk) begin
                         7'b0001000: exe_remain <= 4; //fmul
                         7'b0001100: exe_remain <= 8; //fdiv
                         7'b0101100: exe_remain <= 8; //fsqrt
-                        7'b0010000: if (e_funct == 3'b011) exe_remain <= 3; else exe_remain <= 1; //finv
+                        7'b0010011: exe_remain <= 3; //finv
                         default: exe_remain <= 1;
                     endcase
                 end
                 default: exe_remain <= 1;
             endcase
+
         end
         else if (exe_remain > 0) begin
-            if (e_opcode != OP_INOUT) begin
+            e_opcode_2 <= e_opcode_1;
+            e_rd_2 <= e_rd_1;
+
+            if (e_opcode_1 != OP_INOUT) begin
                 exe_remain <= exe_remain - 1;
                 if (exe_remain == 1) begin
                     out_stage <= 1;
@@ -234,89 +253,87 @@ always @(posedge clk) begin
                 end
             end
 
-            if (e_opcode == OP_IMM) begin
-                case(e_funct)
-                    3'b000: reg_rd <= reg_rs1 + e_imm_i;      //addi
-                    3'b001: reg_rd <= reg_rs1 << e_imm_sham;  //slli
-                    3'b100: reg_rd <= reg_rs1 ^ e_imm_i;      //xori
-                    3'b101: reg_rd <= reg_rs1 >>> e_imm_sham; //srai
-                    3'b111: reg_rd <= reg_rs1 & e_imm_i;      //andi
+            if (e_opcode_1 == OP_IMM) begin
+                case(e_funct_1)
+                    3'b000: reg_rd <= reg_rs1 + e_imm_i_1;      //addi
+                    3'b001: reg_rd <= reg_rs1 << e_imm_sham_1;  //slli
+                    3'b100: reg_rd <= reg_rs1 ^ e_imm_i_1;      //xori
+                    3'b101: reg_rd <= reg_rs1 >>> e_imm_sham_1; //srai
+                    3'b111: reg_rd <= reg_rs1 & e_imm_i_1;      //andi
                     default: reg_rd <= reg_rs1;
                 endcase
             end
-            else if (e_opcode == OP_LUI) reg_rd <= e_imm_u;
-            else if (e_opcode == OP_AUIPC) reg_rd <= e_program_counter + e_imm_u;
-            else if (e_opcode == OP_JALR) begin
+            else if (e_opcode_1 == OP_LUI) reg_rd <= e_imm_u_1;
+            else if (e_opcode_1 == OP_AUIPC) reg_rd <= e_program_counter + e_imm_u_1;
+            else if (e_opcode_1 == OP_JALR) begin
                 reg_rd <= e_program_counter + 4;
-                e_program_counter <= reg_rs1 + e_imm_i;
-                b_addr <= (reg_rs1 + e_imm_i)/4;
+                e_program_counter <= reg_rs1 + e_imm_i_1;
+                b_addr <= (reg_rs1 + e_imm_i_1)/4;
             end
-            else if (e_opcode == BRANCH) begin
-                case(e_funct)
-                    3'b000: begin e_program_counter <= e_program_counter + (reg_rs1==reg_rs2?e_imm_b:4);
-                                            b_addr <= (e_program_counter + (reg_rs1==reg_rs2?e_imm_b:4))/4; end // beq
-                    3'b001: begin e_program_counter <= e_program_counter + (reg_rs1!=reg_rs2?e_imm_b:4);
-                                            b_addr <= (e_program_counter + (reg_rs1!=reg_rs2?e_imm_b:4))/4; end// bne
-                    3'b100: begin e_program_counter <= e_program_counter + (reg_rs1<reg_rs2?e_imm_b:4);
-                                            b_addr <= (e_program_counter + (reg_rs1<reg_rs2?e_imm_b:4))/4; end// blt
-                    3'b101: begin e_program_counter <= e_program_counter + (reg_rs1>=reg_rs2?e_imm_b:4);
-                                            b_addr <= (e_program_counter + (reg_rs1>=reg_rs2?e_imm_b:4))/4; end// bge
+            else if (e_opcode_1 == BRANCH) begin
+                case(e_funct_1)
+                    3'b000: begin e_program_counter <= e_program_counter + (reg_rs1==reg_rs2?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1==reg_rs2?e_imm_b_1:4))/4; end // beq
+                    3'b001: begin e_program_counter <= e_program_counter + (reg_rs1!=reg_rs2?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1!=reg_rs2?e_imm_b_1:4))/4; end// bne
+                    3'b100: begin e_program_counter <= e_program_counter + (reg_rs1<reg_rs2?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1<reg_rs2?e_imm_b_1:4))/4; end// blt
+                    3'b101: begin e_program_counter <= e_program_counter + (reg_rs1>=reg_rs2?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1>=reg_rs2?e_imm_b_1:4))/4; end// bge
+                    3'b010: begin e_program_counter <= e_program_counter + (reg_rs1==e_imm_sham_1?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1==e_imm_sham_1?e_imm_b_1:4))/4; end// beqi
+                    3'b010: begin e_program_counter <= e_program_counter + (reg_rs1!=e_imm_sham_1?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1!=e_imm_sham_1?e_imm_b_1:4))/4; end// bnei
+                    3'b010: begin e_program_counter <= e_program_counter + (reg_rs1<e_imm_sham_1?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1<e_imm_sham_1?e_imm_b_1:4))/4; end// blti
+                    3'b010: begin e_program_counter <= e_program_counter + (reg_rs1>e_imm_sham_1?e_imm_b_1:4);
+                                            b_addr <= (e_program_counter + (reg_rs1>e_imm_sham_1?e_imm_b_1:4))/4; end// bgti
                     default: e_program_counter <= e_program_counter;
                 endcase
             end
-            else if (e_opcode == OP_LOAD) begin
-                m_addr <= (reg_rs1 + e_imm_i)>>2;
+            else if (e_opcode_1 == OP_LOAD) begin
+                m_addr <= (reg_rs1 + e_imm_i_1)>>2;
             end
-            else if (e_opcode == OP_STORE) begin
-                m_addr <= (reg_rs1 + e_imm_s)>>2; m_w_data <= reg_rs2; m_we <= 1;
+            else if (e_opcode_1 == OP_STORE) begin
+                m_addr <= (reg_rs1 + e_imm_s_1)>>2; m_w_data <= reg_rs2; m_we <= 1;
             end
-            else if (e_opcode == OP_OP) begin
-                if (e_funct == 3'b000) begin
-                    case(e_funct7)
+            else if (e_opcode_1 == OP_OP) begin
+                if (e_funct_1 == 3'b000) begin
+                    case(e_funct7_1)
                         7'b0000000: reg_rd <= reg_rs1+reg_rs2; //add
                         7'b0100000: reg_rd <= reg_rs1-reg_rs2; //sub
                         default:    reg_rd <= reg_rs1-reg_rs2;
                     endcase
-                end else if (e_funct == 3'b100) begin //xor
+                end else if (e_funct_1 == 3'b100) begin //xor
                     reg_rd <= reg_rs1 ^ reg_rs2;
                 end
             end
-            else if (e_opcode == LOAD_FP) begin
-                m_addr <= (reg_rs1 + e_imm_i)>>2;
+            else if (e_opcode_1 == LOAD_FP) begin
+                m_addr <= (reg_rs1 + e_imm_i_1)>>2;
             end
-            else if (e_opcode == STORE_FP) begin
-                m_addr <= (reg_rs1 + e_imm_s)>>2; m_w_data <= freg_rs2; m_we <= 1;
+            else if (e_opcode_1 == STORE_FP) begin
+                m_addr <= (reg_rs1 + e_imm_s_1)>>2; m_w_data <= freg_rs2; m_we <= 1;
             end
-            else if (e_opcode == OP_FP) begin
+            else if (e_opcode_1 == OP_FP) begin
                 if (exe_remain == 1) begin
-                    case(e_funct7)
+                    case(e_funct7_1)
                         7'b0000000: freg_rd <= fadd_y;  //fadd
                         7'b0000100: freg_rd <= fsub_y;  //fsub
                         7'b0001000: freg_rd <= fmul_y;  //fmul
                         7'b0001100: freg_rd <= fdiv_y;  //fdiv
                         7'b0101100: freg_rd <= fsqrt_y; //fsqrt
-                        7'b1010000: begin
-                                        case(e_funct)
-                                            3'b010: reg_rd <= feq_y; //feq
-                                            3'b001: reg_rd <= flt_y; //flt
-                                            3'b000: reg_rd <= fle_y; //fle
-                                            default: reg_rd <= fle_y;
-                                        endcase
-                                    end
-                        7'b0010000: begin
-                                        case(e_funct)
-                                            3'b000: freg_rd <= freg_rs1; //fmv
-                                            3'b001: freg_rd <= fneg_y;   //fneg
-                                            3'b010: freg_rd <= fabs_y;   //fabs
-                                            3'b011: freg_rd <= finv_y;   //finv
-                                            default: freg_rd <= finv_y;
-                                        endcase
-                                    end
+                        7'b1010010: reg_rd <= feq_y;    //feq
+                        7'b1010001: reg_rd <= flt_y;    //flt
+                        7'b1010000: reg_rd <= fle_y;    //fle
+                        7'b0010000: reg_rd <= freg_rs1; //fmv
+                        7'b0010001: reg_rd <= fneg_y; //fneg
+                        7'b0010010: reg_rd <= fabs_y; //fabs
+                        7'b0010011: reg_rd <= finv_y; //finv
                         default: freg_rd <= freg_rd;
                     endcase
                 end
             end
-            else if (e_opcode == OP_INOUT) begin //inout
+            else if (e_opcode_1 == OP_INOUT) begin //inout
                 if (e_funct == 0) begin //out
                     if (e_wait == 0) begin
                         b_stage <= 0;
@@ -430,6 +447,9 @@ always @(posedge clk) begin
         else if (out_stage) begin
             freg_rd_load <= m_r_data;
             reg_rd_load  <= m_r_data;
+
+            e_opcode_3 <= e_opcode_2;
+            e_rd_3 <= e_rd_2;
 
             out_stage <= 0;
             fetch_stage <= 1;
