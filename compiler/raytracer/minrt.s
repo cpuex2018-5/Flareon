@@ -1,12 +1,9 @@
 	.text
-	.globl _min_caml_start
-_min_caml_start: # main entry point
-	li	gp, 7404	# initialize gp
-#	main program starts
+_min_caml_start:
+	li	gp, 7404
 	li	a0, 128
 	li	a1, 128
 	call	rt_3074
-#	main program ends
 end:
 	b	end
 read_screen_settings_2720:
@@ -228,7 +225,7 @@ read_nth_object_2727:
 	fsw	fa0, 8(a2)
 	call	min_caml_read_float
 	fle	a3, fzero, fa0
-	xori	a3, a3, 1	# boolean not
+	xori	a3, a3, 1
 	flw	fa0, 16(sp)	# restore
 	fsw	fa0, 0(gp)
 	fsw	fa0, 4(gp)
@@ -359,7 +356,7 @@ read_nth_object_2727:
 	b	.read_nth_object_cont_6
 .read_nth_object_else_5:
 	bnei	a6, 2, .read_nth_object_cont_19
-	xori	a3, a3, 1	# boolean not
+	xori	a3, a3, 1
 	flw	fa0, 0(a2)
 	flw	fa1, 0(a2)
 	fmul	fa0, fa0, fa1
@@ -1509,7 +1506,7 @@ solver_rect_2750:
 	lw	a3, 16(a0)
 	flw	fa3, 0(a1)
 	fle	a4, fzero, fa3
-	xori	a4, a4, 1	# boolean not
+	xori	a4, a4, 1
 	xor	a2, a2, a4
 	flw	fa3, 0(a3)
 	bne	a2, zero, .solver_rect_cont_3
@@ -1555,7 +1552,7 @@ solver_rect_2750:
 	lw	a3, 16(a0)
 	flw	fa3, 4(a1)
 	fle	a4, fzero, fa3
-	xori	a4, a4, 1	# boolean not
+	xori	a4, a4, 1
 	xor	a2, a2, a4
 	flw	fa3, 4(a3)
 	bne	a2, zero, .solver_rect_cont_11
@@ -1601,7 +1598,7 @@ solver_rect_2750:
 	lw	a0, 16(a0)
 	flw	fa3, 8(a1)
 	fle	a3, fzero, fa3
-	xori	a3, a3, 1	# boolean not
+	xori	a3, a3, 1
 	xor	a2, a2, a3
 	flw	fa3, 8(a0)
 	bne	a2, zero, .solver_rect_cont_19
@@ -1808,7 +1805,7 @@ solver_2781:
 	bne	a0, zero, .solver_else_2
 	flw	fa3, 0(a1)
 	fle	a0, fzero, fa3
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a4, a0
 	flw	fa3, 0(a6)
 	bne	a0, zero, .solver_cont_4
@@ -1852,7 +1849,7 @@ solver_2781:
 	bne	a0, zero, .solver_else_10
 	flw	fa3, 4(a1)
 	fle	a0, fzero, fa3
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a4, a0
 	flw	fa3, 4(a6)
 	bne	a0, zero, .solver_cont_12
@@ -1896,7 +1893,7 @@ solver_2781:
 	bne	a0, zero, .solver_else_18
 	flw	fa3, 8(a1)
 	fle	a0, fzero, fa3
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a4, a0
 	flw	fa3, 8(a6)
 	bne	a0, zero, .solver_cont_20
@@ -2127,7 +2124,7 @@ solver_rect_fast_2785:
 	bne	a3, zero, .solver_rect_fast_else_3
 	flw	fa4, 4(a2)
 	feq	a3, fa4, fzero
-	xori	a3, a3, 1	# boolean not
+	xori	a3, a3, 1
 	b	.solver_rect_fast_cont_4
 .solver_rect_fast_else_3:
 	li	a3, 0
@@ -2157,7 +2154,7 @@ solver_rect_fast_2785:
 	bne	a3, zero, .solver_rect_fast_else_8
 	flw	fa4, 12(a2)
 	feq	a3, fa4, fzero
-	xori	a3, a3, 1	# boolean not
+	xori	a3, a3, 1
 	b	.solver_rect_fast_cont_9
 .solver_rect_fast_else_8:
 	li	a3, 0
@@ -2187,7 +2184,7 @@ solver_rect_fast_2785:
 	bne	a0, zero, .solver_rect_fast_else_13
 	flw	fa0, 20(a2)
 	feq	a0, fa0, fzero
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.solver_rect_fast_cont_14
 .solver_rect_fast_else_13:
 	li	a0, 0
@@ -2518,7 +2515,7 @@ setup_rect_table_2825:
 	lw	a4, 16(a1)
 	flw	fa0, 0(a0)
 	fle	a5, fzero, fa0
-	xori	a5, a5, 1	# boolean not
+	xori	a5, a5, 1
 	xor	a3, a3, a5
 	flw	fa0, 0(a4)
 	bne	a3, zero, .setup_rect_table_cont_3
@@ -2540,7 +2537,7 @@ setup_rect_table_2825:
 	lw	a4, 16(a1)
 	flw	fa0, 4(a0)
 	fle	a5, fzero, fa0
-	xori	a5, a5, 1	# boolean not
+	xori	a5, a5, 1
 	xor	a3, a3, a5
 	flw	fa0, 4(a4)
 	bne	a3, zero, .setup_rect_table_cont_6
@@ -2562,7 +2559,7 @@ setup_rect_table_2825:
 	lw	a1, 16(a1)
 	flw	fa0, 8(a0)
 	fle	a4, fzero, fa0
-	xori	a4, a4, 1	# boolean not
+	xori	a4, a4, 1
 	xor	a3, a3, a4
 	flw	fa0, 8(a1)
 	bne	a3, zero, .setup_rect_table_cont_9
@@ -3045,7 +3042,7 @@ is_outside_2859:
 	flw	fa0, 8(a4)
 	fabs	fa1, fa2
 	fle	a0, fa0, fa1
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.is_outside_cont_5
 .is_outside_else_4:
 	li	a0, 0
@@ -3055,7 +3052,7 @@ is_outside_2859:
 	li	a0, 0
 .is_outside_cont_3:
 	bne	a0, zero, .is_outside_else_6
-	xori	a0, a2, 1	# boolean not
+	xori	a0, a2, 1
 	b	is_outside_ret
 .is_outside_else_6:
 	mv	a0, a2
@@ -3071,9 +3068,9 @@ is_outside_2859:
 	fmul	fa1, fa1, fa2
 	fadd	fa0, fa0, fa1
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a2, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	is_outside_ret
 .is_outside_else_7:
 	fmul	fa3, fa0, fa0
@@ -3109,9 +3106,9 @@ is_outside_2859:
 	fsub	fa0, fa0, fa1
 .is_outside_cont_10:
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a2, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 is_outside_ret:
 	jr	ra
 check_all_inside_2864:
@@ -3151,7 +3148,7 @@ check_all_inside_2864:
 	flw	fa3, 8(a6)
 	fabs	fa4, fa5
 	fle	a2, fa3, fa4
-	xori	a2, a2, 1	# boolean not
+	xori	a2, a2, 1
 	b	.check_all_inside_cont_7
 .check_all_inside_else_6:
 	li	a2, 0
@@ -3161,7 +3158,7 @@ check_all_inside_2864:
 	li	a2, 0
 .check_all_inside_cont_5:
 	bne	a2, zero, .check_all_inside_else_8
-	xori	a2, a4, 1	# boolean not
+	xori	a2, a4, 1
 	b	.check_all_inside_cont_9
 .check_all_inside_else_8:
 	mv	a2, a4
@@ -3178,9 +3175,9 @@ check_all_inside_2864:
 	fmul	fa4, fa4, fa5
 	fadd	fa3, fa3, fa4
 	fle	a2, fzero, fa3
-	xori	a2, a2, 1	# boolean not
+	xori	a2, a2, 1
 	xor	a2, a4, a2
-	xori	a2, a2, 1	# boolean not
+	xori	a2, a2, 1
 	b	.check_all_inside_cont_11
 .check_all_inside_else_10:
 	fmul	fa6, fa3, fa3
@@ -3216,9 +3213,9 @@ check_all_inside_2864:
 	fsub	fa3, fa3, fa4
 .check_all_inside_cont_14:
 	fle	a2, fzero, fa3
-	xori	a2, a2, 1	# boolean not
+	xori	a2, a2, 1
 	xor	a2, a4, a2
-	xori	a2, a2, 1	# boolean not
+	xori	a2, a2, 1
 .check_all_inside_cont_11:
 .check_all_inside_cont_3:
 	bne	a2, zero, .check_all_inside_else_15
@@ -3280,7 +3277,7 @@ check_all_inside_2864:
 	flw	fa0, 8(a6)
 	fabs	fa2, fa3
 	fle	a1, fa0, fa2
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	b	.check_all_inside_cont_24
 .check_all_inside_else_23:
 	li	a1, 0
@@ -3290,7 +3287,7 @@ check_all_inside_2864:
 	li	a1, 0
 .check_all_inside_cont_22:
 	bne	a1, zero, .check_all_inside_else_25
-	xori	a1, a4, 1	# boolean not
+	xori	a1, a4, 1
 	b	.check_all_inside_cont_26
 .check_all_inside_else_25:
 	mv	a1, a4
@@ -3307,9 +3304,9 @@ check_all_inside_2864:
 	fmul	fa2, fa2, fa3
 	fadd	fa0, fa0, fa2
 	fle	a1, fzero, fa0
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	xor	a1, a4, a1
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	b	.check_all_inside_cont_28
 .check_all_inside_else_27:
 	fmul	fa5, fa0, fa0
@@ -3345,9 +3342,9 @@ check_all_inside_2864:
 	fsub	fa0, fa0, fa2
 .check_all_inside_cont_31:
 	fle	a1, fzero, fa0
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	xor	a1, a4, a1
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 .check_all_inside_cont_28:
 .check_all_inside_cont_20:
 	bne	a1, zero, .check_all_inside_else_32
@@ -3465,7 +3462,7 @@ shadow_check_and_group_2870:
 .shadow_check_and_group_else_8:
 	fli	fa1, l_data_7
 	fle	a0, fa1, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 .shadow_check_and_group_cont_9:
 	bne	a0, zero, .shadow_check_and_group_else_10
 	lw	a0, 8(sp)	# restore
@@ -3552,7 +3549,7 @@ shadow_check_and_group_2870:
 	flw	fa0, 8(a5)
 	fabs	fa2, fa3
 	fle	a0, fa0, fa2
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.shadow_check_and_group_cont_23
 .shadow_check_and_group_else_22:
 	li	a0, 0
@@ -3562,7 +3559,7 @@ shadow_check_and_group_2870:
 	li	a0, 0
 .shadow_check_and_group_cont_21:
 	bne	a0, zero, .shadow_check_and_group_else_24
-	xori	a0, a3, 1	# boolean not
+	xori	a0, a3, 1
 	b	.shadow_check_and_group_cont_25
 .shadow_check_and_group_else_24:
 	mv	a0, a3
@@ -3579,9 +3576,9 @@ shadow_check_and_group_2870:
 	fmul	fa2, fa2, fa3
 	fadd	fa0, fa0, fa2
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a3, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.shadow_check_and_group_cont_27
 .shadow_check_and_group_else_26:
 	fmul	fa5, fa0, fa0
@@ -3617,9 +3614,9 @@ shadow_check_and_group_2870:
 	fsub	fa0, fa0, fa2
 .shadow_check_and_group_cont_30:
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a3, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 .shadow_check_and_group_cont_27:
 .shadow_check_and_group_cont_19:
 	bne	a0, zero, .shadow_check_and_group_else_31
@@ -4885,7 +4882,7 @@ solve_each_element_2879:
 	flw	fa0, 8(a5)
 	fabs	fa2, fa3
 	fle	a0, fa0, fa2
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.solve_each_element_cont_25
 .solve_each_element_else_24:
 	li	a0, 0
@@ -4895,7 +4892,7 @@ solve_each_element_2879:
 	li	a0, 0
 .solve_each_element_cont_23:
 	bne	a0, zero, .solve_each_element_else_26
-	xori	a0, a3, 1	# boolean not
+	xori	a0, a3, 1
 	b	.solve_each_element_cont_27
 .solve_each_element_else_26:
 	mv	a0, a3
@@ -4912,9 +4909,9 @@ solve_each_element_2879:
 	fmul	fa2, fa2, fa3
 	fadd	fa0, fa0, fa2
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a3, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.solve_each_element_cont_29
 .solve_each_element_else_28:
 	fmul	fa5, fa0, fa0
@@ -4950,9 +4947,9 @@ solve_each_element_2879:
 	fsub	fa0, fa0, fa2
 .solve_each_element_cont_32:
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a3, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 .solve_each_element_cont_29:
 .solve_each_element_cont_21:
 	bne	a0, zero, .solve_each_element_else_33
@@ -5744,7 +5741,7 @@ solve_each_element_fast_2893:
 	flw	fa0, 8(a5)
 	fabs	fa2, fa3
 	fle	a0, fa0, fa2
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.solve_each_element_fast_cont_31
 .solve_each_element_fast_else_30:
 	li	a0, 0
@@ -5754,7 +5751,7 @@ solve_each_element_fast_2893:
 	li	a0, 0
 .solve_each_element_fast_cont_29:
 	bne	a0, zero, .solve_each_element_fast_else_32
-	xori	a0, a3, 1	# boolean not
+	xori	a0, a3, 1
 	b	.solve_each_element_fast_cont_33
 .solve_each_element_fast_else_32:
 	mv	a0, a3
@@ -5771,9 +5768,9 @@ solve_each_element_fast_2893:
 	fmul	fa2, fa2, fa3
 	fadd	fa0, fa0, fa2
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a3, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.solve_each_element_fast_cont_35
 .solve_each_element_fast_else_34:
 	fmul	fa5, fa0, fa0
@@ -5809,9 +5806,9 @@ solve_each_element_fast_2893:
 	fsub	fa0, fa0, fa2
 .solve_each_element_fast_cont_38:
 	fle	a0, fzero, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	xor	a0, a3, a0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 .solve_each_element_fast_cont_35:
 .solve_each_element_fast_cont_27:
 	bne	a0, zero, .solve_each_element_fast_else_39
@@ -6556,7 +6553,7 @@ utexture_2916:
 	flw	fa4, 0(sp)	# restore
 	fsub	fa0, fa4, fa0
 	fle	a0, fa3, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	flw	fa0, 8(a1)
 	flw	fa4, 8(a3)
 	fsub	fa0, fa0, fa4
@@ -6567,7 +6564,7 @@ utexture_2916:
 	flw	fa1, 4(sp)	# restore
 	fsub	fa0, fa1, fa0
 	fle	a1, fa3, fa0
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	bne	a0, zero, .utexture_else_2
 	bne	a1, zero, .utexture_else_4
 	fli	fa0, l_data_16
@@ -6796,7 +6793,7 @@ trace_reflections_2923:
 	bne	a1, zero, .trace_reflections_else_1
 	fli	fa2, l_data_23
 	fle	a1, fa2, fa0
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	b	.trace_reflections_cont_2
 .trace_reflections_else_1:
 	li	a1, 0
@@ -7287,7 +7284,7 @@ trace_reflections_2923:
 	bne	a0, zero, .trace_reflections_else_83
 	fli	fa1, l_data_23
 	fle	a0, fa1, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.trace_reflections_cont_84
 .trace_reflections_else_83:
 	li	a0, 0
@@ -7390,7 +7387,7 @@ trace_ray_2928:
 	bne	a1, zero, .trace_ray_else_1
 	fli	fa2, l_data_23
 	fle	a1, fa2, fa0
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	b	.trace_ray_cont_2
 .trace_ray_else_1:
 	li	a1, 0
@@ -8115,7 +8112,7 @@ trace_ray_2928:
 	bne	a1, zero, .trace_ray_else_96
 	fli	fa1, l_data_23
 	fle	a1, fa1, fa0
-	xori	a1, a1, 1	# boolean not
+	xori	a1, a1, 1
 	b	.trace_ray_cont_97
 .trace_ray_else_96:
 	li	a1, 0
@@ -8236,7 +8233,7 @@ trace_diffuse_ray_2934:
 	bne	a0, zero, .trace_diffuse_ray_else_1
 	fli	fa2, l_data_23
 	fle	a0, fa2, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.trace_diffuse_ray_cont_2
 .trace_diffuse_ray_else_1:
 	li	a0, 0
@@ -8777,7 +8774,7 @@ iter_trace_diffuse_rays_2937:
 	bne	a0, zero, .iter_trace_diffuse_rays_else_16
 	fli	fa1, l_data_23
 	fle	a0, fa1, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.iter_trace_diffuse_rays_cont_17
 .iter_trace_diffuse_rays_else_16:
 	li	a0, 0
@@ -9026,7 +9023,7 @@ iter_trace_diffuse_rays_2937:
 	bne	a0, zero, .iter_trace_diffuse_rays_else_42
 	fli	fa1, l_data_23
 	fle	a0, fa1, fa0
-	xori	a0, a0, 1	# boolean not
+	xori	a0, a0, 1
 	b	.iter_trace_diffuse_rays_cont_43
 .iter_trace_diffuse_rays_else_42:
 	li	a0, 0
