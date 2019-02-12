@@ -100,7 +100,7 @@ let output_buffer' oc e = match e with
   | Bc(b, x, `C(y), Id.L(z)) -> Printf.fprintf oc "\t%si\t%s, %d, %s\n" b (reg x) y z
   | B(Id.L(l)) -> Printf.fprintf oc "\tb\t%s\n" l
   | Jalr -> Printf.fprintf oc "\tjalr\tra, ra, 0\n"
-  | Ret  -> Printf.fprintf oc "\tjr\tjra\n"
+  | Ret  -> Printf.fprintf oc "\tjr\tra\n"
 
 let output_buffer oc buf =
   List.iter (fun (l, e) ->

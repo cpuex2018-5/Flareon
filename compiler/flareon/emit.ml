@@ -32,8 +32,9 @@ let rec adds mnemo buf : Raw.func = match buf with
 let rec addl label buf : Raw.func = match buf with
   | [] -> [([label], [])]
   | [(x, [])] -> [(x @ [label], [])]
-  (* | [(x, e)] -> [(x @ [label], e)] *)
   | xe :: xs -> xe :: (addl label xs)
+let add_prologue prologue buf =
+  let (l, e) = List.hd buf in (l, prologue @ e) :: (List.tl buf)
 
 let funcname = ref ""
 
@@ -246,17 +247,18 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
        [Raw.Add("sp", "sp", `C(-1 * ss))]
      else
        []) in
-  let buf' = let (l, e) = List.hd buf' in (l, prologue @ e) :: (List.tl buf') in
   Id.resetCounter ();
-  let buf' = Peephole.f buf' in (* [XXX] peephole optimization *)
-  Raw.output_buffer oc buf';
-  Printf.fprintf oc "%s_ret:\n" !funcname;
-  if (Asm.has_call e) then
-    (Printf.fprintf oc "\tlw\tra, %d(sp)\n" ss;
-     Printf.fprintf oc "\taddi\tsp, sp, %d\n" (ss + 4))
-  else if ss > 0 then
-    Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
-  Printf.fprintf oc "\tjr\tra\n"
+  let return =
+    [Id.L(!funcname ^ "_ret")],
+    (if (Asm.has_call e) then
+       [Raw.Lw("ra", "sp", `C(ss), None); Raw.Add("sp", "sp", `C(ss + 4))]
+     else if ss > 0 then
+       [Raw.Add("sp", "sp", `C(ss))]
+     else
+       []) @ [Raw.Ret] in
+  (add_prologue prologue buf') @ [return]
+  |> Peephole.f(* [XXX] peephole optimization *)
+  |> Raw.output_buffer oc
 
 let f oc globals (Prog(data, fundefs, e)) =
   let global_size = Globals.global_size() + List.length data + 23 in
@@ -270,10 +272,10 @@ let f oc globals (Prog(data, fundefs, e)) =
   Id.resetCounter ();
   let buf' = g buf (NonTail("_R_0"), e) in
   let ss = stacksize () in
-  if ss > 0 then
-    Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
-  let buf' = Peephole.f buf' in (* [XXX] peephole optimization *)
-  Raw.output_buffer oc buf';
+  let prologue = (if ss > 0 then [Raw.Add("sp", "sp", `C(-1 * ss))] else []) in
+  add_prologue prologue buf'
+  |> Peephole.f (* [XXX] peephole optimization *)
+  |> Raw.output_buffer oc;
   if ss > 0 then
     Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "end:\n";

@@ -74,3 +74,4 @@ lda rd, symbol -> lui rd, symbol[31:12]
 
 ## 2/12
 * 不要なbranchに関する覗き穴最適化的なことをした(命令数 1913457870)
+* early returnを実装(命令数 1884066536)
