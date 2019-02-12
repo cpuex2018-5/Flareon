@@ -1,6 +1,4 @@
 (* PowerPC assembly with a few virtual instructions *)
-external castToInt : float -> int32 = "castToInt"
-
 type id_or_imm = [`V of Id.t | `C of int]
 type id_imm_or_label = [`V of Id.t | `C of int | `L of Id.l]
 type id_or_fimm = [`V of Id.t | `FZero]
@@ -49,12 +47,6 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *
 type fundef = { name : Id.l; args : Id.t list; fargs : Id.t list; body : t; ret : Type.t }
 (* プログラム全体 = 浮動小数点数テーブル + トップレベル関数 + メインの式 *)
 type prog = Prog of (Id.l * float) list * fundef list * t
-type global = {
-  single_array : (string * int * string) list;
-  nested_tuple : (string * string list) list;
-  tuple_array  : (string * int * int list) list;
-  sub_array    : (string * int * string) list;
-}
 
 let rec string_of_t ?(depth = 0) e =
   let indent = String.make (depth * 2) ' ' in
@@ -191,60 +183,6 @@ let rec concat e1 xt e2 =
   match e1 with
   | Ans(exp) -> Let(xt, exp, e2)
   | Let(yt, exp, e1') -> Let(yt, exp, concat e1' xt e2)
-
-let single_array = [
-  ("min_caml_n_objects",             1, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  ("min_caml_dirvecs",               5, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  ("min_caml_intsec_rectside",       1, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  ("min_caml_intersected_object_id", 1, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  ("min_caml_image_size",            2, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  ("min_caml_image_center",          2, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  ("min_caml_n_reflections",         1, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  ("min_caml_screen",                3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_viewpoint",             3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_light",                 3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_beam",                  1, Printf.sprintf "%ld" @@ castToInt 255.0);
-  ("min_caml_solver_dist",           1, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_tmin",                  1, Printf.sprintf "%ld" @@ castToInt 1000000000.0);
-  ("min_caml_intersection_point",    3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_nvector",               3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_texture_color",         3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_diffuse_ray",           3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_rgb",                   3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_startp",                3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_startp_fast",           3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_scan_pitch",            1, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_screenx_dir",           3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_screeny_dir",           3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_screenz_dir",           3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_ptrace_dirvec",         3, Printf.sprintf "%ld" @@ castToInt 0.0);
-  ("min_caml_and_net",              50, ".min_caml_and_net_1");
-  ("min_caml_or_net",                1, ".min_caml_or_net_1");
-]
-let nested_tuple = [
-  ("min_caml_light_dirvec", [".min_caml_light_dirvec_v3"; ".min_caml_light_dirvec_consts"]);
-]
-let tuple_array = [
-  ("min_caml_objects", 60, [0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0]);
-  ("min_caml_reflections", 180, [0; 0; 0; 0]);
-]
-let sub_array = [
-  (".min_caml_light_dirvec_consts", 60, Printf.sprintf "%ld" @@ Int32.of_int 0);
-  (".min_caml_and_net_1",            1, Printf.sprintf "%ld" @@ Int32.of_int(-1));
-  (".min_caml_or_net_1",             1, ".min_caml_and_net_1");
-  (".min_caml_light_dirvec_v3",      3, Printf.sprintf "%ld" @@ castToInt 0.0);
-]
-let globals =
-  { single_array = single_array;
-    nested_tuple = nested_tuple;
-    tuple_array = tuple_array;
-    sub_array = sub_array; }
-let global_size () =
-  let global_size = List.fold_left (fun acc (_, len, _) -> len + acc) 0 globals.single_array in
-  let global_size = global_size + List.fold_left (fun acc (_, labels) -> List.length labels + acc) 0 globals.nested_tuple in
-  let global_size = global_size + List.fold_left (fun acc (_, len, x) -> len + len * (List.length x) + acc) 0 globals.tuple_array in
-  let global_size = global_size + List.fold_left (fun acc (_, len, _) -> len + acc) 0 globals.sub_array in
-  global_size
 
 let callee_save_funs =
   (* callee-saveの関数 * saveされないレジスタ *)

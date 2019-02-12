@@ -46,12 +46,6 @@ and exp =
 
 type fundef = { name : Id.l; args : Id.t list; fargs : Id.t list; body : t; ret : Type.t }
 type prog = Prog of (Id.l * float) list * fundef list * t
-type global = {
-  single_array : (string * int * string) list;
-  nested_tuple : (string * string list) list;
-  tuple_array  : (string * int * int list) list;
-  sub_array    : (string * int * string) list;
-}
 
 val print_t : t -> unit
 val print_exp : exp -> unit
@@ -82,6 +76,4 @@ val has_call : t -> bool
 val is_mincaml : string -> bool
 val concat : t -> Id.t * Type.t -> t -> t
 
-val globals : global
-val global_size : unit -> int
 val callee_save_funs : (string * string list) list
