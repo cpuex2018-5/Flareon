@@ -183,15 +183,15 @@ rotate_quadratic_matrix_ret:
 	addi	sp, sp, 24
 	jr	ra
 read_nth_object_2727:
-	addi	sp, sp, -28
-	sw	ra, 24(sp)
+	addi	sp, sp, -24
+	sw	ra, 20(sp)
 	sw	a0, 0(sp)	# save
 	call	min_caml_read_int
 	li	t6, -1
 	bne	a0, t6, .read_nth_object_else_1
 	li	a0, 0
-	lw	ra, 24(sp)
-	addi	sp, sp, 28
+	lw	ra, 20(sp)
+	addi	sp, sp, 24
 	jr	ra
 .read_nth_object_else_1:
 	sw	a0, 4(sp)	# save
@@ -200,23 +200,20 @@ read_nth_object_2727:
 	call	min_caml_read_int
 	sw	a0, 12(sp)	# save
 	call	min_caml_read_int
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
-	fsw	fa0, 16(sp)	# save
 	call	min_caml_read_float
 	fsw	fa0, 0(a1)
 	call	min_caml_read_float
 	fsw	fa0, 4(a1)
 	call	min_caml_read_float
 	fsw	fa0, 8(a1)
-	flw	fa0, 16(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	call	min_caml_read_float
@@ -228,19 +225,17 @@ read_nth_object_2727:
 	call	min_caml_read_float
 	fle	a3, fzero, fa0
 	xori	a3, a3, 1
-	flw	fa0, 16(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
 	mv	a4, gp
 	addi	gp, gp, 8
 	call	min_caml_read_float
 	fsw	fa0, 0(a4)
 	call	min_caml_read_float
 	fsw	fa0, 4(a4)
-	flw	fa0, 16(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	call	min_caml_read_float
@@ -249,13 +244,12 @@ read_nth_object_2727:
 	fsw	fa0, 4(a5)
 	call	min_caml_read_float
 	fsw	fa0, 8(a5)
-	flw	fa0, 16(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a6, gp
 	addi	gp, gp, 12
-	sw	a1, 20(sp)	# save
+	sw	a1, 16(sp)	# save
 	mv	a1, a6
 	beq	a0, zero, .read_nth_object_cont_2
 	call	min_caml_read_float
@@ -276,11 +270,10 @@ read_nth_object_2727:
 .read_nth_object_else_3:
 	mv	a7, a3
 .read_nth_object_cont_4:
-	flw	fa0, 16(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	s1, gp
 	addi	gp, gp, 16
 	sw	s1, 40(gp)
@@ -289,7 +282,7 @@ read_nth_object_2727:
 	sw	a4, 28(gp)
 	sw	a7, 24(gp)
 	sw	a2, 20(gp)
-	lw	a2, 20(sp)	# restore
+	lw	a2, 16(sp)	# restore
 	sw	a2, 16(gp)
 	sw	a0, 12(gp)
 	lw	a4, 12(sp)	# restore
@@ -400,8 +393,8 @@ read_nth_object_2727:
 .read_nth_object_cont_24:
 	li	a0, 1
 read_nth_object_ret:
-	lw	ra, 24(sp)
-	addi	sp, sp, 28
+	lw	ra, 20(sp)
+	addi	sp, sp, 24
 	jr	ra
 read_object_2729:
 	addi	sp, sp, -36
@@ -2570,13 +2563,12 @@ solver_fast2_ret:
 	addi	sp, sp, 4
 	jr	ra
 setup_rect_table_2825:
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
-	fsw	fa0, 16(gp)
-	fsw	fa0, 20(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
+	fsw	fzero, 16(gp)
+	fsw	fzero, 20(gp)
 	mv	a2, gp
 	addi	gp, gp, 24
 	flw	fa0, 0(a0)
@@ -2649,12 +2641,11 @@ setup_rect_table_2825:
 setup_rect_table_ret:
 	jr	ra
 setup_second_table_2831:
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
-	fsw	fa0, 16(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
+	fsw	fzero, 16(gp)
 	mv	a2, gp
 	addi	gp, gp, 20
 	flw	fa0, 0(a0)
@@ -2776,11 +2767,10 @@ iter_setup_dirvec_constants_2834:
 	b	.iter_setup_dirvec_constants_cont_2
 .iter_setup_dirvec_constants_else_1:
 	bnei	a5, 2, .iter_setup_dirvec_constants_else_3
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	a2, gp
 	addi	gp, gp, 16
 	flw	fa0, 0(a0)
@@ -2850,11 +2840,10 @@ iter_setup_dirvec_constants_2834:
 	b	.iter_setup_dirvec_constants_cont_8
 .iter_setup_dirvec_constants_else_7:
 	bnei	a4, 2, .iter_setup_dirvec_constants_else_9
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	a1, gp
 	addi	gp, gp, 16
 	lw	a4, 4(sp)	# restore
@@ -2940,11 +2929,10 @@ setup_dirvec_constants_2837:
 	b	.setup_dirvec_constants_cont_2
 .setup_dirvec_constants_else_1:
 	bnei	a5, 2, .setup_dirvec_constants_else_3
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	a2, gp
 	addi	gp, gp, 16
 	flw	fa0, 0(a0)
@@ -11708,15 +11696,14 @@ scan_line_ret:
 	addi	sp, sp, 68
 	jr	ra
 create_pixel_3016:
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a1, 0(gp)
@@ -11726,27 +11713,27 @@ create_pixel_3016:
 	sw	a1, 16(gp)
 	mv	a1, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	sw	a2, 4(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	sw	a2, 8(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	sw	a2, 12(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	sw	a2, 16(a1)
@@ -11766,9 +11753,9 @@ create_pixel_3016:
 	sw	a3, 16(gp)
 	mv	a3, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 0(gp)
@@ -11778,33 +11765,33 @@ create_pixel_3016:
 	sw	a4, 16(gp)
 	mv	a4, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 4(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 8(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 12(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 16(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 0(gp)
@@ -11814,27 +11801,27 @@ create_pixel_3016:
 	sw	a5, 16(gp)
 	mv	a5, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a6, gp
 	addi	gp, gp, 12
 	sw	a6, 4(a5)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a6, gp
 	addi	gp, gp, 12
 	sw	a6, 8(a5)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a6, gp
 	addi	gp, gp, 12
 	sw	a6, 12(a5)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a6, gp
 	addi	gp, gp, 12
 	sw	a6, 16(a5)
@@ -11842,9 +11829,9 @@ create_pixel_3016:
 	sw	a6, 0(gp)
 	mv	a6, gp
 	addi	gp, gp, 4
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 0(gp)
@@ -11854,27 +11841,27 @@ create_pixel_3016:
 	sw	a7, 16(gp)
 	mv	a7, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 4(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 8(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 12(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 16(a7)
@@ -11891,18 +11878,17 @@ create_pixel_3016:
 create_pixel_ret:
 	jr	ra
 init_line_elements_3018:
-	addi	sp, sp, -20
-	sw	ra, 16(sp)
+	addi	sp, sp, -16
+	sw	ra, 12(sp)
 	blt	a1, zero, .init_line_elements_else_1
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
 	sw	a3, 0(gp)
@@ -11912,27 +11898,27 @@ init_line_elements_3018:
 	sw	a3, 16(gp)
 	mv	a3, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 4(a3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 8(a3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 12(a3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 16(a3)
@@ -11952,9 +11938,9 @@ init_line_elements_3018:
 	sw	a5, 16(gp)
 	mv	a5, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a6, gp
 	addi	gp, gp, 12
 	sw	a6, 0(gp)
@@ -11964,33 +11950,33 @@ init_line_elements_3018:
 	sw	a6, 16(gp)
 	mv	a6, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 4(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 8(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 12(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 16(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 0(gp)
@@ -12000,27 +11986,27 @@ init_line_elements_3018:
 	sw	a7, 16(gp)
 	mv	a7, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 4(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 8(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 12(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 16(a7)
@@ -12028,9 +12014,9 @@ init_line_elements_3018:
 	sw	s1, 0(gp)
 	mv	s1, gp
 	addi	gp, gp, 4
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 0(gp)
@@ -12040,27 +12026,27 @@ init_line_elements_3018:
 	sw	s2, 16(gp)
 	mv	s2, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 4(s2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 8(s2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 12(s2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 16(s2)
@@ -12079,26 +12065,24 @@ init_line_elements_3018:
 	sw	a2, 0(t6)
 	addi	a1, a1, -1
 	blt	a1, zero, .init_line_elements_else_2
-	fsw	fa0, 0(sp)	# save
-	sw	a0, 4(sp)	# save
-	sw	a1, 8(sp)	# save
+	sw	a0, 0(sp)	# save
+	sw	a1, 4(sp)	# save
 	call	create_pixel_3016
-	lw	a1, 8(sp)	# restore
+	lw	a1, 4(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 4(sp)	# restore
+	lw	a3, 0(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, .init_line_elements_else_3
-	flw	fa0, 0(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	sw	a2, 0(gp)
@@ -12108,27 +12092,27 @@ init_line_elements_3018:
 	sw	a2, 16(gp)
 	mv	a2, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 4(a2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 8(a2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 12(a2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 16(a2)
@@ -12148,9 +12132,9 @@ init_line_elements_3018:
 	sw	a5, 16(gp)
 	mv	a5, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a6, gp
 	addi	gp, gp, 12
 	sw	a6, 0(gp)
@@ -12160,33 +12144,33 @@ init_line_elements_3018:
 	sw	a6, 16(gp)
 	mv	a6, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 4(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 8(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 12(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 16(a6)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 0(gp)
@@ -12196,27 +12180,27 @@ init_line_elements_3018:
 	sw	a7, 16(gp)
 	mv	a7, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 4(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 8(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 12(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 16(a7)
@@ -12224,9 +12208,9 @@ init_line_elements_3018:
 	sw	s1, 0(gp)
 	mv	s1, gp
 	addi	gp, gp, 4
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 0(gp)
@@ -12236,27 +12220,27 @@ init_line_elements_3018:
 	sw	s2, 16(gp)
 	mv	s2, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 4(s2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 8(s2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 12(s2)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 16(s2)
@@ -12275,37 +12259,37 @@ init_line_elements_3018:
 	sw	a1, 0(t6)
 	addi	a0, a0, -1
 	blt	a0, zero, .init_line_elements_else_4
-	sw	a0, 12(sp)	# save
+	sw	a0, 8(sp)	# save
 	call	create_pixel_3016
-	lw	a1, 12(sp)	# restore
+	lw	a1, 8(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 4(sp)	# restore
+	lw	a3, 0(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 	addi	a1, a1, -1
 	mv	a0, a3
 	call	init_line_elements_3018
-	lw	ra, 16(sp)
-	addi	sp, sp, 20
+	lw	ra, 12(sp)
+	addi	sp, sp, 16
 	jr	ra
 .init_line_elements_else_4:
 	mv	a0, a3
-	lw	ra, 16(sp)
-	addi	sp, sp, 20
+	lw	ra, 12(sp)
+	addi	sp, sp, 16
 	jr	ra
 .init_line_elements_else_3:
 	mv	a0, a3
-	lw	ra, 16(sp)
-	addi	sp, sp, 20
+	lw	ra, 12(sp)
+	addi	sp, sp, 16
 	jr	ra
 .init_line_elements_else_2:
-	lw	ra, 16(sp)
-	addi	sp, sp, 20
+	lw	ra, 12(sp)
+	addi	sp, sp, 16
 	jr	ra
 .init_line_elements_else_1:
 init_line_elements_ret:
-	lw	ra, 16(sp)
-	addi	sp, sp, 20
+	lw	ra, 12(sp)
+	addi	sp, sp, 16
 	jr	ra
 calc_dirvec_3028:
 	addi	sp, sp, -28
@@ -12869,10 +12853,9 @@ create_dirvec_elements_3047:
 	addi	sp, sp, -40
 	sw	ra, 36(sp)
 	blt	a1, zero, create_dirvec_elements_ret
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	sw	a1, 0(sp)	# save
@@ -12892,9 +12875,9 @@ create_dirvec_elements_3047:
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, create_dirvec_elements_ret
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a0, 8(sp)	# save
@@ -12910,9 +12893,9 @@ create_dirvec_elements_3047:
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, create_dirvec_elements_ret
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a0, 12(sp)	# save
@@ -12928,9 +12911,9 @@ create_dirvec_elements_3047:
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, create_dirvec_elements_ret
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a0, 16(sp)	# save
@@ -12946,9 +12929,9 @@ create_dirvec_elements_3047:
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, create_dirvec_elements_ret
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a0, 20(sp)	# save
@@ -12964,9 +12947,9 @@ create_dirvec_elements_3047:
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, create_dirvec_elements_ret
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a0, 24(sp)	# save
@@ -12982,9 +12965,9 @@ create_dirvec_elements_3047:
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, create_dirvec_elements_ret
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a0, 28(sp)	# save
@@ -13000,9 +12983,9 @@ create_dirvec_elements_3047:
 	sw	a0, 0(t6)
 	addi	a0, a1, -1
 	blt	a0, zero, create_dirvec_elements_ret
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	sw	a0, 32(sp)	# save
@@ -13024,13 +13007,12 @@ create_dirvec_elements_ret:
 	addi	sp, sp, 40
 	jr	ra
 create_dirvecs_3050:
-	addi	sp, sp, -44
-	sw	ra, 40(sp)
+	addi	sp, sp, -40
+	sw	ra, 36(sp)
 	blt	a0, zero, create_dirvecs_ret
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	lda	a2, min_caml_n_objects
@@ -13168,9 +13150,9 @@ create_dirvecs_3050:
 	swl	a0, min_caml_dirvecs(a3)
 	slli	a0, a1, 2
 	lwl	a0, min_caml_dirvecs(a0)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
 	mv	a1, a3
@@ -13183,9 +13165,9 @@ create_dirvecs_3050:
 	addi	gp, gp, 8
 	lw	a1, 4(sp)	# restore
 	sw	a0, 472(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13197,9 +13179,9 @@ create_dirvecs_3050:
 	addi	gp, gp, 8
 	lw	a1, 4(sp)	# restore
 	sw	a0, 468(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13211,9 +13193,9 @@ create_dirvecs_3050:
 	addi	gp, gp, 8
 	lw	a1, 4(sp)	# restore
 	sw	a0, 464(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13225,9 +13207,9 @@ create_dirvecs_3050:
 	addi	gp, gp, 8
 	lw	a1, 4(sp)	# restore
 	sw	a0, 460(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13239,9 +13221,9 @@ create_dirvecs_3050:
 	addi	gp, gp, 8
 	lw	a1, 4(sp)	# restore
 	sw	a0, 456(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13253,9 +13235,9 @@ create_dirvecs_3050:
 	addi	gp, gp, 8
 	lw	a1, 4(sp)	# restore
 	sw	a0, 452(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13269,7 +13251,6 @@ create_dirvecs_3050:
 	sw	a0, 448(a1)
 	li	a0, 111
 	sw	a2, 8(sp)	# save
-	fsw	fa0, 12(sp)	# save
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
@@ -13277,13 +13258,12 @@ create_dirvecs_3050:
 	lw	a0, 0(sp)	# restore
 	addi	a0, a0, -1
 	blt	a0, zero, create_dirvecs_ret
-	flw	fa0, 12(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
-	sw	a0, 16(sp)	# save
+	sw	a0, 12(sp)	# save
 	lw	a2, 8(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
@@ -13413,29 +13393,29 @@ create_dirvecs_3050:
 	sw	a0, 476(gp)
 	mv	a0, gp
 	addi	gp, gp, 480
-	lw	a1, 16(sp)	# restore
+	lw	a1, 12(sp)	# restore
 	slli	a3, a1, 2
 	swl	a0, min_caml_dirvecs(a3)
 	slli	a0, a1, 2
 	lwl	a0, min_caml_dirvecs(a0)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
 	mv	a1, a3
-	sw	a0, 20(sp)	# save
+	sw	a0, 16(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
 	sw	a0, 4(gp)
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 20(sp)	# restore
+	lw	a1, 16(sp)	# restore
 	sw	a0, 472(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13445,11 +13425,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 20(sp)	# restore
+	lw	a1, 16(sp)	# restore
 	sw	a0, 468(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13459,11 +13439,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 20(sp)	# restore
+	lw	a1, 16(sp)	# restore
 	sw	a0, 464(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13473,11 +13453,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 20(sp)	# restore
+	lw	a1, 16(sp)	# restore
 	sw	a0, 460(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13487,11 +13467,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 20(sp)	# restore
+	lw	a1, 16(sp)	# restore
 	sw	a0, 456(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13501,23 +13481,22 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 20(sp)	# restore
+	lw	a1, 16(sp)	# restore
 	sw	a0, 452(a1)
 	li	a0, 112
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
 	call	create_dirvec_elements_3047
-	lw	a0, 16(sp)	# restore
+	lw	a0, 12(sp)	# restore
 	addi	a0, a0, -1
 	blt	a0, zero, create_dirvecs_ret
-	flw	fa0, 12(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
-	sw	a0, 24(sp)	# save
+	sw	a0, 20(sp)	# save
 	lw	a2, 8(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
@@ -13647,29 +13626,29 @@ create_dirvecs_3050:
 	sw	a0, 476(gp)
 	mv	a0, gp
 	addi	gp, gp, 480
-	lw	a1, 24(sp)	# restore
+	lw	a1, 20(sp)	# restore
 	slli	a3, a1, 2
 	swl	a0, min_caml_dirvecs(a3)
 	slli	a0, a1, 2
 	lwl	a0, min_caml_dirvecs(a0)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
 	mv	a1, a3
-	sw	a0, 28(sp)	# save
+	sw	a0, 24(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
 	sw	a0, 4(gp)
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 28(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	sw	a0, 472(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13679,11 +13658,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 28(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	sw	a0, 468(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13693,11 +13672,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 28(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	sw	a0, 464(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13707,11 +13686,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 28(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	sw	a0, 460(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13721,23 +13700,22 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 28(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	sw	a0, 456(a1)
 	li	a0, 113
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
 	call	create_dirvec_elements_3047
-	lw	a0, 24(sp)	# restore
+	lw	a0, 20(sp)	# restore
 	addi	a0, a0, -1
 	blt	a0, zero, create_dirvecs_ret
-	flw	fa0, 12(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
-	sw	a0, 32(sp)	# save
+	sw	a0, 28(sp)	# save
 	lw	a2, 8(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
@@ -13867,29 +13845,29 @@ create_dirvecs_3050:
 	sw	a0, 476(gp)
 	mv	a0, gp
 	addi	gp, gp, 480
-	lw	a1, 32(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	slli	a3, a1, 2
 	swl	a0, min_caml_dirvecs(a3)
 	slli	a0, a1, 2
 	lwl	a0, min_caml_dirvecs(a0)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
 	mv	a1, a3
-	sw	a0, 36(sp)	# save
+	sw	a0, 32(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
 	sw	a0, 4(gp)
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 36(sp)	# restore
+	lw	a1, 32(sp)	# restore
 	sw	a0, 472(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13899,11 +13877,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 36(sp)	# restore
+	lw	a1, 32(sp)	# restore
 	sw	a0, 468(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13913,11 +13891,11 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 36(sp)	# restore
+	lw	a1, 32(sp)	# restore
 	sw	a0, 464(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -13927,19 +13905,19 @@ create_dirvecs_3050:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 36(sp)	# restore
+	lw	a1, 32(sp)	# restore
 	sw	a0, 460(a1)
 	li	a0, 114
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
 	call	create_dirvec_elements_3047
-	lw	a0, 32(sp)	# restore
+	lw	a0, 28(sp)	# restore
 	addi	a0, a0, -1
 	call	create_dirvecs_3050
 create_dirvecs_ret:
-	lw	ra, 40(sp)
-	addi	sp, sp, 44
+	lw	ra, 36(sp)
+	addi	sp, sp, 40
 	jr	ra
 init_dirvec_constants_3052:
 	addi	sp, sp, -40
@@ -13986,11 +13964,10 @@ init_dirvec_constants_3052:
 	b	.init_dirvec_constants_cont_3
 .init_dirvec_constants_else_2:
 	bnei	a6, 2, .init_dirvec_constants_else_4
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	a1, gp
 	addi	gp, gp, 16
 	flw	fa0, 0(a0)
@@ -14106,11 +14083,10 @@ init_vecset_constants_3055:
 	b	.init_vecset_constants_cont_3
 .init_vecset_constants_else_2:
 	bnei	a6, 2, .init_vecset_constants_else_4
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
-	fsw	fa0, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	a1, gp
 	addi	gp, gp, 16
 	flw	fa0, 0(a0)
@@ -14222,8 +14198,8 @@ init_vecset_constants_ret:
 	addi	sp, sp, 48
 	jr	ra
 setup_rect_reflection_3066:
-	addi	sp, sp, -100
-	sw	ra, 96(sp)
+	addi	sp, sp, -96
+	sw	ra, 92(sp)
 	slli	a0, a0, 2
 	lda	a2, min_caml_n_reflections
 	lw	a3, 0(a2)
@@ -14240,10 +14216,9 @@ setup_rect_reflection_3066:
 	fneg	fa3, fa3
 	addi	a4, a0, 1
 	flw	fa4, 0(a1)
-	fmv	fa5, fzero
-	fsw	fa5, 0(gp)
-	fsw	fa5, 4(gp)
-	fsw	fa5, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a1, 0(sp)	# save
@@ -14266,62 +14241,61 @@ setup_rect_reflection_3066:
 	fsw	fa3, 16(sp)	# save
 	fsw	fa1, 20(sp)	# save
 	sw	a5, 24(sp)	# save
-	fsw	fa5, 28(sp)	# save
-	sw	a3, 32(sp)	# save
-	sw	a4, 36(sp)	# save
-	sw	a6, 40(sp)	# save
-	fsw	fa0, 44(sp)	# save
+	sw	a3, 28(sp)	# save
+	sw	a4, 32(sp)	# save
+	sw	a6, 36(sp)	# save
+	fsw	fa0, 40(sp)	# save
 	blt	a7, zero, .setup_rect_reflection_cont_1
 	slli	s1, a7, 2
 	lwl	s1, min_caml_objects(s1)
 	lw	s2, 16(s1)
 	lw	s3, 4(s1)
-	sw	a7, 48(sp)	# save
+	sw	a7, 44(sp)	# save
 	bnei	s3, 1, .setup_rect_reflection_else_2
-	sw	a0, 52(sp)	# save
+	sw	a0, 48(sp)	# save
 	mv	a0, a1
 	mv	a1, s1
 	call	setup_rect_table_2825
-	lw	a1, 48(sp)	# restore
+	lw	a1, 44(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 52(sp)	# restore
+	lw	a3, 48(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 	b	.setup_rect_reflection_cont_3
 .setup_rect_reflection_else_2:
 	bnei	s3, 2, .setup_rect_reflection_else_4
-	fsw	fa5, 0(gp)
-	fsw	fa5, 4(gp)
-	fsw	fa5, 8(gp)
-	fsw	fa5, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	s1, gp
 	addi	gp, gp, 16
 	flw	fa4, 0(a1)
-	flw	fa6, 0(s2)
-	fmul	fa4, fa4, fa6
-	flw	fa6, 4(a1)
-	flw	fa7, 4(s2)
-	fmul	fa6, fa6, fa7
-	fadd	fa4, fa4, fa6
-	flw	fa6, 8(a1)
-	flw	fa7, 8(s2)
-	fmul	fa6, fa6, fa7
-	fadd	fa4, fa4, fa6
+	flw	fa5, 0(s2)
+	fmul	fa4, fa4, fa5
+	flw	fa5, 4(a1)
+	flw	fa6, 4(s2)
+	fmul	fa5, fa5, fa6
+	fadd	fa4, fa4, fa5
+	flw	fa5, 8(a1)
+	flw	fa6, 8(s2)
+	fmul	fa5, fa5, fa6
+	fadd	fa4, fa4, fa5
 	fle	a1, fa4, fzero
 	bne	a1, zero, .setup_rect_reflection_else_6
-	fli	fa6, l_data_6
-	fdiv	fa6, fa6, fa4
-	fsw	fa6, 0(s1)
-	flw	fa6, 0(s2)
-	fdiv	fa6, fa6, fa4
-	fneg	fa6, fa6
-	fsw	fa6, 4(s1)
-	flw	fa6, 4(s2)
-	fdiv	fa6, fa6, fa4
-	fneg	fa6, fa6
-	fsw	fa6, 8(s1)
-	flw	fa6, 8(s2)
-	fdiv	fa4, fa6, fa4
+	fli	fa5, l_data_6
+	fdiv	fa5, fa5, fa4
+	fsw	fa5, 0(s1)
+	flw	fa5, 0(s2)
+	fdiv	fa5, fa5, fa4
+	fneg	fa5, fa5
+	fsw	fa5, 4(s1)
+	flw	fa5, 4(s2)
+	fdiv	fa5, fa5, fa4
+	fneg	fa5, fa5
+	fsw	fa5, 8(s1)
+	flw	fa5, 8(s2)
+	fdiv	fa4, fa5, fa4
 	fneg	fa4, fa4
 	fsw	fa4, 12(s1)
 	b	.setup_rect_reflection_cont_7
@@ -14333,31 +14307,31 @@ setup_rect_reflection_3066:
 	sw	s1, 0(t6)
 	b	.setup_rect_reflection_cont_5
 .setup_rect_reflection_else_4:
-	sw	a0, 52(sp)	# save
+	sw	a0, 48(sp)	# save
 	mv	a0, a1
 	mv	a1, s1
 	call	setup_second_table_2831
-	lw	a1, 48(sp)	# restore
+	lw	a1, 44(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 52(sp)	# restore
+	lw	a3, 48(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 .setup_rect_reflection_cont_5:
 .setup_rect_reflection_cont_3:
-	lw	a0, 48(sp)	# restore
+	lw	a0, 44(sp)	# restore
 	addi	a1, a0, -1
-	lw	a0, 40(sp)	# restore
+	lw	a0, 36(sp)	# restore
 	call	iter_setup_dirvec_constants_2834
 .setup_rect_reflection_cont_1:
-	flw	fa0, 44(sp)	# restore
+	flw	fa0, 40(sp)	# restore
 	fsw	fa0, 8(gp)
-	lw	a0, 40(sp)	# restore
-	sw	a0, 4(gp)
 	lw	a0, 36(sp)	# restore
+	sw	a0, 4(gp)
+	lw	a0, 32(sp)	# restore
 	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	lw	a1, 32(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	slli	a2, a1, 2
 	swl	a0, min_caml_reflections(a2)
 	addi	a0, a1, 1
@@ -14365,14 +14339,13 @@ setup_rect_reflection_3066:
 	addi	a3, a2, 2
 	lw	a4, 0(sp)	# restore
 	flw	fa1, 4(a4)
-	flw	fa2, 28(sp)	# restore
-	fsw	fa2, 0(gp)
-	fsw	fa2, 4(gp)
-	fsw	fa2, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	mv	a1, a5
-	sw	a0, 56(sp)	# save
+	sw	a0, 52(sp)	# save
 	lw	a5, 24(sp)	# restore
 	lw	a0, 0(a5)
 	call	min_caml_create_array
@@ -14380,66 +14353,66 @@ setup_rect_reflection_3066:
 	sw	a1, 0(gp)
 	mv	a6, gp
 	addi	gp, gp, 8
-	flw	fa3, 20(sp)	# restore
-	fsw	fa3, 0(a1)
+	flw	fa2, 20(sp)	# restore
+	fsw	fa2, 0(a1)
 	fsw	fa1, 4(a1)
 	flw	fa1, 16(sp)	# restore
 	fsw	fa1, 8(a1)
 	lw	a7, 0(a5)
 	addi	a7, a7, -1
-	sw	a3, 60(sp)	# save
-	sw	a6, 64(sp)	# save
+	sw	a3, 56(sp)	# save
+	sw	a6, 60(sp)	# save
 	blt	a7, zero, .setup_rect_reflection_cont_8
 	slli	s1, a7, 2
 	lwl	s1, min_caml_objects(s1)
 	lw	s2, 16(s1)
 	lw	s3, 4(s1)
-	sw	a7, 68(sp)	# save
+	sw	a7, 64(sp)	# save
 	bnei	s3, 1, .setup_rect_reflection_else_9
-	sw	a0, 72(sp)	# save
+	sw	a0, 68(sp)	# save
 	mv	a0, a1
 	mv	a1, s1
 	call	setup_rect_table_2825
-	lw	a1, 68(sp)	# restore
+	lw	a1, 64(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 72(sp)	# restore
+	lw	a3, 68(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 	b	.setup_rect_reflection_cont_10
 .setup_rect_reflection_else_9:
 	bnei	s3, 2, .setup_rect_reflection_else_11
-	fsw	fa2, 0(gp)
-	fsw	fa2, 4(gp)
-	fsw	fa2, 8(gp)
-	fsw	fa2, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	s1, gp
 	addi	gp, gp, 16
 	flw	fa1, 0(a1)
-	flw	fa4, 0(s2)
-	fmul	fa1, fa1, fa4
-	flw	fa4, 4(a1)
-	flw	fa5, 4(s2)
-	fmul	fa4, fa4, fa5
-	fadd	fa1, fa1, fa4
-	flw	fa4, 8(a1)
-	flw	fa5, 8(s2)
-	fmul	fa4, fa4, fa5
-	fadd	fa1, fa1, fa4
+	flw	fa3, 0(s2)
+	fmul	fa1, fa1, fa3
+	flw	fa3, 4(a1)
+	flw	fa4, 4(s2)
+	fmul	fa3, fa3, fa4
+	fadd	fa1, fa1, fa3
+	flw	fa3, 8(a1)
+	flw	fa4, 8(s2)
+	fmul	fa3, fa3, fa4
+	fadd	fa1, fa1, fa3
 	fle	a1, fa1, fzero
 	bne	a1, zero, .setup_rect_reflection_else_13
-	fli	fa4, l_data_6
-	fdiv	fa4, fa4, fa1
-	fsw	fa4, 0(s1)
-	flw	fa4, 0(s2)
-	fdiv	fa4, fa4, fa1
-	fneg	fa4, fa4
-	fsw	fa4, 4(s1)
-	flw	fa4, 4(s2)
-	fdiv	fa4, fa4, fa1
-	fneg	fa4, fa4
-	fsw	fa4, 8(s1)
-	flw	fa4, 8(s2)
-	fdiv	fa1, fa4, fa1
+	fli	fa3, l_data_6
+	fdiv	fa3, fa3, fa1
+	fsw	fa3, 0(s1)
+	flw	fa3, 0(s2)
+	fdiv	fa3, fa3, fa1
+	fneg	fa3, fa3
+	fsw	fa3, 4(s1)
+	flw	fa3, 4(s2)
+	fdiv	fa3, fa3, fa1
+	fneg	fa3, fa3
+	fsw	fa3, 8(s1)
+	flw	fa3, 8(s2)
+	fdiv	fa1, fa3, fa1
 	fneg	fa1, fa1
 	fsw	fa1, 12(s1)
 	b	.setup_rect_reflection_cont_14
@@ -14451,46 +14424,45 @@ setup_rect_reflection_3066:
 	sw	s1, 0(t6)
 	b	.setup_rect_reflection_cont_12
 .setup_rect_reflection_else_11:
-	sw	a0, 72(sp)	# save
+	sw	a0, 68(sp)	# save
 	mv	a0, a1
 	mv	a1, s1
 	call	setup_second_table_2831
-	lw	a1, 68(sp)	# restore
+	lw	a1, 64(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 72(sp)	# restore
+	lw	a3, 68(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 .setup_rect_reflection_cont_12:
 .setup_rect_reflection_cont_10:
-	lw	a0, 68(sp)	# restore
-	addi	a1, a0, -1
 	lw	a0, 64(sp)	# restore
+	addi	a1, a0, -1
+	lw	a0, 60(sp)	# restore
 	call	iter_setup_dirvec_constants_2834
 .setup_rect_reflection_cont_8:
-	flw	fa0, 44(sp)	# restore
+	flw	fa0, 40(sp)	# restore
 	fsw	fa0, 8(gp)
-	lw	a0, 64(sp)	# restore
-	sw	a0, 4(gp)
 	lw	a0, 60(sp)	# restore
+	sw	a0, 4(gp)
+	lw	a0, 56(sp)	# restore
 	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	lw	a1, 56(sp)	# restore
+	lw	a1, 52(sp)	# restore
 	slli	a1, a1, 2
 	swl	a0, min_caml_reflections(a1)
-	lw	a0, 32(sp)	# restore
+	lw	a0, 28(sp)	# restore
 	addi	a1, a0, 2
 	lw	a2, 4(sp)	# restore
 	addi	a2, a2, 3
 	lw	a3, 0(sp)	# restore
 	flw	fa1, 8(a3)
-	flw	fa2, 28(sp)	# restore
-	fsw	fa2, 0(gp)
-	fsw	fa2, 4(gp)
-	fsw	fa2, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
-	sw	a1, 76(sp)	# save
+	sw	a1, 72(sp)	# save
 	mv	a1, a3
 	lw	a3, 24(sp)	# restore
 	lw	a0, 0(a3)
@@ -14499,38 +14471,38 @@ setup_rect_reflection_3066:
 	sw	a1, 0(gp)
 	mv	a4, gp
 	addi	gp, gp, 8
-	flw	fa3, 20(sp)	# restore
-	fsw	fa3, 0(a1)
-	flw	fa3, 12(sp)	# restore
-	fsw	fa3, 4(a1)
+	flw	fa2, 20(sp)	# restore
+	fsw	fa2, 0(a1)
+	flw	fa2, 12(sp)	# restore
+	fsw	fa2, 4(a1)
 	fsw	fa1, 8(a1)
 	lw	a3, 0(a3)
 	addi	a3, a3, -1
-	sw	a2, 80(sp)	# save
-	sw	a4, 84(sp)	# save
+	sw	a2, 76(sp)	# save
+	sw	a4, 80(sp)	# save
 	blt	a3, zero, .setup_rect_reflection_cont_15
 	slli	a5, a3, 2
 	lwl	a5, min_caml_objects(a5)
 	lw	a6, 16(a5)
 	lw	a7, 4(a5)
-	sw	a3, 88(sp)	# save
+	sw	a3, 84(sp)	# save
 	bnei	a7, 1, .setup_rect_reflection_else_16
-	sw	a0, 92(sp)	# save
+	sw	a0, 88(sp)	# save
 	mv	a0, a1
 	mv	a1, a5
 	call	setup_rect_table_2825
-	lw	a1, 88(sp)	# restore
+	lw	a1, 84(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 92(sp)	# restore
+	lw	a3, 88(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 	b	.setup_rect_reflection_cont_17
 .setup_rect_reflection_else_16:
 	bnei	a7, 2, .setup_rect_reflection_else_18
-	fsw	fa2, 0(gp)
-	fsw	fa2, 4(gp)
-	fsw	fa2, 8(gp)
-	fsw	fa2, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	a5, gp
 	addi	gp, gp, 16
 	flw	fa1, 0(a1)
@@ -14570,40 +14542,40 @@ setup_rect_reflection_3066:
 	sw	a5, 0(t6)
 	b	.setup_rect_reflection_cont_19
 .setup_rect_reflection_else_18:
-	sw	a0, 92(sp)	# save
+	sw	a0, 88(sp)	# save
 	mv	a0, a1
 	mv	a1, a5
 	call	setup_second_table_2831
-	lw	a1, 88(sp)	# restore
+	lw	a1, 84(sp)	# restore
 	slli	a2, a1, 2
-	lw	a3, 92(sp)	# restore
+	lw	a3, 88(sp)	# restore
 	add	t6, a3, a2
 	sw	a0, 0(t6)
 .setup_rect_reflection_cont_19:
 .setup_rect_reflection_cont_17:
-	lw	a0, 88(sp)	# restore
-	addi	a1, a0, -1
 	lw	a0, 84(sp)	# restore
+	addi	a1, a0, -1
+	lw	a0, 80(sp)	# restore
 	call	iter_setup_dirvec_constants_2834
 .setup_rect_reflection_cont_15:
-	flw	fa0, 44(sp)	# restore
+	flw	fa0, 40(sp)	# restore
 	fsw	fa0, 8(gp)
-	lw	a0, 84(sp)	# restore
-	sw	a0, 4(gp)
 	lw	a0, 80(sp)	# restore
+	sw	a0, 4(gp)
+	lw	a0, 76(sp)	# restore
 	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	lw	a1, 76(sp)	# restore
+	lw	a1, 72(sp)	# restore
 	slli	a1, a1, 2
 	swl	a0, min_caml_reflections(a1)
-	lw	a0, 32(sp)	# restore
+	lw	a0, 28(sp)	# restore
 	addi	a0, a0, 3
 	lw	a1, 8(sp)	# restore
 	sw	a0, 0(a1)
 setup_rect_reflection_ret:
-	lw	ra, 96(sp)
-	addi	sp, sp, 100
+	lw	ra, 92(sp)
+	addi	sp, sp, 96
 	jr	ra
 setup_surface_reflection_3069:
 	addi	sp, sp, -32
@@ -14645,10 +14617,9 @@ setup_surface_reflection_3069:
 	fmul	fa1, fa2, fa1
 	flw	fa2, 8(a4)
 	fsub	fa1, fa1, fa2
-	fmv	fa2, fzero
-	fsw	fa2, 0(gp)
-	fsw	fa2, 4(gp)
-	fsw	fa2, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	lda	a4, min_caml_n_objects
@@ -14687,10 +14658,10 @@ setup_surface_reflection_3069:
 	b	.setup_surface_reflection_cont_3
 .setup_surface_reflection_else_2:
 	bnei	s1, 2, .setup_surface_reflection_else_4
-	fsw	fa2, 0(gp)
-	fsw	fa2, 4(gp)
-	fsw	fa2, 8(gp)
-	fsw	fa2, 12(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
 	mv	a6, gp
 	addi	gp, gp, 16
 	flw	fa1, 0(a1)
@@ -14795,15 +14766,14 @@ rt_3074:
 	lw	a2, 0(a1)
 	addi	a2, a2, -2
 	blt	a2, zero, .rt_cont_1
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 0(gp)
@@ -14813,27 +14783,27 @@ rt_3074:
 	sw	a4, 16(gp)
 	mv	a4, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 4(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 8(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 12(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 16(a4)
@@ -14853,9 +14823,9 @@ rt_3074:
 	sw	a6, 16(gp)
 	mv	a6, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 0(gp)
@@ -14865,33 +14835,33 @@ rt_3074:
 	sw	a7, 16(gp)
 	mv	a7, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 4(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 8(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 12(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 16(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 0(gp)
@@ -14901,27 +14871,27 @@ rt_3074:
 	sw	s1, 16(gp)
 	mv	s1, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 4(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 8(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 12(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 16(s1)
@@ -14929,9 +14899,9 @@ rt_3074:
 	sw	s2, 0(gp)
 	mv	s2, gp
 	addi	gp, gp, 4
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 0(gp)
@@ -14941,27 +14911,27 @@ rt_3074:
 	sw	s3, 16(gp)
 	mv	s3, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 4(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 8(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 12(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 16(s3)
@@ -15005,15 +14975,14 @@ rt_3074:
 	lw	a2, 0(a1)
 	addi	a2, a2, -2
 	blt	a2, zero, .rt_cont_3
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 0(gp)
@@ -15023,27 +14992,27 @@ rt_3074:
 	sw	a4, 16(gp)
 	mv	a4, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 4(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 8(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 12(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 16(a4)
@@ -15063,9 +15032,9 @@ rt_3074:
 	sw	a6, 16(gp)
 	mv	a6, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 0(gp)
@@ -15075,33 +15044,33 @@ rt_3074:
 	sw	a7, 16(gp)
 	mv	a7, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 4(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 8(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 12(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 16(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 0(gp)
@@ -15111,27 +15080,27 @@ rt_3074:
 	sw	s1, 16(gp)
 	mv	s1, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 4(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 8(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 12(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 16(s1)
@@ -15139,9 +15108,9 @@ rt_3074:
 	sw	s2, 0(gp)
 	mv	s2, gp
 	addi	gp, gp, 4
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 0(gp)
@@ -15151,27 +15120,27 @@ rt_3074:
 	sw	s3, 16(gp)
 	mv	s3, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 4(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 8(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 12(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 16(s3)
@@ -15215,15 +15184,14 @@ rt_3074:
 	lw	a2, 0(a1)
 	addi	a2, a2, -2
 	blt	a2, zero, .rt_cont_5
-	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a4, gp
 	addi	gp, gp, 12
 	sw	a4, 0(gp)
@@ -15233,27 +15201,27 @@ rt_3074:
 	sw	a4, 16(gp)
 	mv	a4, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 4(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 8(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 12(a4)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a5, gp
 	addi	gp, gp, 12
 	sw	a5, 16(a4)
@@ -15273,9 +15241,9 @@ rt_3074:
 	sw	a6, 16(gp)
 	mv	a6, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a7, gp
 	addi	gp, gp, 12
 	sw	a7, 0(gp)
@@ -15285,33 +15253,33 @@ rt_3074:
 	sw	a7, 16(gp)
 	mv	a7, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 4(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 8(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 12(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 16(a7)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 0(gp)
@@ -15321,27 +15289,27 @@ rt_3074:
 	sw	s1, 16(gp)
 	mv	s1, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 4(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 8(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 12(s1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s2, gp
 	addi	gp, gp, 12
 	sw	s2, 16(s1)
@@ -15349,9 +15317,9 @@ rt_3074:
 	sw	s2, 0(gp)
 	mv	s2, gp
 	addi	gp, gp, 4
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 0(gp)
@@ -15361,27 +15329,27 @@ rt_3074:
 	sw	s3, 16(gp)
 	mv	s3, gp
 	addi	gp, gp, 20
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 4(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 8(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 12(s3)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 16(s3)
@@ -15837,9 +15805,9 @@ rt_3074:
 	call	min_caml_print_char
 	lda	a0, min_caml_dirvecs
 	fmv	fa0, fzero
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
 	lda	a2, min_caml_n_objects
@@ -15975,9 +15943,9 @@ rt_3074:
 	lw	a1, 188(sp)	# restore
 	sw	a0, 16(a1)
 	lw	a0, 16(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a3, gp
 	addi	gp, gp, 12
 	mv	a1, a3
@@ -15990,9 +15958,9 @@ rt_3074:
 	addi	gp, gp, 8
 	lw	a1, 192(sp)	# restore
 	sw	a0, 472(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -16004,9 +15972,9 @@ rt_3074:
 	addi	gp, gp, 8
 	lw	a1, 192(sp)	# restore
 	sw	a0, 468(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -16018,9 +15986,9 @@ rt_3074:
 	addi	gp, gp, 8
 	lw	a1, 192(sp)	# restore
 	sw	a0, 464(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -16032,9 +16000,9 @@ rt_3074:
 	addi	gp, gp, 8
 	lw	a1, 192(sp)	# restore
 	sw	a0, 460(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -16047,20 +16015,19 @@ rt_3074:
 	lw	a1, 192(sp)	# restore
 	sw	a0, 456(a1)
 	li	a0, 113
-	sw	a2, 196(sp)	# save
-	fsw	fa0, 200(sp)	# save
+	fsw	fa0, 196(sp)	# save
+	sw	a2, 200(sp)	# save
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
 	call	create_dirvec_elements_3047
-	flw	fa0, 200(sp)	# restore
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
-	lw	a0, 196(sp)	# restore
+	lw	a0, 200(sp)	# restore
 	lw	a0, 0(a0)
 	call	min_caml_create_array
 	sw	a0, 4(gp)
@@ -16192,14 +16159,14 @@ rt_3074:
 	lw	a1, 188(sp)	# restore
 	sw	a0, 12(a1)
 	lw	a0, 12(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a2, gp
 	addi	gp, gp, 12
 	mv	a1, a2
 	sw	a0, 204(sp)	# save
-	lw	a2, 196(sp)	# restore
+	lw	a2, 200(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
 	sw	a0, 4(gp)
@@ -16208,9 +16175,9 @@ rt_3074:
 	addi	gp, gp, 8
 	lw	a1, 204(sp)	# restore
 	sw	a0, 472(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -16222,9 +16189,9 @@ rt_3074:
 	addi	gp, gp, 8
 	lw	a1, 204(sp)	# restore
 	sw	a0, 468(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -16236,9 +16203,9 @@ rt_3074:
 	addi	gp, gp, 8
 	lw	a1, 204(sp)	# restore
 	sw	a0, 464(a1)
-	fsw	fa0, 0(gp)
-	fsw	fa0, 4(gp)
-	fsw	fa0, 8(gp)
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
 	mv	a1, a0
@@ -16273,7 +16240,7 @@ rt_3074:
 	fsw	fa2, 216(sp)	# save
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 200(sp)	# restore
+	flw	fa0, 196(sp)	# restore
 	flw	fa3, 208(sp)	# restore
 	sw	a2, 220(sp)	# save
 	sw	a1, 224(sp)	# save
@@ -16288,7 +16255,7 @@ rt_3074:
 	fadd	fa2, fa0, fa2
 	li	a0, 0
 	li	a2, 2
-	flw	fa0, 200(sp)	# restore
+	flw	fa0, 196(sp)	# restore
 	flw	fa3, 208(sp)	# restore
 	lw	a1, 224(sp)	# restore
 	fmv	fa1, fa0
@@ -16335,11 +16302,11 @@ rt_3074:
 	fsw	fa0, 4(a1)
 	flw	fa0, 8(a2)
 	fsw	fa0, 8(a1)
-	lw	a1, 196(sp)	# restore
+	lw	a1, 200(sp)	# restore
 	lw	a2, 0(a1)
 	addi	a1, a2, -1
 	call	iter_setup_dirvec_constants_2834
-	lw	a0, 196(sp)	# restore
+	lw	a0, 200(sp)	# restore
 	lw	a0, 0(a0)
 	addi	a0, a0, -1
 	blt	a0, zero, .rt_cont_59
