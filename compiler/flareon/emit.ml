@@ -270,17 +270,20 @@ let f oc globals (Prog(data, fundefs, e)) =
   stackmap := [];
   funcname := "main";
   Id.resetCounter ();
+  (* ===== prologue & body ===== *)
   let buf' = g buf (NonTail("_R_0"), e) in
   let ss = stacksize () in
   let prologue = (if ss > 0 then [Raw.Add("sp", "sp", `C(-1 * ss))] else []) in
   add_prologue prologue buf'
   |> Peephole.f (* [XXX] peephole optimization *)
   |> Raw.output_buffer oc;
+  (* ===== epilogue ===== *)
   if ss > 0 then
     Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;
   Printf.fprintf oc "end:\n";
   Printf.fprintf oc "\tb\tend\n";
   List.iter (fun fundef -> h oc fundef) fundefs;
+  (* ===== data ===== *)
   Printf.fprintf oc "\t.data\n";
   if data <> [] then
     List.iter

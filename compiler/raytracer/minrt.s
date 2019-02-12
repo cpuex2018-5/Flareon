@@ -283,23 +283,22 @@ read_nth_object_2727:
 	fsw	fa0, 12(gp)
 	mv	s1, gp
 	addi	gp, gp, 16
-	mv	s2, gp
-	addi	gp, gp, 44
-	sw	s1, 40(s2)
-	sw	a1, 36(s2)
-	sw	a5, 32(s2)
-	sw	a4, 28(s2)
-	sw	a7, 24(s2)
-	sw	a2, 20(s2)
+	sw	s1, 40(gp)
+	sw	a1, 36(gp)
+	sw	a5, 32(gp)
+	sw	a4, 28(gp)
+	sw	a7, 24(gp)
+	sw	a2, 20(gp)
 	lw	a2, 20(sp)	# restore
-	sw	a2, 16(s2)
-	sw	a0, 12(s2)
+	sw	a2, 16(gp)
+	sw	a0, 12(gp)
 	lw	a4, 12(sp)	# restore
-	sw	a4, 8(s2)
-	sw	a6, 4(s2)
+	sw	a4, 8(gp)
+	sw	a6, 4(gp)
 	lw	a4, 4(sp)	# restore
-	sw	a4, 0(s2)
-	mv	a4, s2
+	sw	a4, 0(gp)
+	mv	a4, gp
+	addi	gp, gp, 44
 	lw	a5, 0(sp)	# restore
 	slli	a5, a5, 2
 	swl	a4, min_caml_objects(a5)
@@ -11879,17 +11878,16 @@ create_pixel_3016:
 	mv	s1, gp
 	addi	gp, gp, 12
 	sw	s1, 16(a7)
-	mv	s1, gp
+	sw	a7, 28(gp)
+	sw	a6, 24(gp)
+	sw	a5, 20(gp)
+	sw	a4, 16(gp)
+	sw	a3, 12(gp)
+	sw	a2, 8(gp)
+	sw	a1, 4(gp)
+	sw	a0, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 32
-	sw	a7, 28(s1)
-	sw	a6, 24(s1)
-	sw	a5, 20(s1)
-	sw	a4, 16(s1)
-	sw	a3, 12(s1)
-	sw	a2, 8(s1)
-	sw	a1, 4(s1)
-	sw	a0, 0(s1)
-	mv	a0, s1
 create_pixel_ret:
 	jr	ra
 init_line_elements_3018:
@@ -12066,17 +12064,16 @@ init_line_elements_3018:
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 16(s2)
-	mv	s3, gp
+	sw	s2, 28(gp)
+	sw	s1, 24(gp)
+	sw	a7, 20(gp)
+	sw	a6, 16(gp)
+	sw	a5, 12(gp)
+	sw	a4, 8(gp)
+	sw	a3, 4(gp)
+	sw	a2, 0(gp)
+	mv	a2, gp
 	addi	gp, gp, 32
-	sw	s2, 28(s3)
-	sw	s1, 24(s3)
-	sw	a7, 20(s3)
-	sw	a6, 16(s3)
-	sw	a5, 12(s3)
-	sw	a4, 8(s3)
-	sw	a3, 4(s3)
-	sw	a2, 0(s3)
-	mv	a2, s3
 	slli	a3, a1, 2
 	add	t6, a0, a3
 	sw	a2, 0(t6)
@@ -12263,17 +12260,16 @@ init_line_elements_3018:
 	mv	s3, gp
 	addi	gp, gp, 12
 	sw	s3, 16(s2)
-	mv	s3, gp
+	sw	s2, 28(gp)
+	sw	s1, 24(gp)
+	sw	a7, 20(gp)
+	sw	a6, 16(gp)
+	sw	a5, 12(gp)
+	sw	a4, 8(gp)
+	sw	a2, 4(gp)
+	sw	a1, 0(gp)
+	mv	a1, gp
 	addi	gp, gp, 32
-	sw	s2, 28(s3)
-	sw	s1, 24(s3)
-	sw	a7, 20(s3)
-	sw	a6, 16(s3)
-	sw	a5, 12(s3)
-	sw	a4, 8(s3)
-	sw	a2, 4(s3)
-	sw	a1, 0(s3)
-	mv	a1, s3
 	slli	a2, a0, 2
 	add	t6, a3, a2
 	sw	a1, 0(t6)
@@ -12885,11 +12881,10 @@ create_dirvec_elements_3047:
 	sw	a0, 4(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 0(sp)	# restore
 	slli	a3, a1, 2
 	lw	a4, 4(sp)	# restore
@@ -12905,11 +12900,10 @@ create_dirvec_elements_3047:
 	sw	a0, 8(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 8(sp)	# restore
 	slli	a3, a1, 2
 	add	t6, a4, a3
@@ -12924,11 +12918,10 @@ create_dirvec_elements_3047:
 	sw	a0, 12(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 12(sp)	# restore
 	slli	a3, a1, 2
 	add	t6, a4, a3
@@ -12943,11 +12936,10 @@ create_dirvec_elements_3047:
 	sw	a0, 16(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 16(sp)	# restore
 	slli	a3, a1, 2
 	add	t6, a4, a3
@@ -12962,11 +12954,10 @@ create_dirvec_elements_3047:
 	sw	a0, 20(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 20(sp)	# restore
 	slli	a3, a1, 2
 	add	t6, a4, a3
@@ -12981,11 +12972,10 @@ create_dirvec_elements_3047:
 	sw	a0, 24(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 24(sp)	# restore
 	slli	a3, a1, 2
 	add	t6, a4, a3
@@ -13000,11 +12990,10 @@ create_dirvec_elements_3047:
 	sw	a0, 28(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 28(sp)	# restore
 	slli	a3, a1, 2
 	add	t6, a4, a3
@@ -13019,11 +13008,10 @@ create_dirvec_elements_3047:
 	sw	a0, 32(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a2, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a2)
-	sw	a1, 0(a2)
-	mv	a0, a2
 	lw	a1, 32(sp)	# restore
 	slli	a2, a1, 2
 	add	t6, a4, a2
@@ -13049,11 +13037,10 @@ create_dirvecs_3050:
 	sw	a0, 0(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	sw	a0, 0(gp)
 	sw	a0, 4(gp)
 	sw	a0, 8(gp)
@@ -13190,11 +13177,10 @@ create_dirvecs_3050:
 	sw	a0, 4(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 4(sp)	# restore
 	sw	a0, 472(a1)
 	fsw	fa0, 0(gp)
@@ -13205,11 +13191,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 4(sp)	# restore
 	sw	a0, 468(a1)
 	fsw	fa0, 0(gp)
@@ -13220,11 +13205,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 4(sp)	# restore
 	sw	a0, 464(a1)
 	fsw	fa0, 0(gp)
@@ -13235,11 +13219,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 4(sp)	# restore
 	sw	a0, 460(a1)
 	fsw	fa0, 0(gp)
@@ -13250,11 +13233,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 4(sp)	# restore
 	sw	a0, 456(a1)
 	fsw	fa0, 0(gp)
@@ -13265,11 +13247,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 4(sp)	# restore
 	sw	a0, 452(a1)
 	fsw	fa0, 0(gp)
@@ -13280,11 +13261,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 4(sp)	# restore
 	sw	a0, 448(a1)
 	li	a0, 111
@@ -13307,11 +13287,10 @@ create_dirvecs_3050:
 	lw	a2, 8(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	sw	a0, 0(gp)
 	sw	a0, 4(gp)
 	sw	a0, 8(gp)
@@ -13448,11 +13427,10 @@ create_dirvecs_3050:
 	sw	a0, 20(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 20(sp)	# restore
 	sw	a0, 472(a1)
 	fsw	fa0, 0(gp)
@@ -13463,11 +13441,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 20(sp)	# restore
 	sw	a0, 468(a1)
 	fsw	fa0, 0(gp)
@@ -13478,11 +13455,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 20(sp)	# restore
 	sw	a0, 464(a1)
 	fsw	fa0, 0(gp)
@@ -13493,11 +13469,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 20(sp)	# restore
 	sw	a0, 460(a1)
 	fsw	fa0, 0(gp)
@@ -13508,11 +13483,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 20(sp)	# restore
 	sw	a0, 456(a1)
 	fsw	fa0, 0(gp)
@@ -13523,11 +13497,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 20(sp)	# restore
 	sw	a0, 452(a1)
 	li	a0, 112
@@ -13548,11 +13521,10 @@ create_dirvecs_3050:
 	lw	a2, 8(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	sw	a0, 0(gp)
 	sw	a0, 4(gp)
 	sw	a0, 8(gp)
@@ -13689,11 +13661,10 @@ create_dirvecs_3050:
 	sw	a0, 28(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 28(sp)	# restore
 	sw	a0, 472(a1)
 	fsw	fa0, 0(gp)
@@ -13704,11 +13675,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 28(sp)	# restore
 	sw	a0, 468(a1)
 	fsw	fa0, 0(gp)
@@ -13719,11 +13689,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 28(sp)	# restore
 	sw	a0, 464(a1)
 	fsw	fa0, 0(gp)
@@ -13734,11 +13703,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 28(sp)	# restore
 	sw	a0, 460(a1)
 	fsw	fa0, 0(gp)
@@ -13749,11 +13717,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 28(sp)	# restore
 	sw	a0, 456(a1)
 	li	a0, 113
@@ -13774,11 +13741,10 @@ create_dirvecs_3050:
 	lw	a2, 8(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	sw	a0, 0(gp)
 	sw	a0, 4(gp)
 	sw	a0, 8(gp)
@@ -13915,11 +13881,10 @@ create_dirvecs_3050:
 	sw	a0, 36(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 36(sp)	# restore
 	sw	a0, 472(a1)
 	fsw	fa0, 0(gp)
@@ -13930,11 +13895,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 36(sp)	# restore
 	sw	a0, 468(a1)
 	fsw	fa0, 0(gp)
@@ -13945,11 +13909,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 36(sp)	# restore
 	sw	a0, 464(a1)
 	fsw	fa0, 0(gp)
@@ -13960,11 +13923,10 @@ create_dirvecs_3050:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a2, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a2)
-	sw	a1, 0(a2)
-	mv	a0, a2
 	lw	a1, 36(sp)	# restore
 	sw	a0, 460(a1)
 	li	a0, 114
@@ -14290,10 +14252,10 @@ setup_rect_reflection_3066:
 	sw	a0, 4(sp)	# save
 	lw	a0, 0(a5)
 	call	min_caml_create_array
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
 	mv	a6, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a6)
-	sw	a1, 0(a6)
 	fsw	fa4, 0(a1)
 	fsw	fa2, 4(a1)
 	fsw	fa3, 8(a1)
@@ -14387,14 +14349,14 @@ setup_rect_reflection_3066:
 	lw	a0, 40(sp)	# restore
 	call	iter_setup_dirvec_constants_2834
 .setup_rect_reflection_cont_1:
+	flw	fa0, 44(sp)	# restore
+	fsw	fa0, 8(gp)
+	lw	a0, 40(sp)	# restore
+	sw	a0, 4(gp)
+	lw	a0, 36(sp)	# restore
+	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	flw	fa0, 44(sp)	# restore
-	fsw	fa0, 8(a0)
-	lw	a1, 40(sp)	# restore
-	sw	a1, 4(a0)
-	lw	a1, 36(sp)	# restore
-	sw	a1, 0(a0)
 	lw	a1, 32(sp)	# restore
 	slli	a2, a1, 2
 	swl	a0, min_caml_reflections(a2)
@@ -14414,10 +14376,10 @@ setup_rect_reflection_3066:
 	lw	a5, 24(sp)	# restore
 	lw	a0, 0(a5)
 	call	min_caml_create_array
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
 	mv	a6, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a6)
-	sw	a1, 0(a6)
 	flw	fa3, 20(sp)	# restore
 	fsw	fa3, 0(a1)
 	fsw	fa1, 4(a1)
@@ -14505,14 +14467,14 @@ setup_rect_reflection_3066:
 	lw	a0, 64(sp)	# restore
 	call	iter_setup_dirvec_constants_2834
 .setup_rect_reflection_cont_8:
+	flw	fa0, 44(sp)	# restore
+	fsw	fa0, 8(gp)
+	lw	a0, 64(sp)	# restore
+	sw	a0, 4(gp)
+	lw	a0, 60(sp)	# restore
+	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	flw	fa0, 44(sp)	# restore
-	fsw	fa0, 8(a0)
-	lw	a1, 64(sp)	# restore
-	sw	a1, 4(a0)
-	lw	a1, 60(sp)	# restore
-	sw	a1, 0(a0)
 	lw	a1, 56(sp)	# restore
 	slli	a1, a1, 2
 	swl	a0, min_caml_reflections(a1)
@@ -14533,10 +14495,10 @@ setup_rect_reflection_3066:
 	lw	a3, 24(sp)	# restore
 	lw	a0, 0(a3)
 	call	min_caml_create_array
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
 	mv	a4, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a4)
-	sw	a1, 0(a4)
 	flw	fa3, 20(sp)	# restore
 	fsw	fa3, 0(a1)
 	flw	fa3, 12(sp)	# restore
@@ -14624,14 +14586,14 @@ setup_rect_reflection_3066:
 	lw	a0, 84(sp)	# restore
 	call	iter_setup_dirvec_constants_2834
 .setup_rect_reflection_cont_15:
+	flw	fa0, 44(sp)	# restore
+	fsw	fa0, 8(gp)
+	lw	a0, 84(sp)	# restore
+	sw	a0, 4(gp)
+	lw	a0, 80(sp)	# restore
+	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	flw	fa0, 44(sp)	# restore
-	fsw	fa0, 8(a0)
-	lw	a1, 84(sp)	# restore
-	sw	a1, 4(a0)
-	lw	a1, 80(sp)	# restore
-	sw	a1, 0(a0)
 	lw	a1, 76(sp)	# restore
 	slli	a1, a1, 2
 	swl	a0, min_caml_reflections(a1)
@@ -14693,10 +14655,10 @@ setup_surface_reflection_3069:
 	sw	a0, 0(sp)	# save
 	lw	a0, 0(a4)
 	call	min_caml_create_array
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
 	mv	a5, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a5)
-	sw	a1, 0(a5)
 	fsw	fa3, 0(a1)
 	fsw	fa4, 4(a1)
 	fsw	fa1, 8(a1)
@@ -14784,14 +14746,14 @@ setup_surface_reflection_3069:
 	lw	a0, 12(sp)	# restore
 	call	iter_setup_dirvec_constants_2834
 .setup_surface_reflection_cont_1:
+	flw	fa0, 16(sp)	# restore
+	fsw	fa0, 8(gp)
+	lw	a0, 12(sp)	# restore
+	sw	a0, 4(gp)
+	lw	a0, 0(sp)	# restore
+	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 12
-	flw	fa0, 16(sp)	# restore
-	fsw	fa0, 8(a0)
-	lw	a1, 12(sp)	# restore
-	sw	a1, 4(a0)
-	lw	a1, 0(sp)	# restore
-	sw	a1, 0(a0)
 	lw	a1, 8(sp)	# restore
 	slli	a2, a1, 2
 	swl	a0, min_caml_reflections(a2)
@@ -15003,17 +14965,16 @@ rt_3074:
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 16(s3)
-	mv	s4, gp
+	sw	s3, 28(gp)
+	sw	s2, 24(gp)
+	sw	s1, 20(gp)
+	sw	a7, 16(gp)
+	sw	a6, 12(gp)
+	sw	a5, 8(gp)
+	sw	a4, 4(gp)
+	sw	a3, 0(gp)
+	mv	a3, gp
 	addi	gp, gp, 32
-	sw	s3, 28(s4)
-	sw	s2, 24(s4)
-	sw	s1, 20(s4)
-	sw	a7, 16(s4)
-	sw	a6, 12(s4)
-	sw	a5, 8(s4)
-	sw	a4, 4(s4)
-	sw	a3, 0(s4)
-	mv	a3, s4
 	slli	a4, a2, 2
 	add	t6, a0, a4
 	sw	a3, 0(t6)
@@ -15214,17 +15175,16 @@ rt_3074:
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 16(s3)
-	mv	s4, gp
+	sw	s3, 28(gp)
+	sw	s2, 24(gp)
+	sw	s1, 20(gp)
+	sw	a7, 16(gp)
+	sw	a6, 12(gp)
+	sw	a5, 8(gp)
+	sw	a4, 4(gp)
+	sw	a3, 0(gp)
+	mv	a3, gp
 	addi	gp, gp, 32
-	sw	s3, 28(s4)
-	sw	s2, 24(s4)
-	sw	s1, 20(s4)
-	sw	a7, 16(s4)
-	sw	a6, 12(s4)
-	sw	a5, 8(s4)
-	sw	a4, 4(s4)
-	sw	a3, 0(s4)
-	mv	a3, s4
 	slli	a4, a2, 2
 	add	t6, a0, a4
 	sw	a3, 0(t6)
@@ -15425,17 +15385,16 @@ rt_3074:
 	mv	s4, gp
 	addi	gp, gp, 12
 	sw	s4, 16(s3)
-	mv	s4, gp
+	sw	s3, 28(gp)
+	sw	s2, 24(gp)
+	sw	s1, 20(gp)
+	sw	a7, 16(gp)
+	sw	a6, 12(gp)
+	sw	a5, 8(gp)
+	sw	a4, 4(gp)
+	sw	a3, 0(gp)
+	mv	a3, gp
 	addi	gp, gp, 32
-	sw	s3, 28(s4)
-	sw	s2, 24(s4)
-	sw	s1, 20(s4)
-	sw	a7, 16(s4)
-	sw	a6, 12(s4)
-	sw	a5, 8(s4)
-	sw	a4, 4(s4)
-	sw	a3, 0(s4)
-	mv	a3, s4
 	slli	a4, a2, 2
 	add	t6, a0, a4
 	sw	a3, 0(t6)
@@ -15887,11 +15846,10 @@ rt_3074:
 	sw	a0, 188(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	sw	a0, 0(gp)
 	sw	a0, 4(gp)
 	sw	a0, 8(gp)
@@ -16026,11 +15984,10 @@ rt_3074:
 	sw	a0, 192(sp)	# save
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 192(sp)	# restore
 	sw	a0, 472(a1)
 	fsw	fa0, 0(gp)
@@ -16041,11 +15998,10 @@ rt_3074:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 192(sp)	# restore
 	sw	a0, 468(a1)
 	fsw	fa0, 0(gp)
@@ -16056,11 +16012,10 @@ rt_3074:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 192(sp)	# restore
 	sw	a0, 464(a1)
 	fsw	fa0, 0(gp)
@@ -16071,11 +16026,10 @@ rt_3074:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 192(sp)	# restore
 	sw	a0, 460(a1)
 	fsw	fa0, 0(gp)
@@ -16086,11 +16040,10 @@ rt_3074:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 192(sp)	# restore
 	sw	a0, 456(a1)
 	li	a0, 113
@@ -16110,11 +16063,10 @@ rt_3074:
 	lw	a0, 196(sp)	# restore
 	lw	a0, 0(a0)
 	call	min_caml_create_array
-	mv	a2, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a2)
-	sw	a1, 0(a2)
-	mv	a0, a2
 	sw	a0, 0(gp)
 	sw	a0, 4(gp)
 	sw	a0, 8(gp)
@@ -16250,11 +16202,10 @@ rt_3074:
 	lw	a2, 196(sp)	# restore
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 204(sp)	# restore
 	sw	a0, 472(a1)
 	fsw	fa0, 0(gp)
@@ -16265,11 +16216,10 @@ rt_3074:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 204(sp)	# restore
 	sw	a0, 468(a1)
 	fsw	fa0, 0(gp)
@@ -16280,11 +16230,10 @@ rt_3074:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 204(sp)	# restore
 	sw	a0, 464(a1)
 	fsw	fa0, 0(gp)
@@ -16295,11 +16244,10 @@ rt_3074:
 	mv	a1, a0
 	lw	a0, 0(a2)
 	call	min_caml_create_array
-	mv	a3, gp
+	sw	a0, 4(gp)
+	sw	a1, 0(gp)
+	mv	a0, gp
 	addi	gp, gp, 8
-	sw	a0, 4(a3)
-	sw	a1, 0(a3)
-	mv	a0, a3
 	lw	a1, 204(sp)	# restore
 	sw	a0, 460(a1)
 	li	a0, 114

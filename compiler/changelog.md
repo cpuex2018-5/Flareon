@@ -75,3 +75,17 @@ lda rd, symbol -> lui rd, symbol[31:12]
 ## 2/12
 * 不要なbranchに関する覗き穴最適化的なことをした(命令数 1913457870)
 * early returnを実装(命令数 1884066536)
+* tupleの初期化の手順変更(上のようなものを下のようにする)
+```
+mv    a3, gp
+addi  gp, gp, 8
+sw    a0, 4(a3)
+sw    a1, 0(a3)
+mv    a0, a3
+```
+```
+sw    a0, 4(gp)
+sw    a1, 0(gp)
+mv    a0, gp
+addi  gp, gp, 8
+```

@@ -151,15 +151,17 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
     Ans(CallDir(Id.L(x), int, float))
   | Closure.Tuple(xs) ->
     let y = Id.genid "t" in
-    let (offset, store) =
+    let seed =
+      Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)), Mv(reg_hp),
+          Let((reg_hp, Type.Int), Add(reg_hp, `C(List.length xs * 4)),
+              Ans(Mv(y)))) in
+    let (_, store) =
       expand
         (List.map (fun x -> (x, M.find x env)) xs)
-        (0, Ans(Mv(y)))
-        (fun x offset store -> seq(Fsw(`V(x), y, `C(offset)), store))
-        (fun x _ offset store -> seq(Sw(x, y, `C(offset)), store))  in
-    Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)), Mv(reg_hp),
-        Let((reg_hp, Type.Int), Add(reg_hp, `C(offset)),
-            store))
+        (0, seed)
+        (fun x offset store -> seq(Fsw(`V(x), reg_hp, `C(offset)), store))
+        (fun x _ offset store -> seq(Sw(x, reg_hp, `C(offset)), store))  in
+    store
   | Closure.LetTuple(xts, y, e2) ->
     let s = Closure.fv e2 in
     let (offset, load) =
