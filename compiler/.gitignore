@@ -27,7 +27,6 @@ emit.ml
 regAlloc.ml
 virtual.ml
 libmincaml.S
-min-rt/globals.s
 
 bytemark/
 shootout/
