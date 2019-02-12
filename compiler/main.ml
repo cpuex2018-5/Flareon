@@ -54,7 +54,6 @@ let lexbuf outchan l = (* compile the buffer and put it to outchan (caml2html: m
   (* let e = Schedule.f Schedule.resource e in *)
   if !print_asm then Asm.print_prog e;
   let e = RegAlloc.f e in
-  let e = Peephole.f e in
   Emit.f outchan Globals.globals e
 
 let string s = lexbuf stdout (Lexing.from_string s) (* compile a string and put it to stdout (caml2html: main_string) *)

@@ -248,6 +248,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
        []) in
   let buf' = let (l, e) = List.hd buf' in (l, prologue @ e) :: (List.tl buf') in
   Id.resetCounter ();
+  let buf' = Peephole.f buf' in (* [XXX] peephole optimization *)
   Raw.output_buffer oc buf';
   Printf.fprintf oc "%s_ret:\n" !funcname;
   if (Asm.has_call e) then
@@ -271,6 +272,7 @@ let f oc globals (Prog(data, fundefs, e)) =
   let ss = stacksize () in
   if ss > 0 then
     Printf.fprintf oc "\taddi\tsp, sp, %d\n" (-1 * ss);
+  let buf' = Peephole.f buf' in (* [XXX] peephole optimization *)
   Raw.output_buffer oc buf';
   if ss > 0 then
     Printf.fprintf oc "\taddi\tsp, sp, %d\n" ss;

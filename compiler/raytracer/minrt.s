@@ -374,11 +374,10 @@ read_nth_object_2727:
 	bne	a3, zero, .read_nth_object_else_22
 	fli	fa1, l_data_5
 	fdiv	fa0, fa1, fa0
-	b	.read_nth_object_cont_23
+	b	.read_nth_object_cont_21
 .read_nth_object_else_22:
 	fli	fa1, l_data_6
 	fdiv	fa0, fa1, fa0
-.read_nth_object_cont_23:
 	b	.read_nth_object_cont_21
 .read_nth_object_else_20:
 	fli	fa0, l_data_5
@@ -1532,14 +1531,12 @@ solver_rect_2750:
 	lda	a2, min_caml_solver_dist
 	fsw	fa3, 0(a2)
 	li	a2, 1
-	b	.solver_rect_cont_7
+	b	.solver_rect_cont_2
 .solver_rect_else_6:
 	li	a2, 0
-.solver_rect_cont_7:
-	b	.solver_rect_cont_5
+	b	.solver_rect_cont_2
 .solver_rect_else_4:
 	li	a2, 0
-.solver_rect_cont_5:
 	b	.solver_rect_cont_2
 .solver_rect_else_1:
 	li	a2, 0
@@ -1578,14 +1575,12 @@ solver_rect_2750:
 	lda	a2, min_caml_solver_dist
 	fsw	fa3, 0(a2)
 	li	a2, 1
-	b	.solver_rect_cont_15
+	b	.solver_rect_cont_10
 .solver_rect_else_14:
 	li	a2, 0
-.solver_rect_cont_15:
-	b	.solver_rect_cont_13
+	b	.solver_rect_cont_10
 .solver_rect_else_12:
 	li	a2, 0
-.solver_rect_cont_13:
 	b	.solver_rect_cont_10
 .solver_rect_else_9:
 	li	a2, 0
@@ -1624,14 +1619,12 @@ solver_rect_2750:
 	lda	a0, min_caml_solver_dist
 	fsw	fa2, 0(a0)
 	li	a0, 1
-	b	.solver_rect_cont_23
+	b	.solver_rect_cont_18
 .solver_rect_else_22:
 	li	a0, 0
-.solver_rect_cont_23:
-	b	.solver_rect_cont_21
+	b	.solver_rect_cont_18
 .solver_rect_else_20:
 	li	a0, 0
-.solver_rect_cont_21:
 	b	.solver_rect_cont_18
 .solver_rect_else_17:
 	li	a0, 0
@@ -1831,14 +1824,12 @@ solver_2781:
 	lda	a0, min_caml_solver_dist
 	fsw	fa3, 0(a0)
 	li	a0, 1
-	b	.solver_cont_8
+	b	.solver_cont_3
 .solver_else_7:
 	li	a0, 0
-.solver_cont_8:
-	b	.solver_cont_6
+	b	.solver_cont_3
 .solver_else_5:
 	li	a0, 0
-.solver_cont_6:
 	b	.solver_cont_3
 .solver_else_2:
 	li	a0, 0
@@ -1875,14 +1866,12 @@ solver_2781:
 	lda	a0, min_caml_solver_dist
 	fsw	fa3, 0(a0)
 	li	a0, 1
-	b	.solver_cont_16
+	b	.solver_cont_11
 .solver_else_15:
 	li	a0, 0
-.solver_cont_16:
-	b	.solver_cont_14
+	b	.solver_cont_11
 .solver_else_13:
 	li	a0, 0
-.solver_cont_14:
 	b	.solver_cont_11
 .solver_else_10:
 	li	a0, 0
@@ -1919,14 +1908,12 @@ solver_2781:
 	lda	a0, min_caml_solver_dist
 	fsw	fa2, 0(a0)
 	li	a0, 1
-	b	.solver_cont_24
+	b	.solver_cont_19
 .solver_else_23:
 	li	a0, 0
-.solver_cont_24:
-	b	.solver_cont_22
+	b	.solver_cont_19
 .solver_else_21:
 	li	a0, 0
-.solver_cont_22:
 	b	.solver_cont_19
 .solver_else_18:
 	li	a0, 0
@@ -2125,10 +2112,9 @@ solver_rect_fast_2785:
 	flw	fa4, 4(a2)
 	feq	a3, fa4, fzero
 	xori	a3, a3, 1
-	b	.solver_rect_fast_cont_4
+	b	.solver_rect_fast_cont_2
 .solver_rect_fast_else_3:
 	li	a3, 0
-.solver_rect_fast_cont_4:
 	b	.solver_rect_fast_cont_2
 .solver_rect_fast_else_1:
 	li	a3, 0
@@ -2155,10 +2141,9 @@ solver_rect_fast_2785:
 	flw	fa4, 12(a2)
 	feq	a3, fa4, fzero
 	xori	a3, a3, 1
-	b	.solver_rect_fast_cont_9
+	b	.solver_rect_fast_cont_7
 .solver_rect_fast_else_8:
 	li	a3, 0
-.solver_rect_fast_cont_9:
 	b	.solver_rect_fast_cont_7
 .solver_rect_fast_else_6:
 	li	a3, 0
@@ -2185,10 +2170,9 @@ solver_rect_fast_2785:
 	flw	fa0, 20(a2)
 	feq	a0, fa0, fzero
 	xori	a0, a0, 1
-	b	.solver_rect_fast_cont_14
+	b	.solver_rect_fast_cont_12
 .solver_rect_fast_else_13:
 	li	a0, 0
-.solver_rect_fast_cont_14:
 	b	.solver_rect_fast_cont_12
 .solver_rect_fast_else_11:
 	li	a0, 0
@@ -3043,10 +3027,9 @@ is_outside_2859:
 	fabs	fa1, fa2
 	fle	a0, fa0, fa1
 	xori	a0, a0, 1
-	b	.is_outside_cont_5
+	b	.is_outside_cont_3
 .is_outside_else_4:
 	li	a0, 0
-.is_outside_cont_5:
 	b	.is_outside_cont_3
 .is_outside_else_2:
 	li	a0, 0
@@ -3149,20 +3132,18 @@ check_all_inside_2864:
 	fabs	fa4, fa5
 	fle	a2, fa3, fa4
 	xori	a2, a2, 1
-	b	.check_all_inside_cont_7
+	b	.check_all_inside_cont_5
 .check_all_inside_else_6:
 	li	a2, 0
-.check_all_inside_cont_7:
 	b	.check_all_inside_cont_5
 .check_all_inside_else_4:
 	li	a2, 0
 .check_all_inside_cont_5:
 	bne	a2, zero, .check_all_inside_else_8
 	xori	a2, a4, 1
-	b	.check_all_inside_cont_9
+	b	.check_all_inside_cont_3
 .check_all_inside_else_8:
 	mv	a2, a4
-.check_all_inside_cont_9:
 	b	.check_all_inside_cont_3
 .check_all_inside_else_2:
 	bnei	a2, 2, .check_all_inside_else_10
@@ -3278,20 +3259,18 @@ check_all_inside_2864:
 	fabs	fa2, fa3
 	fle	a1, fa0, fa2
 	xori	a1, a1, 1
-	b	.check_all_inside_cont_24
+	b	.check_all_inside_cont_22
 .check_all_inside_else_23:
 	li	a1, 0
-.check_all_inside_cont_24:
 	b	.check_all_inside_cont_22
 .check_all_inside_else_21:
 	li	a1, 0
 .check_all_inside_cont_22:
 	bne	a1, zero, .check_all_inside_else_25
 	xori	a1, a4, 1
-	b	.check_all_inside_cont_26
+	b	.check_all_inside_cont_20
 .check_all_inside_else_25:
 	mv	a1, a4
-.check_all_inside_cont_26:
 	b	.check_all_inside_cont_20
 .check_all_inside_else_19:
 	bnei	a1, 2, .check_all_inside_else_27
@@ -3444,10 +3423,9 @@ shadow_check_and_group_2870:
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 0(a0)
 	li	a0, 1
-	b	.shadow_check_and_group_cont_7
+	b	.shadow_check_and_group_cont_5
 .shadow_check_and_group_else_6:
 	li	a0, 0
-.shadow_check_and_group_cont_7:
 	b	.shadow_check_and_group_cont_5
 .shadow_check_and_group_else_4:
 	mv	a1, a2
@@ -3518,7 +3496,7 @@ shadow_check_and_group_2870:
 	li	t6, -1
 	bne	a0, t6, .shadow_check_and_group_else_16
 	li	a0, 1
-	b	.shadow_check_and_group_cont_17
+	b	.shadow_check_and_group_cont_15
 .shadow_check_and_group_else_16:
 	slli	a0, a0, 2
 	lwl	a0, min_caml_objects(a0)
@@ -3550,20 +3528,18 @@ shadow_check_and_group_2870:
 	fabs	fa2, fa3
 	fle	a0, fa0, fa2
 	xori	a0, a0, 1
-	b	.shadow_check_and_group_cont_23
+	b	.shadow_check_and_group_cont_21
 .shadow_check_and_group_else_22:
 	li	a0, 0
-.shadow_check_and_group_cont_23:
 	b	.shadow_check_and_group_cont_21
 .shadow_check_and_group_else_20:
 	li	a0, 0
 .shadow_check_and_group_cont_21:
 	bne	a0, zero, .shadow_check_and_group_else_24
 	xori	a0, a3, 1
-	b	.shadow_check_and_group_cont_25
+	b	.shadow_check_and_group_cont_19
 .shadow_check_and_group_else_24:
 	mv	a0, a3
-.shadow_check_and_group_cont_25:
 	b	.shadow_check_and_group_cont_19
 .shadow_check_and_group_else_18:
 	bnei	a0, 2, .shadow_check_and_group_else_26
@@ -3624,7 +3600,7 @@ shadow_check_and_group_2870:
 	li	t6, -1
 	bne	a0, t6, .shadow_check_and_group_else_33
 	li	a0, 1
-	b	.shadow_check_and_group_cont_34
+	b	.shadow_check_and_group_cont_15
 .shadow_check_and_group_else_33:
 	slli	a0, a0, 2
 	lwl	a0, min_caml_objects(a0)
@@ -3638,16 +3614,12 @@ shadow_check_and_group_2870:
 	flw	fa2, 16(sp)	# restore
 	lw	a1, 4(sp)	# restore
 	call	check_all_inside_2864
-	b	.shadow_check_and_group_cont_36
+	b	.shadow_check_and_group_cont_15
 .shadow_check_and_group_else_35:
 	li	a0, 0
-.shadow_check_and_group_cont_36:
-.shadow_check_and_group_cont_34:
-	b	.shadow_check_and_group_cont_32
+	b	.shadow_check_and_group_cont_15
 .shadow_check_and_group_else_31:
 	li	a0, 0
-.shadow_check_and_group_cont_32:
-.shadow_check_and_group_cont_17:
 	b	.shadow_check_and_group_cont_15
 .shadow_check_and_group_else_14:
 	li	a0, 0
@@ -3893,10 +3865,9 @@ shadow_check_one_or_matrix_2876:
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 0(a0)
 	li	a0, 1
-	b	.shadow_check_one_or_matrix_cont_9
+	b	.shadow_check_one_or_matrix_cont_7
 .shadow_check_one_or_matrix_else_8:
 	li	a0, 0
-.shadow_check_one_or_matrix_cont_9:
 	b	.shadow_check_one_or_matrix_cont_7
 .shadow_check_one_or_matrix_else_6:
 	mv	a1, a2
@@ -3929,7 +3900,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_18
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_19
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_18:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -3941,7 +3912,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_22
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_23
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_22:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -3953,7 +3924,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_26
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_27
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_26:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -3965,7 +3936,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_30
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_31
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_30:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -3977,7 +3948,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_34
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_35
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_34:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -3989,7 +3960,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_38
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_39
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_38:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -3999,36 +3970,24 @@ shadow_check_one_or_matrix_2876:
 	li	a0, 8
 	lw	a1, 0(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.shadow_check_one_or_matrix_cont_41
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_40:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_41:
-.shadow_check_one_or_matrix_cont_39:
-	b	.shadow_check_one_or_matrix_cont_37
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_36:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_37:
-.shadow_check_one_or_matrix_cont_35:
-	b	.shadow_check_one_or_matrix_cont_33
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_32:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_33:
-.shadow_check_one_or_matrix_cont_31:
-	b	.shadow_check_one_or_matrix_cont_29
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_28:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_29:
-.shadow_check_one_or_matrix_cont_27:
-	b	.shadow_check_one_or_matrix_cont_25
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_24:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_25:
-.shadow_check_one_or_matrix_cont_23:
-	b	.shadow_check_one_or_matrix_cont_21
+	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_20:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_21:
-.shadow_check_one_or_matrix_cont_19:
 	b	.shadow_check_one_or_matrix_cont_17
 .shadow_check_one_or_matrix_else_16:
 	li	a0, 1
@@ -4036,10 +3995,9 @@ shadow_check_one_or_matrix_2876:
 .shadow_check_one_or_matrix_cont_15:
 	bne	a0, zero, .shadow_check_one_or_matrix_else_42
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_43
+	b	.shadow_check_one_or_matrix_cont_13
 .shadow_check_one_or_matrix_else_42:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_43:
 	b	.shadow_check_one_or_matrix_cont_13
 .shadow_check_one_or_matrix_else_12:
 	li	a0, 0
@@ -4095,7 +4053,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_56
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_57
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_56:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4107,7 +4065,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_60
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_61
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_60:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4119,7 +4077,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_64
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_65
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_64:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4131,7 +4089,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_68
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_69
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_68:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4143,7 +4101,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_72
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_73
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_72:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4153,31 +4111,21 @@ shadow_check_one_or_matrix_2876:
 	li	a0, 7
 	lw	a1, 16(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.shadow_check_one_or_matrix_cont_75
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_74:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_75:
-.shadow_check_one_or_matrix_cont_73:
-	b	.shadow_check_one_or_matrix_cont_71
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_70:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_71:
-.shadow_check_one_or_matrix_cont_69:
-	b	.shadow_check_one_or_matrix_cont_67
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_66:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_67:
-.shadow_check_one_or_matrix_cont_65:
-	b	.shadow_check_one_or_matrix_cont_63
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_62:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_63:
-.shadow_check_one_or_matrix_cont_61:
-	b	.shadow_check_one_or_matrix_cont_59
+	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_58:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_59:
-.shadow_check_one_or_matrix_cont_57:
 	b	.shadow_check_one_or_matrix_cont_55
 .shadow_check_one_or_matrix_else_54:
 	li	a0, 1
@@ -4185,10 +4133,9 @@ shadow_check_one_or_matrix_2876:
 .shadow_check_one_or_matrix_cont_53:
 	bne	a0, zero, .shadow_check_one_or_matrix_else_76
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_77
+	b	.shadow_check_one_or_matrix_cont_51
 .shadow_check_one_or_matrix_else_76:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_77:
 	b	.shadow_check_one_or_matrix_cont_51
 .shadow_check_one_or_matrix_else_50:
 	li	a0, 0
@@ -4219,7 +4166,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_83
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_84
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_83:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4231,7 +4178,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_87
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_88
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_87:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4243,7 +4190,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_91
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_92
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_91:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4255,7 +4202,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_95
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_96
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_95:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4267,7 +4214,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_99
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_100
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_99:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4277,31 +4224,21 @@ shadow_check_one_or_matrix_2876:
 	li	a0, 7
 	lw	a1, 16(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.shadow_check_one_or_matrix_cont_102
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_101:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_102:
-.shadow_check_one_or_matrix_cont_100:
-	b	.shadow_check_one_or_matrix_cont_98
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_97:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_98:
-.shadow_check_one_or_matrix_cont_96:
-	b	.shadow_check_one_or_matrix_cont_94
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_93:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_94:
-.shadow_check_one_or_matrix_cont_92:
-	b	.shadow_check_one_or_matrix_cont_90
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_89:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_90:
-.shadow_check_one_or_matrix_cont_88:
-	b	.shadow_check_one_or_matrix_cont_86
+	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_85:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_86:
-.shadow_check_one_or_matrix_cont_84:
 	b	.shadow_check_one_or_matrix_cont_82
 .shadow_check_one_or_matrix_else_81:
 	li	a0, 1
@@ -4334,7 +4271,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_108
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_109
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_108:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4346,7 +4283,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_112
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_113
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_112:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4358,7 +4295,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_116
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_117
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_116:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4370,7 +4307,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_120
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_121
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_120:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4382,7 +4319,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_124
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_125
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_124:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4394,7 +4331,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_128
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_129
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_128:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4404,36 +4341,24 @@ shadow_check_one_or_matrix_2876:
 	li	a0, 8
 	lw	a1, 0(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.shadow_check_one_or_matrix_cont_131
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_130:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_131:
-.shadow_check_one_or_matrix_cont_129:
-	b	.shadow_check_one_or_matrix_cont_127
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_126:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_127:
-.shadow_check_one_or_matrix_cont_125:
-	b	.shadow_check_one_or_matrix_cont_123
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_122:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_123:
-.shadow_check_one_or_matrix_cont_121:
-	b	.shadow_check_one_or_matrix_cont_119
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_118:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_119:
-.shadow_check_one_or_matrix_cont_117:
-	b	.shadow_check_one_or_matrix_cont_115
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_114:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_115:
-.shadow_check_one_or_matrix_cont_113:
-	b	.shadow_check_one_or_matrix_cont_111
+	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_110:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_111:
-.shadow_check_one_or_matrix_cont_109:
 	b	.shadow_check_one_or_matrix_cont_107
 .shadow_check_one_or_matrix_else_106:
 	li	a0, 1
@@ -4488,7 +4413,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_144
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_145
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_144:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4500,7 +4425,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_148
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_149
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_148:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4512,7 +4437,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_152
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_153
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_152:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4524,7 +4449,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_156
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_157
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_156:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4536,7 +4461,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_160
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_161
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_160:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4546,31 +4471,21 @@ shadow_check_one_or_matrix_2876:
 	li	a0, 7
 	lw	a1, 24(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.shadow_check_one_or_matrix_cont_163
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_162:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_163:
-.shadow_check_one_or_matrix_cont_161:
-	b	.shadow_check_one_or_matrix_cont_159
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_158:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_159:
-.shadow_check_one_or_matrix_cont_157:
-	b	.shadow_check_one_or_matrix_cont_155
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_154:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_155:
-.shadow_check_one_or_matrix_cont_153:
-	b	.shadow_check_one_or_matrix_cont_151
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_150:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_151:
-.shadow_check_one_or_matrix_cont_149:
-	b	.shadow_check_one_or_matrix_cont_147
+	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_146:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_147:
-.shadow_check_one_or_matrix_cont_145:
 	b	.shadow_check_one_or_matrix_cont_143
 .shadow_check_one_or_matrix_else_142:
 	li	a0, 1
@@ -4578,10 +4493,9 @@ shadow_check_one_or_matrix_2876:
 .shadow_check_one_or_matrix_cont_141:
 	bne	a0, zero, .shadow_check_one_or_matrix_else_164
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_165
+	b	.shadow_check_one_or_matrix_cont_139
 .shadow_check_one_or_matrix_else_164:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_165:
 	b	.shadow_check_one_or_matrix_cont_139
 .shadow_check_one_or_matrix_else_138:
 	li	a0, 0
@@ -4612,7 +4526,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_171
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_172
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_171:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4624,7 +4538,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_175
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_176
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_175:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4636,7 +4550,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_179
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_180
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_179:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4648,7 +4562,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_183
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_184
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_183:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4660,7 +4574,7 @@ shadow_check_one_or_matrix_2876:
 	li	t6, -1
 	bne	a1, t6, .shadow_check_one_or_matrix_else_187
 	li	a0, 0
-	b	.shadow_check_one_or_matrix_cont_188
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_187:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -4670,31 +4584,21 @@ shadow_check_one_or_matrix_2876:
 	li	a0, 7
 	lw	a1, 24(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.shadow_check_one_or_matrix_cont_190
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_189:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_190:
-.shadow_check_one_or_matrix_cont_188:
-	b	.shadow_check_one_or_matrix_cont_186
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_185:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_186:
-.shadow_check_one_or_matrix_cont_184:
-	b	.shadow_check_one_or_matrix_cont_182
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_181:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_182:
-.shadow_check_one_or_matrix_cont_180:
-	b	.shadow_check_one_or_matrix_cont_178
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_177:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_178:
-.shadow_check_one_or_matrix_cont_176:
-	b	.shadow_check_one_or_matrix_cont_174
+	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_173:
 	li	a0, 1
-.shadow_check_one_or_matrix_cont_174:
-.shadow_check_one_or_matrix_cont_172:
 	b	.shadow_check_one_or_matrix_cont_170
 .shadow_check_one_or_matrix_else_169:
 	li	a0, 1
@@ -4777,10 +4681,9 @@ solve_each_element_2879:
 	fdiv	fa0, fa0, fa3
 	fsw	fa0, 0(a0)
 	li	a0, 1
-	b	.solve_each_element_cont_8
+	b	.solve_each_element_cont_6
 .solve_each_element_else_7:
 	li	a0, 0
-.solve_each_element_cont_8:
 	b	.solve_each_element_cont_6
 .solve_each_element_else_5:
 	mv	a1, a2
@@ -4851,7 +4754,7 @@ solve_each_element_2879:
 	li	t6, -1
 	bne	a0, t6, .solve_each_element_else_18
 	li	a0, 1
-	b	.solve_each_element_cont_19
+	b	.solve_each_element_cont_17
 .solve_each_element_else_18:
 	slli	a0, a0, 2
 	lwl	a0, min_caml_objects(a0)
@@ -4883,20 +4786,18 @@ solve_each_element_2879:
 	fabs	fa2, fa3
 	fle	a0, fa0, fa2
 	xori	a0, a0, 1
-	b	.solve_each_element_cont_25
+	b	.solve_each_element_cont_23
 .solve_each_element_else_24:
 	li	a0, 0
-.solve_each_element_cont_25:
 	b	.solve_each_element_cont_23
 .solve_each_element_else_22:
 	li	a0, 0
 .solve_each_element_cont_23:
 	bne	a0, zero, .solve_each_element_else_26
 	xori	a0, a3, 1
-	b	.solve_each_element_cont_27
+	b	.solve_each_element_cont_21
 .solve_each_element_else_26:
 	mv	a0, a3
-.solve_each_element_cont_27:
 	b	.solve_each_element_cont_21
 .solve_each_element_else_20:
 	bnei	a0, 2, .solve_each_element_else_28
@@ -4957,7 +4858,7 @@ solve_each_element_2879:
 	li	t6, -1
 	bne	a0, t6, .solve_each_element_else_35
 	li	a0, 1
-	b	.solve_each_element_cont_36
+	b	.solve_each_element_cont_17
 .solve_each_element_else_35:
 	slli	a0, a0, 2
 	lwl	a0, min_caml_objects(a0)
@@ -4971,16 +4872,12 @@ solve_each_element_2879:
 	flw	fa2, 28(sp)	# restore
 	lw	a1, 12(sp)	# restore
 	call	check_all_inside_2864
-	b	.solve_each_element_cont_38
+	b	.solve_each_element_cont_17
 .solve_each_element_else_37:
 	li	a0, 0
-.solve_each_element_cont_38:
-.solve_each_element_cont_36:
-	b	.solve_each_element_cont_34
+	b	.solve_each_element_cont_17
 .solve_each_element_else_33:
 	li	a0, 0
-.solve_each_element_cont_34:
-.solve_each_element_cont_19:
 	b	.solve_each_element_cont_17
 .solve_each_element_else_16:
 	li	a0, 0
@@ -5171,7 +5068,7 @@ trace_or_matrix_2887:
 	bne	a4, t6, .trace_or_matrix_else_3
 	lw	a4, 4(a3)
 	li	t6, -1
-	beq	a4, t6, .trace_or_matrix_cont_5
+	beq	a4, t6, .trace_or_matrix_cont_4
 	slli	a4, a4, 2
 	lwl	a1, min_caml_and_net(a4)
 	li	a0, 0
@@ -5180,7 +5077,7 @@ trace_or_matrix_2887:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_6
+	beq	a1, t6, .trace_or_matrix_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5189,7 +5086,7 @@ trace_or_matrix_2887:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_7
+	beq	a1, t6, .trace_or_matrix_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5198,7 +5095,7 @@ trace_or_matrix_2887:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_8
+	beq	a1, t6, .trace_or_matrix_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5207,7 +5104,7 @@ trace_or_matrix_2887:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 20(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_9
+	beq	a1, t6, .trace_or_matrix_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5216,7 +5113,7 @@ trace_or_matrix_2887:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 24(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_10
+	beq	a1, t6, .trace_or_matrix_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5225,7 +5122,7 @@ trace_or_matrix_2887:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 28(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_11
+	beq	a1, t6, .trace_or_matrix_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5235,13 +5132,6 @@ trace_or_matrix_2887:
 	lw	a1, 12(sp)	# restore
 	lw	a2, 0(sp)	# restore
 	call	solve_one_or_network_2883
-.trace_or_matrix_cont_11:
-.trace_or_matrix_cont_10:
-.trace_or_matrix_cont_9:
-.trace_or_matrix_cont_8:
-.trace_or_matrix_cont_7:
-.trace_or_matrix_cont_6:
-.trace_or_matrix_cont_5:
 	b	.trace_or_matrix_cont_4
 .trace_or_matrix_else_3:
 	lda	a5, min_caml_startp
@@ -5292,10 +5182,9 @@ trace_or_matrix_2887:
 	fdiv	fa0, fa0, fa3
 	fsw	fa0, 0(a0)
 	li	a0, 1
-	b	.trace_or_matrix_cont_17
+	b	.trace_or_matrix_cont_15
 .trace_or_matrix_else_16:
 	li	a0, 0
-.trace_or_matrix_cont_17:
 	b	.trace_or_matrix_cont_15
 .trace_or_matrix_else_14:
 	mv	a1, a2
@@ -5402,7 +5291,7 @@ trace_or_matrix_2887:
 	bne	a0, t6, .trace_or_matrix_else_29
 	lw	a0, 4(a1)
 	li	t6, -1
-	beq	a0, t6, .trace_or_matrix_cont_31
+	beq	a0, t6, .trace_or_matrix_cont_30
 	slli	a0, a0, 2
 	sw	a1, 20(sp)	# save
 	lwl	a1, min_caml_and_net(a0)
@@ -5412,7 +5301,7 @@ trace_or_matrix_2887:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_32
+	beq	a1, t6, .trace_or_matrix_cont_30
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5421,7 +5310,7 @@ trace_or_matrix_2887:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_33
+	beq	a1, t6, .trace_or_matrix_cont_30
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5430,7 +5319,7 @@ trace_or_matrix_2887:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_34
+	beq	a1, t6, .trace_or_matrix_cont_30
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5439,7 +5328,7 @@ trace_or_matrix_2887:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 20(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_35
+	beq	a1, t6, .trace_or_matrix_cont_30
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5448,7 +5337,7 @@ trace_or_matrix_2887:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 24(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_cont_36
+	beq	a1, t6, .trace_or_matrix_cont_30
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -5458,12 +5347,6 @@ trace_or_matrix_2887:
 	lw	a1, 20(sp)	# restore
 	lw	a2, 0(sp)	# restore
 	call	solve_one_or_network_2883
-.trace_or_matrix_cont_36:
-.trace_or_matrix_cont_35:
-.trace_or_matrix_cont_34:
-.trace_or_matrix_cont_33:
-.trace_or_matrix_cont_32:
-.trace_or_matrix_cont_31:
 	b	.trace_or_matrix_cont_30
 .trace_or_matrix_else_29:
 	lda	a2, min_caml_startp
@@ -5596,10 +5479,9 @@ solve_each_element_fast_2893:
 	fmul	fa0, fa0, fa1
 	fsw	fa0, 0(a0)
 	li	a0, 1
-	b	.solve_each_element_fast_cont_8
+	b	.solve_each_element_fast_cont_6
 .solve_each_element_fast_else_7:
 	li	a0, 0
-.solve_each_element_fast_cont_8:
 	b	.solve_each_element_fast_cont_6
 .solve_each_element_fast_else_5:
 	flw	fa3, 0(a2)
@@ -5636,10 +5518,9 @@ solve_each_element_fast_2893:
 	fsw	fa0, 0(a0)
 .solve_each_element_fast_cont_14:
 	li	a0, 1
-	b	.solve_each_element_fast_cont_12
+	b	.solve_each_element_fast_cont_10
 .solve_each_element_fast_else_11:
 	li	a0, 0
-.solve_each_element_fast_cont_12:
 	b	.solve_each_element_fast_cont_10
 .solve_each_element_fast_else_9:
 	li	a0, 0
@@ -5710,7 +5591,7 @@ solve_each_element_fast_2893:
 	li	t6, -1
 	bne	a0, t6, .solve_each_element_fast_else_24
 	li	a0, 1
-	b	.solve_each_element_fast_cont_25
+	b	.solve_each_element_fast_cont_23
 .solve_each_element_fast_else_24:
 	slli	a0, a0, 2
 	lwl	a0, min_caml_objects(a0)
@@ -5742,20 +5623,18 @@ solve_each_element_fast_2893:
 	fabs	fa2, fa3
 	fle	a0, fa0, fa2
 	xori	a0, a0, 1
-	b	.solve_each_element_fast_cont_31
+	b	.solve_each_element_fast_cont_29
 .solve_each_element_fast_else_30:
 	li	a0, 0
-.solve_each_element_fast_cont_31:
 	b	.solve_each_element_fast_cont_29
 .solve_each_element_fast_else_28:
 	li	a0, 0
 .solve_each_element_fast_cont_29:
 	bne	a0, zero, .solve_each_element_fast_else_32
 	xori	a0, a3, 1
-	b	.solve_each_element_fast_cont_33
+	b	.solve_each_element_fast_cont_27
 .solve_each_element_fast_else_32:
 	mv	a0, a3
-.solve_each_element_fast_cont_33:
 	b	.solve_each_element_fast_cont_27
 .solve_each_element_fast_else_26:
 	bnei	a0, 2, .solve_each_element_fast_else_34
@@ -5816,7 +5695,7 @@ solve_each_element_fast_2893:
 	li	t6, -1
 	bne	a0, t6, .solve_each_element_fast_else_41
 	li	a0, 1
-	b	.solve_each_element_fast_cont_42
+	b	.solve_each_element_fast_cont_23
 .solve_each_element_fast_else_41:
 	slli	a0, a0, 2
 	lwl	a0, min_caml_objects(a0)
@@ -5830,16 +5709,12 @@ solve_each_element_fast_2893:
 	flw	fa2, 28(sp)	# restore
 	lw	a1, 12(sp)	# restore
 	call	check_all_inside_2864
-	b	.solve_each_element_fast_cont_44
+	b	.solve_each_element_fast_cont_23
 .solve_each_element_fast_else_43:
 	li	a0, 0
-.solve_each_element_fast_cont_44:
-.solve_each_element_fast_cont_42:
-	b	.solve_each_element_fast_cont_40
+	b	.solve_each_element_fast_cont_23
 .solve_each_element_fast_else_39:
 	li	a0, 0
-.solve_each_element_fast_cont_40:
-.solve_each_element_fast_cont_25:
 	b	.solve_each_element_fast_cont_23
 .solve_each_element_fast_else_22:
 	li	a0, 0
@@ -6030,7 +5905,7 @@ trace_or_matrix_fast_2901:
 	bne	a4, t6, .trace_or_matrix_fast_else_3
 	lw	a4, 4(a3)
 	li	t6, -1
-	beq	a4, t6, .trace_or_matrix_fast_cont_5
+	beq	a4, t6, .trace_or_matrix_fast_cont_4
 	slli	a4, a4, 2
 	lwl	a1, min_caml_and_net(a4)
 	li	a0, 0
@@ -6039,7 +5914,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_6
+	beq	a1, t6, .trace_or_matrix_fast_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6048,7 +5923,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_7
+	beq	a1, t6, .trace_or_matrix_fast_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6057,7 +5932,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_8
+	beq	a1, t6, .trace_or_matrix_fast_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6066,7 +5941,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 20(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_9
+	beq	a1, t6, .trace_or_matrix_fast_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6075,7 +5950,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 24(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_10
+	beq	a1, t6, .trace_or_matrix_fast_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6084,7 +5959,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 12(sp)	# restore
 	lw	a1, 28(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_11
+	beq	a1, t6, .trace_or_matrix_fast_cont_4
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6094,13 +5969,6 @@ trace_or_matrix_fast_2901:
 	lw	a1, 12(sp)	# restore
 	lw	a2, 0(sp)	# restore
 	call	solve_one_or_network_fast_2897
-.trace_or_matrix_fast_cont_11:
-.trace_or_matrix_fast_cont_10:
-.trace_or_matrix_fast_cont_9:
-.trace_or_matrix_fast_cont_8:
-.trace_or_matrix_fast_cont_7:
-.trace_or_matrix_fast_cont_6:
-.trace_or_matrix_fast_cont_5:
 	b	.trace_or_matrix_fast_cont_4
 .trace_or_matrix_fast_else_3:
 	slli	a5, a4, 2
@@ -6131,10 +5999,9 @@ trace_or_matrix_fast_2901:
 	fmul	fa0, fa0, fa1
 	fsw	fa0, 0(a0)
 	li	a0, 1
-	b	.trace_or_matrix_fast_cont_17
+	b	.trace_or_matrix_fast_cont_15
 .trace_or_matrix_fast_else_16:
 	li	a0, 0
-.trace_or_matrix_fast_cont_17:
 	b	.trace_or_matrix_fast_cont_15
 .trace_or_matrix_fast_else_14:
 	flw	fa3, 0(a2)
@@ -6171,10 +6038,9 @@ trace_or_matrix_fast_2901:
 	fsw	fa0, 0(a0)
 .trace_or_matrix_fast_cont_23:
 	li	a0, 1
-	b	.trace_or_matrix_fast_cont_21
+	b	.trace_or_matrix_fast_cont_19
 .trace_or_matrix_fast_else_20:
 	li	a0, 0
-.trace_or_matrix_fast_cont_21:
 	b	.trace_or_matrix_fast_cont_19
 .trace_or_matrix_fast_else_18:
 	li	a0, 0
@@ -6281,7 +6147,7 @@ trace_or_matrix_fast_2901:
 	bne	a0, t6, .trace_or_matrix_fast_else_35
 	lw	a0, 4(a1)
 	li	t6, -1
-	beq	a0, t6, .trace_or_matrix_fast_cont_37
+	beq	a0, t6, .trace_or_matrix_fast_cont_36
 	slli	a0, a0, 2
 	sw	a1, 20(sp)	# save
 	lwl	a1, min_caml_and_net(a0)
@@ -6291,7 +6157,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_38
+	beq	a1, t6, .trace_or_matrix_fast_cont_36
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6300,7 +6166,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_39
+	beq	a1, t6, .trace_or_matrix_fast_cont_36
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6309,7 +6175,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_40
+	beq	a1, t6, .trace_or_matrix_fast_cont_36
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6318,7 +6184,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 20(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_41
+	beq	a1, t6, .trace_or_matrix_fast_cont_36
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6327,7 +6193,7 @@ trace_or_matrix_fast_2901:
 	lw	a0, 20(sp)	# restore
 	lw	a1, 24(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_or_matrix_fast_cont_42
+	beq	a1, t6, .trace_or_matrix_fast_cont_36
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -6337,12 +6203,6 @@ trace_or_matrix_fast_2901:
 	lw	a1, 20(sp)	# restore
 	lw	a2, 0(sp)	# restore
 	call	solve_one_or_network_fast_2897
-.trace_or_matrix_fast_cont_42:
-.trace_or_matrix_fast_cont_41:
-.trace_or_matrix_fast_cont_40:
-.trace_or_matrix_fast_cont_39:
-.trace_or_matrix_fast_cont_38:
-.trace_or_matrix_fast_cont_37:
 	b	.trace_or_matrix_fast_cont_36
 .trace_or_matrix_fast_else_35:
 	sw	a1, 20(sp)	# save
@@ -6505,11 +6365,10 @@ get_nvector_second_2911:
 	bne	a3, zero, .get_nvector_second_else_5
 	fli	fa1, l_data_5
 	fdiv	fa0, fa1, fa0
-	b	.get_nvector_second_cont_6
+	b	.get_nvector_second_cont_4
 .get_nvector_second_else_5:
 	fli	fa1, l_data_6
 	fdiv	fa0, fa1, fa0
-.get_nvector_second_cont_6:
 	b	.get_nvector_second_cont_4
 .get_nvector_second_else_3:
 	fli	fa0, l_data_5
@@ -6568,10 +6427,9 @@ utexture_2916:
 	bne	a0, zero, .utexture_else_2
 	bne	a1, zero, .utexture_else_4
 	fli	fa0, l_data_16
-	b	.utexture_cont_5
+	b	.utexture_cont_3
 .utexture_else_4:
 	fmv	fa0, fzero
-.utexture_cont_5:
 	b	.utexture_cont_3
 .utexture_else_2:
 	bne	a1, zero, .utexture_else_6
@@ -6853,7 +6711,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_17
 	li	a0, 0
-	b	.trace_reflections_cont_18
+	b	.trace_reflections_cont_16
 .trace_reflections_else_17:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -6865,7 +6723,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_21
 	li	a0, 0
-	b	.trace_reflections_cont_22
+	b	.trace_reflections_cont_16
 .trace_reflections_else_21:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -6877,7 +6735,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_25
 	li	a0, 0
-	b	.trace_reflections_cont_26
+	b	.trace_reflections_cont_16
 .trace_reflections_else_25:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -6889,7 +6747,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_29
 	li	a0, 0
-	b	.trace_reflections_cont_30
+	b	.trace_reflections_cont_16
 .trace_reflections_else_29:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -6901,7 +6759,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_33
 	li	a0, 0
-	b	.trace_reflections_cont_34
+	b	.trace_reflections_cont_16
 .trace_reflections_else_33:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -6911,31 +6769,21 @@ trace_reflections_2923:
 	li	a0, 7
 	lw	a1, 44(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.trace_reflections_cont_36
+	b	.trace_reflections_cont_16
 .trace_reflections_else_35:
 	li	a0, 1
-.trace_reflections_cont_36:
-.trace_reflections_cont_34:
-	b	.trace_reflections_cont_32
+	b	.trace_reflections_cont_16
 .trace_reflections_else_31:
 	li	a0, 1
-.trace_reflections_cont_32:
-.trace_reflections_cont_30:
-	b	.trace_reflections_cont_28
+	b	.trace_reflections_cont_16
 .trace_reflections_else_27:
 	li	a0, 1
-.trace_reflections_cont_28:
-.trace_reflections_cont_26:
-	b	.trace_reflections_cont_24
+	b	.trace_reflections_cont_16
 .trace_reflections_else_23:
 	li	a0, 1
-.trace_reflections_cont_24:
-.trace_reflections_cont_22:
-	b	.trace_reflections_cont_20
+	b	.trace_reflections_cont_16
 .trace_reflections_else_19:
 	li	a0, 1
-.trace_reflections_cont_20:
-.trace_reflections_cont_18:
 	b	.trace_reflections_cont_16
 .trace_reflections_else_15:
 	li	a0, 1
@@ -6943,10 +6791,9 @@ trace_reflections_2923:
 .trace_reflections_cont_14:
 	bne	a0, zero, .trace_reflections_else_37
 	li	a0, 0
-	b	.trace_reflections_cont_38
+	b	.trace_reflections_cont_12
 .trace_reflections_else_37:
 	li	a0, 1
-.trace_reflections_cont_38:
 	b	.trace_reflections_cont_12
 .trace_reflections_else_11:
 	li	a0, 0
@@ -6976,7 +6823,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_45
 	li	a0, 0
-	b	.trace_reflections_cont_46
+	b	.trace_reflections_cont_44
 .trace_reflections_else_45:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -6988,7 +6835,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_49
 	li	a0, 0
-	b	.trace_reflections_cont_50
+	b	.trace_reflections_cont_44
 .trace_reflections_else_49:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7000,7 +6847,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_53
 	li	a0, 0
-	b	.trace_reflections_cont_54
+	b	.trace_reflections_cont_44
 .trace_reflections_else_53:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7012,7 +6859,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_57
 	li	a0, 0
-	b	.trace_reflections_cont_58
+	b	.trace_reflections_cont_44
 .trace_reflections_else_57:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7024,7 +6871,7 @@ trace_reflections_2923:
 	li	t6, -1
 	bne	a1, t6, .trace_reflections_else_61
 	li	a0, 0
-	b	.trace_reflections_cont_62
+	b	.trace_reflections_cont_44
 .trace_reflections_else_61:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7034,31 +6881,21 @@ trace_reflections_2923:
 	li	a0, 7
 	lw	a1, 44(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.trace_reflections_cont_64
+	b	.trace_reflections_cont_44
 .trace_reflections_else_63:
 	li	a0, 1
-.trace_reflections_cont_64:
-.trace_reflections_cont_62:
-	b	.trace_reflections_cont_60
+	b	.trace_reflections_cont_44
 .trace_reflections_else_59:
 	li	a0, 1
-.trace_reflections_cont_60:
-.trace_reflections_cont_58:
-	b	.trace_reflections_cont_56
+	b	.trace_reflections_cont_44
 .trace_reflections_else_55:
 	li	a0, 1
-.trace_reflections_cont_56:
-.trace_reflections_cont_54:
-	b	.trace_reflections_cont_52
+	b	.trace_reflections_cont_44
 .trace_reflections_else_51:
 	li	a0, 1
-.trace_reflections_cont_52:
-.trace_reflections_cont_50:
-	b	.trace_reflections_cont_48
+	b	.trace_reflections_cont_44
 .trace_reflections_else_47:
 	li	a0, 1
-.trace_reflections_cont_48:
-.trace_reflections_cont_46:
 	b	.trace_reflections_cont_44
 .trace_reflections_else_43:
 	li	a0, 1
@@ -7172,7 +7009,7 @@ trace_reflections_2923:
 	bne	a0, t6, .trace_reflections_else_71
 	lw	a0, 4(a5)
 	li	t6, -1
-	beq	a0, t6, .trace_reflections_cont_73
+	beq	a0, t6, .trace_reflections_cont_72
 	slli	a0, a0, 2
 	lwl	a1, min_caml_and_net(a0)
 	li	a0, 0
@@ -7181,7 +7018,7 @@ trace_reflections_2923:
 	lw	a0, 72(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_reflections_cont_74
+	beq	a1, t6, .trace_reflections_cont_72
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -7190,7 +7027,7 @@ trace_reflections_2923:
 	lw	a0, 72(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_reflections_cont_75
+	beq	a1, t6, .trace_reflections_cont_72
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -7199,7 +7036,7 @@ trace_reflections_2923:
 	lw	a0, 72(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_reflections_cont_76
+	beq	a1, t6, .trace_reflections_cont_72
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -7209,10 +7046,6 @@ trace_reflections_2923:
 	lw	a1, 72(sp)	# restore
 	lw	a2, 64(sp)	# restore
 	call	solve_one_or_network_fast_2897
-.trace_reflections_cont_76:
-.trace_reflections_cont_75:
-.trace_reflections_cont_74:
-.trace_reflections_cont_73:
 	b	.trace_reflections_cont_72
 .trace_reflections_else_71:
 	sw	a5, 72(sp)	# save
@@ -7472,10 +7305,9 @@ trace_ray_2928:
 	fle	a6, fa3, fzero
 	bne	a6, zero, .trace_ray_else_11
 	fli	fa3, l_data_5
-	b	.trace_ray_cont_12
+	b	.trace_ray_cont_10
 .trace_ray_else_11:
 	fli	fa3, l_data_6
-.trace_ray_cont_12:
 	b	.trace_ray_cont_10
 .trace_ray_else_9:
 	fmv	fa3, fzero
@@ -7669,7 +7501,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_29
 	li	a0, 0
-	b	.trace_ray_cont_30
+	b	.trace_ray_cont_28
 .trace_ray_else_29:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7681,7 +7513,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_33
 	li	a0, 0
-	b	.trace_ray_cont_34
+	b	.trace_ray_cont_28
 .trace_ray_else_33:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7693,7 +7525,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_37
 	li	a0, 0
-	b	.trace_ray_cont_38
+	b	.trace_ray_cont_28
 .trace_ray_else_37:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7705,7 +7537,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_41
 	li	a0, 0
-	b	.trace_ray_cont_42
+	b	.trace_ray_cont_28
 .trace_ray_else_41:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7717,7 +7549,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_45
 	li	a0, 0
-	b	.trace_ray_cont_46
+	b	.trace_ray_cont_28
 .trace_ray_else_45:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7727,31 +7559,21 @@ trace_ray_2928:
 	li	a0, 7
 	lw	a1, 96(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.trace_ray_cont_48
+	b	.trace_ray_cont_28
 .trace_ray_else_47:
 	li	a0, 1
-.trace_ray_cont_48:
-.trace_ray_cont_46:
-	b	.trace_ray_cont_44
+	b	.trace_ray_cont_28
 .trace_ray_else_43:
 	li	a0, 1
-.trace_ray_cont_44:
-.trace_ray_cont_42:
-	b	.trace_ray_cont_40
+	b	.trace_ray_cont_28
 .trace_ray_else_39:
 	li	a0, 1
-.trace_ray_cont_40:
-.trace_ray_cont_38:
-	b	.trace_ray_cont_36
+	b	.trace_ray_cont_28
 .trace_ray_else_35:
 	li	a0, 1
-.trace_ray_cont_36:
-.trace_ray_cont_34:
-	b	.trace_ray_cont_32
+	b	.trace_ray_cont_28
 .trace_ray_else_31:
 	li	a0, 1
-.trace_ray_cont_32:
-.trace_ray_cont_30:
 	b	.trace_ray_cont_28
 .trace_ray_else_27:
 	li	a0, 1
@@ -7759,10 +7581,9 @@ trace_ray_2928:
 .trace_ray_cont_26:
 	bne	a0, zero, .trace_ray_else_49
 	li	a0, 0
-	b	.trace_ray_cont_50
+	b	.trace_ray_cont_24
 .trace_ray_else_49:
 	li	a0, 1
-.trace_ray_cont_50:
 	b	.trace_ray_cont_24
 .trace_ray_else_23:
 	li	a0, 0
@@ -7792,7 +7613,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_57
 	li	a0, 0
-	b	.trace_ray_cont_58
+	b	.trace_ray_cont_56
 .trace_ray_else_57:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7804,7 +7625,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_61
 	li	a0, 0
-	b	.trace_ray_cont_62
+	b	.trace_ray_cont_56
 .trace_ray_else_61:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7816,7 +7637,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_65
 	li	a0, 0
-	b	.trace_ray_cont_66
+	b	.trace_ray_cont_56
 .trace_ray_else_65:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7828,7 +7649,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_69
 	li	a0, 0
-	b	.trace_ray_cont_70
+	b	.trace_ray_cont_56
 .trace_ray_else_69:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7840,7 +7661,7 @@ trace_ray_2928:
 	li	t6, -1
 	bne	a1, t6, .trace_ray_else_73
 	li	a0, 0
-	b	.trace_ray_cont_74
+	b	.trace_ray_cont_56
 .trace_ray_else_73:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -7850,31 +7671,21 @@ trace_ray_2928:
 	li	a0, 7
 	lw	a1, 96(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.trace_ray_cont_76
+	b	.trace_ray_cont_56
 .trace_ray_else_75:
 	li	a0, 1
-.trace_ray_cont_76:
-.trace_ray_cont_74:
-	b	.trace_ray_cont_72
+	b	.trace_ray_cont_56
 .trace_ray_else_71:
 	li	a0, 1
-.trace_ray_cont_72:
-.trace_ray_cont_70:
-	b	.trace_ray_cont_68
+	b	.trace_ray_cont_56
 .trace_ray_else_67:
 	li	a0, 1
-.trace_ray_cont_68:
-.trace_ray_cont_66:
-	b	.trace_ray_cont_64
+	b	.trace_ray_cont_56
 .trace_ray_else_63:
 	li	a0, 1
-.trace_ray_cont_64:
-.trace_ray_cont_62:
-	b	.trace_ray_cont_60
+	b	.trace_ray_cont_56
 .trace_ray_else_59:
 	li	a0, 1
-.trace_ray_cont_60:
-.trace_ray_cont_58:
 	b	.trace_ray_cont_56
 .trace_ray_else_55:
 	li	a0, 1
@@ -8000,7 +7811,7 @@ trace_ray_2928:
 	bne	a0, t6, .trace_ray_else_84
 	lw	a0, 4(a5)
 	li	t6, -1
-	beq	a0, t6, .trace_ray_cont_86
+	beq	a0, t6, .trace_ray_cont_85
 	slli	a0, a0, 2
 	lwl	a1, min_caml_and_net(a0)
 	li	a0, 0
@@ -8009,7 +7820,7 @@ trace_ray_2928:
 	lw	a0, 124(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_ray_cont_87
+	beq	a1, t6, .trace_ray_cont_85
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8018,7 +7829,7 @@ trace_ray_2928:
 	lw	a0, 124(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_ray_cont_88
+	beq	a1, t6, .trace_ray_cont_85
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8027,7 +7838,7 @@ trace_ray_2928:
 	lw	a0, 124(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .trace_ray_cont_89
+	beq	a1, t6, .trace_ray_cont_85
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8037,10 +7848,6 @@ trace_ray_2928:
 	lw	a1, 124(sp)	# restore
 	lw	a2, 116(sp)	# restore
 	call	solve_one_or_network_fast_2897
-.trace_ray_cont_89:
-.trace_ray_cont_88:
-.trace_ray_cont_87:
-.trace_ray_cont_86:
 	b	.trace_ray_cont_85
 .trace_ray_else_84:
 	sw	a5, 124(sp)	# save
@@ -8269,10 +8076,9 @@ trace_diffuse_ray_2934:
 	fle	a1, fa0, fzero
 	bne	a1, zero, .trace_diffuse_ray_else_9
 	fli	fa0, l_data_5
-	b	.trace_diffuse_ray_cont_10
+	b	.trace_diffuse_ray_cont_8
 .trace_diffuse_ray_else_9:
 	fli	fa0, l_data_6
-.trace_diffuse_ray_cont_10:
 	b	.trace_diffuse_ray_cont_8
 .trace_diffuse_ray_else_7:
 	fmv	fa0, fzero
@@ -8347,7 +8153,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_25
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_26
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_25:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8359,7 +8165,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_29
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_30
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_29:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8371,7 +8177,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_33
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_34
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_33:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8383,7 +8189,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_37
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_38
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_37:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8395,7 +8201,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_41
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_42
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_41:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8405,31 +8211,21 @@ trace_diffuse_ray_2934:
 	li	a0, 7
 	lw	a1, 32(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.trace_diffuse_ray_cont_44
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_43:
 	li	a0, 1
-.trace_diffuse_ray_cont_44:
-.trace_diffuse_ray_cont_42:
-	b	.trace_diffuse_ray_cont_40
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_39:
 	li	a0, 1
-.trace_diffuse_ray_cont_40:
-.trace_diffuse_ray_cont_38:
-	b	.trace_diffuse_ray_cont_36
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_35:
 	li	a0, 1
-.trace_diffuse_ray_cont_36:
-.trace_diffuse_ray_cont_34:
-	b	.trace_diffuse_ray_cont_32
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_31:
 	li	a0, 1
-.trace_diffuse_ray_cont_32:
-.trace_diffuse_ray_cont_30:
-	b	.trace_diffuse_ray_cont_28
+	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_27:
 	li	a0, 1
-.trace_diffuse_ray_cont_28:
-.trace_diffuse_ray_cont_26:
 	b	.trace_diffuse_ray_cont_24
 .trace_diffuse_ray_else_23:
 	li	a0, 1
@@ -8437,10 +8233,9 @@ trace_diffuse_ray_2934:
 .trace_diffuse_ray_cont_22:
 	bne	a0, zero, .trace_diffuse_ray_else_45
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_46
+	b	.trace_diffuse_ray_cont_20
 .trace_diffuse_ray_else_45:
 	li	a0, 1
-.trace_diffuse_ray_cont_46:
 	b	.trace_diffuse_ray_cont_20
 .trace_diffuse_ray_else_19:
 	li	a0, 0
@@ -8470,7 +8265,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_53
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_54
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_53:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8482,7 +8277,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_57
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_58
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_57:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8494,7 +8289,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_61
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_62
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_61:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8506,7 +8301,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_65
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_66
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_65:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8518,7 +8313,7 @@ trace_diffuse_ray_2934:
 	li	t6, -1
 	bne	a1, t6, .trace_diffuse_ray_else_69
 	li	a0, 0
-	b	.trace_diffuse_ray_cont_70
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_69:
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
@@ -8528,31 +8323,21 @@ trace_diffuse_ray_2934:
 	li	a0, 7
 	lw	a1, 32(sp)	# restore
 	call	shadow_check_one_or_group_2873
-	b	.trace_diffuse_ray_cont_72
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_71:
 	li	a0, 1
-.trace_diffuse_ray_cont_72:
-.trace_diffuse_ray_cont_70:
-	b	.trace_diffuse_ray_cont_68
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_67:
 	li	a0, 1
-.trace_diffuse_ray_cont_68:
-.trace_diffuse_ray_cont_66:
-	b	.trace_diffuse_ray_cont_64
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_63:
 	li	a0, 1
-.trace_diffuse_ray_cont_64:
-.trace_diffuse_ray_cont_62:
-	b	.trace_diffuse_ray_cont_60
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_59:
 	li	a0, 1
-.trace_diffuse_ray_cont_60:
-.trace_diffuse_ray_cont_58:
-	b	.trace_diffuse_ray_cont_56
+	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_55:
 	li	a0, 1
-.trace_diffuse_ray_cont_56:
-.trace_diffuse_ray_cont_54:
 	b	.trace_diffuse_ray_cont_52
 .trace_diffuse_ray_else_51:
 	li	a0, 1
@@ -8662,7 +8447,7 @@ iter_trace_diffuse_rays_2937:
 	bne	a0, t6, .iter_trace_diffuse_rays_else_4
 	lw	a0, 4(a6)
 	li	t6, -1
-	beq	a0, t6, .iter_trace_diffuse_rays_cont_6
+	beq	a0, t6, .iter_trace_diffuse_rays_cont_5
 	slli	a0, a0, 2
 	lwl	a1, min_caml_and_net(a0)
 	li	a0, 0
@@ -8671,7 +8456,7 @@ iter_trace_diffuse_rays_2937:
 	lw	a0, 36(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .iter_trace_diffuse_rays_cont_7
+	beq	a1, t6, .iter_trace_diffuse_rays_cont_5
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8680,7 +8465,7 @@ iter_trace_diffuse_rays_2937:
 	lw	a0, 36(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .iter_trace_diffuse_rays_cont_8
+	beq	a1, t6, .iter_trace_diffuse_rays_cont_5
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8689,7 +8474,7 @@ iter_trace_diffuse_rays_2937:
 	lw	a0, 36(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .iter_trace_diffuse_rays_cont_9
+	beq	a1, t6, .iter_trace_diffuse_rays_cont_5
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8699,10 +8484,6 @@ iter_trace_diffuse_rays_2937:
 	lw	a1, 36(sp)	# restore
 	lw	a2, 24(sp)	# restore
 	call	solve_one_or_network_fast_2897
-.iter_trace_diffuse_rays_cont_9:
-.iter_trace_diffuse_rays_cont_8:
-.iter_trace_diffuse_rays_cont_7:
-.iter_trace_diffuse_rays_cont_6:
 	b	.iter_trace_diffuse_rays_cont_5
 .iter_trace_diffuse_rays_else_4:
 	sw	a6, 36(sp)	# save
@@ -8779,7 +8560,7 @@ iter_trace_diffuse_rays_2937:
 .iter_trace_diffuse_rays_else_16:
 	li	a0, 0
 .iter_trace_diffuse_rays_cont_17:
-	beq	a0, zero, .iter_trace_diffuse_rays_cont_18
+	beq	a0, zero, .iter_trace_diffuse_rays_cont_2
 	lda	a0, min_caml_intersected_object_id
 	lw	a0, 0(a0)
 	slli	a0, a0, 2
@@ -8807,10 +8588,9 @@ iter_trace_diffuse_rays_2937:
 	fle	a1, fa0, fzero
 	bne	a1, zero, .iter_trace_diffuse_rays_else_23
 	fli	fa0, l_data_5
-	b	.iter_trace_diffuse_rays_cont_24
+	b	.iter_trace_diffuse_rays_cont_22
 .iter_trace_diffuse_rays_else_23:
 	fli	fa0, l_data_6
-.iter_trace_diffuse_rays_cont_24:
 	b	.iter_trace_diffuse_rays_cont_22
 .iter_trace_diffuse_rays_else_21:
 	fmv	fa0, fzero
@@ -8843,7 +8623,7 @@ iter_trace_diffuse_rays_2937:
 	lw	a1, 20(sp)	# restore
 	lw	a1, 0(a1)
 	call	shadow_check_one_or_matrix_2876
-	bne	a0, zero, .iter_trace_diffuse_rays_cont_27
+	bne	a0, zero, .iter_trace_diffuse_rays_cont_2
 	lda	a0, min_caml_nvector
 	lda	a1, min_caml_light
 	flw	fa0, 0(a0)
@@ -8884,8 +8664,6 @@ iter_trace_diffuse_rays_2937:
 	fmul	fa0, fa0, fa2
 	fadd	fa0, fa1, fa0
 	fsw	fa0, 8(a0)
-.iter_trace_diffuse_rays_cont_27:
-.iter_trace_diffuse_rays_cont_18:
 	b	.iter_trace_diffuse_rays_cont_2
 .iter_trace_diffuse_rays_else_1:
 	slli	a4, a3, 2
@@ -8911,7 +8689,7 @@ iter_trace_diffuse_rays_2937:
 	bne	a0, t6, .iter_trace_diffuse_rays_else_30
 	lw	a0, 4(a6)
 	li	t6, -1
-	beq	a0, t6, .iter_trace_diffuse_rays_cont_32
+	beq	a0, t6, .iter_trace_diffuse_rays_cont_31
 	slli	a0, a0, 2
 	lwl	a1, min_caml_and_net(a0)
 	li	a0, 0
@@ -8920,7 +8698,7 @@ iter_trace_diffuse_rays_2937:
 	lw	a0, 68(sp)	# restore
 	lw	a1, 8(a0)
 	li	t6, -1
-	beq	a1, t6, .iter_trace_diffuse_rays_cont_33
+	beq	a1, t6, .iter_trace_diffuse_rays_cont_31
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8929,7 +8707,7 @@ iter_trace_diffuse_rays_2937:
 	lw	a0, 68(sp)	# restore
 	lw	a1, 12(a0)
 	li	t6, -1
-	beq	a1, t6, .iter_trace_diffuse_rays_cont_34
+	beq	a1, t6, .iter_trace_diffuse_rays_cont_31
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8938,7 +8716,7 @@ iter_trace_diffuse_rays_2937:
 	lw	a0, 68(sp)	# restore
 	lw	a1, 16(a0)
 	li	t6, -1
-	beq	a1, t6, .iter_trace_diffuse_rays_cont_35
+	beq	a1, t6, .iter_trace_diffuse_rays_cont_31
 	slli	a1, a1, 2
 	lwl	a1, min_caml_and_net(a1)
 	li	a0, 0
@@ -8948,10 +8726,6 @@ iter_trace_diffuse_rays_2937:
 	lw	a1, 68(sp)	# restore
 	lw	a2, 56(sp)	# restore
 	call	solve_one_or_network_fast_2897
-.iter_trace_diffuse_rays_cont_35:
-.iter_trace_diffuse_rays_cont_34:
-.iter_trace_diffuse_rays_cont_33:
-.iter_trace_diffuse_rays_cont_32:
 	b	.iter_trace_diffuse_rays_cont_31
 .iter_trace_diffuse_rays_else_30:
 	sw	a6, 68(sp)	# save
@@ -9056,10 +8830,9 @@ iter_trace_diffuse_rays_2937:
 	fle	a1, fa0, fzero
 	bne	a1, zero, .iter_trace_diffuse_rays_else_49
 	fli	fa0, l_data_5
-	b	.iter_trace_diffuse_rays_cont_50
+	b	.iter_trace_diffuse_rays_cont_48
 .iter_trace_diffuse_rays_else_49:
 	fli	fa0, l_data_6
-.iter_trace_diffuse_rays_cont_50:
 	b	.iter_trace_diffuse_rays_cont_48
 .iter_trace_diffuse_rays_else_47:
 	fmv	fa0, fzero
@@ -10092,18 +9865,15 @@ try_exploit_neighbors_2975:
 	lw	s1, 0(t6)
 	bne	s1, a6, .try_exploit_neighbors_else_7
 	li	a6, 1
-	b	.try_exploit_neighbors_cont_8
+	b	.try_exploit_neighbors_cont_2
 .try_exploit_neighbors_else_7:
 	li	a6, 0
-.try_exploit_neighbors_cont_8:
-	b	.try_exploit_neighbors_cont_6
+	b	.try_exploit_neighbors_cont_2
 .try_exploit_neighbors_else_5:
 	li	a6, 0
-.try_exploit_neighbors_cont_6:
-	b	.try_exploit_neighbors_cont_4
+	b	.try_exploit_neighbors_cont_2
 .try_exploit_neighbors_else_3:
 	li	a6, 0
-.try_exploit_neighbors_cont_4:
 	b	.try_exploit_neighbors_cont_2
 .try_exploit_neighbors_else_1:
 	li	a6, 0
@@ -10402,18 +10172,15 @@ try_exploit_neighbors_2975:
 	lw	s1, 0(t6)
 	bne	s1, a6, .try_exploit_neighbors_else_20
 	li	a6, 1
-	b	.try_exploit_neighbors_cont_21
+	b	.try_exploit_neighbors_cont_15
 .try_exploit_neighbors_else_20:
 	li	a6, 0
-.try_exploit_neighbors_cont_21:
-	b	.try_exploit_neighbors_cont_19
+	b	.try_exploit_neighbors_cont_15
 .try_exploit_neighbors_else_18:
 	li	a6, 0
-.try_exploit_neighbors_cont_19:
-	b	.try_exploit_neighbors_cont_17
+	b	.try_exploit_neighbors_cont_15
 .try_exploit_neighbors_else_16:
 	li	a6, 0
-.try_exploit_neighbors_cont_17:
 	b	.try_exploit_neighbors_cont_15
 .try_exploit_neighbors_else_14:
 	li	a6, 0
@@ -10979,7 +10746,7 @@ scan_pixel_3002:
 	lw	s5, 8(a0)
 	lw	s6, 4(a0)
 	lw	s7, 0(s5)
-	blt	s7, zero, .scan_pixel_cont_13
+	blt	s7, zero, .scan_pixel_cont_12
 	lw	s7, 0(s4)
 	sw	a0, 28(sp)	# save
 	sw	s3, 32(sp)	# save
@@ -10994,7 +10761,7 @@ scan_pixel_3002:
 .scan_pixel_cont_14:
 	lw	a0, 56(sp)	# restore
 	lw	a1, 4(a0)
-	blt	a1, zero, .scan_pixel_cont_15
+	blt	a1, zero, .scan_pixel_cont_12
 	lw	a1, 52(sp)	# restore
 	lw	a2, 4(a1)
 	beq	a2, zero, .scan_pixel_cont_16
@@ -11041,7 +10808,7 @@ scan_pixel_3002:
 	li	a1, 2
 	lw	a0, 56(sp)	# restore
 	lw	a0, 8(a0)
-	blt	a0, zero, .scan_pixel_cont_17
+	blt	a0, zero, .scan_pixel_cont_12
 	lw	a0, 52(sp)	# restore
 	lw	a0, 8(a0)
 	beq	a0, zero, .scan_pixel_cont_18
@@ -11051,9 +10818,6 @@ scan_pixel_3002:
 	li	a1, 3
 	lw	a0, 28(sp)	# restore
 	call	do_without_neighbors_2959
-.scan_pixel_cont_17:
-.scan_pixel_cont_15:
-.scan_pixel_cont_13:
 	b	.scan_pixel_cont_12
 .scan_pixel_else_11:
 	li	a7, 0
@@ -11096,18 +10860,15 @@ scan_pixel_3002:
 	lw	s3, 0(s3)
 	bne	s3, s1, .scan_pixel_else_26
 	li	s1, 1
-	b	.scan_pixel_cont_27
+	b	.scan_pixel_cont_21
 .scan_pixel_else_26:
 	li	s1, 0
-.scan_pixel_cont_27:
-	b	.scan_pixel_cont_25
+	b	.scan_pixel_cont_21
 .scan_pixel_else_24:
 	li	s1, 0
-.scan_pixel_cont_25:
-	b	.scan_pixel_cont_23
+	b	.scan_pixel_cont_21
 .scan_pixel_else_22:
 	li	s1, 0
-.scan_pixel_cont_23:
 	b	.scan_pixel_cont_21
 .scan_pixel_else_20:
 	li	s1, 0
@@ -11124,7 +10885,7 @@ scan_pixel_3002:
 	lw	s5, 8(a0)
 	lw	s6, 4(a0)
 	lw	s7, 0(s5)
-	blt	s7, zero, .scan_pixel_cont_30
+	blt	s7, zero, .scan_pixel_cont_29
 	lw	s7, 0(s4)
 	sw	a0, 64(sp)	# save
 	sw	s4, 68(sp)	# save
@@ -11170,7 +10931,7 @@ scan_pixel_3002:
 	li	a1, 1
 	lw	a0, 72(sp)	# restore
 	lw	a0, 4(a0)
-	blt	a0, zero, .scan_pixel_cont_32
+	blt	a0, zero, .scan_pixel_cont_29
 	lw	a0, 68(sp)	# restore
 	lw	a0, 4(a0)
 	beq	a0, zero, .scan_pixel_cont_33
@@ -11180,8 +10941,6 @@ scan_pixel_3002:
 	li	a1, 2
 	lw	a0, 64(sp)	# restore
 	call	do_without_neighbors_2959
-.scan_pixel_cont_32:
-.scan_pixel_cont_30:
 	b	.scan_pixel_cont_29
 .scan_pixel_else_28:
 	lw	s1, 0(s2)
@@ -11207,9 +10966,8 @@ scan_pixel_3002:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_pixel_else_35
-	bge	a0, zero, .scan_pixel_cont_37
+	bge	a0, zero, .scan_pixel_cont_36
 	li	a0, 0
-.scan_pixel_cont_37:
 	b	.scan_pixel_cont_36
 .scan_pixel_else_35:
 	li	a0, 255
@@ -11222,9 +10980,8 @@ scan_pixel_3002:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_pixel_else_38
-	bge	a0, zero, .scan_pixel_cont_40
+	bge	a0, zero, .scan_pixel_cont_39
 	li	a0, 0
-.scan_pixel_cont_40:
 	b	.scan_pixel_cont_39
 .scan_pixel_else_38:
 	li	a0, 255
@@ -11237,9 +10994,8 @@ scan_pixel_3002:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_pixel_else_41
-	bge	a0, zero, .scan_pixel_cont_43
+	bge	a0, zero, .scan_pixel_cont_42
 	li	a0, 0
-.scan_pixel_cont_43:
 	b	.scan_pixel_cont_42
 .scan_pixel_else_41:
 	li	a0, 255
@@ -11305,7 +11061,7 @@ scan_pixel_3002:
 	lw	s2, 8(a0)
 	lw	s3, 4(a0)
 	lw	s4, 0(s2)
-	blt	s4, zero, .scan_pixel_cont_56
+	blt	s4, zero, .scan_pixel_cont_55
 	lw	s4, 0(s1)
 	sw	a0, 88(sp)	# save
 	sw	s1, 92(sp)	# save
@@ -11351,7 +11107,7 @@ scan_pixel_3002:
 	li	a1, 1
 	lw	a0, 96(sp)	# restore
 	lw	a0, 4(a0)
-	blt	a0, zero, .scan_pixel_cont_58
+	blt	a0, zero, .scan_pixel_cont_55
 	lw	a0, 92(sp)	# restore
 	lw	a0, 4(a0)
 	beq	a0, zero, .scan_pixel_cont_59
@@ -11361,8 +11117,6 @@ scan_pixel_3002:
 	li	a1, 2
 	lw	a0, 88(sp)	# restore
 	call	do_without_neighbors_2959
-.scan_pixel_cont_58:
-.scan_pixel_cont_56:
 	b	.scan_pixel_cont_55
 .scan_pixel_else_54:
 	li	a1, 0
@@ -11378,9 +11132,8 @@ scan_pixel_3002:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_pixel_else_60
-	bge	a0, zero, .scan_pixel_cont_62
+	bge	a0, zero, .scan_pixel_cont_61
 	li	a0, 0
-.scan_pixel_cont_62:
 	b	.scan_pixel_cont_61
 .scan_pixel_else_60:
 	li	a0, 255
@@ -11393,9 +11146,8 @@ scan_pixel_3002:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_pixel_else_63
-	bge	a0, zero, .scan_pixel_cont_65
+	bge	a0, zero, .scan_pixel_cont_64
 	li	a0, 0
-.scan_pixel_cont_65:
 	b	.scan_pixel_cont_64
 .scan_pixel_else_63:
 	li	a0, 255
@@ -11408,9 +11160,8 @@ scan_pixel_3002:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_pixel_else_66
-	bge	a0, zero, .scan_pixel_cont_68
+	bge	a0, zero, .scan_pixel_cont_67
 	li	a0, 0
-.scan_pixel_cont_68:
 	b	.scan_pixel_cont_67
 .scan_pixel_else_66:
 	li	a0, 255
@@ -11525,7 +11276,7 @@ scan_line_3008:
 	lw	s3, 8(a0)
 	lw	s4, 4(a0)
 	lw	s5, 0(s3)
-	blt	s5, zero, .scan_line_cont_13
+	blt	s5, zero, .scan_line_cont_12
 	lw	s5, 0(s2)
 	sw	a0, 32(sp)	# save
 	sw	s2, 36(sp)	# save
@@ -11571,7 +11322,7 @@ scan_line_3008:
 	li	a1, 1
 	lw	a0, 40(sp)	# restore
 	lw	a0, 4(a0)
-	blt	a0, zero, .scan_line_cont_15
+	blt	a0, zero, .scan_line_cont_12
 	lw	a0, 36(sp)	# restore
 	lw	a0, 4(a0)
 	beq	a0, zero, .scan_line_cont_16
@@ -11581,8 +11332,6 @@ scan_line_3008:
 	li	a1, 2
 	lw	a0, 32(sp)	# restore
 	call	do_without_neighbors_2959
-.scan_line_cont_15:
-.scan_line_cont_13:
 	b	.scan_line_cont_12
 .scan_line_else_11:
 	li	a4, 0
@@ -11598,9 +11347,8 @@ scan_line_3008:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_line_else_17
-	bge	a0, zero, .scan_line_cont_19
+	bge	a0, zero, .scan_line_cont_18
 	li	a0, 0
-.scan_line_cont_19:
 	b	.scan_line_cont_18
 .scan_line_else_17:
 	li	a0, 255
@@ -11613,9 +11361,8 @@ scan_line_3008:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_line_else_20
-	bge	a0, zero, .scan_line_cont_22
+	bge	a0, zero, .scan_line_cont_21
 	li	a0, 0
-.scan_line_cont_22:
 	b	.scan_line_cont_21
 .scan_line_else_20:
 	li	a0, 255
@@ -11628,9 +11375,8 @@ scan_line_3008:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_line_else_23
-	bge	a0, zero, .scan_line_cont_25
+	bge	a0, zero, .scan_line_cont_24
 	li	a0, 0
-.scan_line_cont_25:
 	b	.scan_line_cont_24
 .scan_line_else_23:
 	li	a0, 255
@@ -12092,7 +11838,7 @@ init_line_elements_3018:
 	add	t6, a0, a3
 	sw	a2, 0(t6)
 	addi	a1, a1, -1
-	blt	a1, zero, .init_line_elements_else_2
+	blt	a1, zero, init_line_elements_ret
 	fsw	fa0, 0(sp)	# save
 	sw	a0, 4(sp)	# save
 	sw	a1, 8(sp)	# save
@@ -12307,7 +12053,6 @@ init_line_elements_3018:
 .init_line_elements_else_3:
 	mv	a0, a3
 	b	init_line_elements_ret
-.init_line_elements_else_2:
 	b	init_line_elements_ret
 .init_line_elements_else_1:
 init_line_elements_ret:
