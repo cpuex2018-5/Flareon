@@ -201,7 +201,7 @@ and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
     | NonTail(x), Ans(Mv(y)) | NonTail(x), Ans(FMv(y)) when x = y -> false
     | _ -> true
   in
-  let unsymmetry = match rs2 with `C(_) -> b = "bge" || b = "ble" | _ -> false in
+  let unsymmetry = match rs2 with `C(0) -> false | `C(_) -> b = "bge" || b = "ble" | _ -> false in
   if not (does_write e2) then
     (let b_cont = Id.L(Id.genid ("." ^ !funcname ^ "_cont")) in
      let buf' = g'_branch buf bn rs1 rs2 b_cont in
@@ -211,7 +211,7 @@ and g'_non_tail_if buf dest rs1 rs2 e1 e2 b bn =
      stackset := stackset_back;
      buf')
   else
-  if not (does_write e1 || unsymmetry) then
+  if not (does_write e1) && not unsymmetry then
     (let b_cont = Id.L(Id.genid ("." ^ !funcname ^ "_cont")) in
      let buf' = g'_branch buf b rs1 rs2 b_cont in (* NOTE: b = "bgei" or "blei" shouldn't reach here *)
      let stackset_back = !stackset in

@@ -11207,11 +11207,9 @@ scan_pixel_3002:
 	call	min_caml_int_of_float
 	li	t6, 255
 	bgt	a0, t6, .scan_pixel_else_35
-	blt	a0, zero, .scan_pixel_else_37
-	b	.scan_pixel_cont_38
-.scan_pixel_else_37:
+	bge	a0, zero, .scan_pixel_cont_37
 	li	a0, 0
-.scan_pixel_cont_38:
+.scan_pixel_cont_37:
 	b	.scan_pixel_cont_36
 .scan_pixel_else_35:
 	li	a0, 255
@@ -11223,16 +11221,14 @@ scan_pixel_3002:
 	flw	fa0, 4(a0)
 	call	min_caml_int_of_float
 	li	t6, 255
-	bgt	a0, t6, .scan_pixel_else_39
-	blt	a0, zero, .scan_pixel_else_41
-	b	.scan_pixel_cont_42
-.scan_pixel_else_41:
+	bgt	a0, t6, .scan_pixel_else_38
+	bge	a0, zero, .scan_pixel_cont_40
 	li	a0, 0
-.scan_pixel_cont_42:
-	b	.scan_pixel_cont_40
-.scan_pixel_else_39:
-	li	a0, 255
 .scan_pixel_cont_40:
+	b	.scan_pixel_cont_39
+.scan_pixel_else_38:
+	li	a0, 255
+.scan_pixel_cont_39:
 	call	min_caml_print_int
 	li	a0, 32
 	call	min_caml_print_char
@@ -11240,16 +11236,14 @@ scan_pixel_3002:
 	flw	fa0, 8(a0)
 	call	min_caml_int_of_float
 	li	t6, 255
-	bgt	a0, t6, .scan_pixel_else_43
-	blt	a0, zero, .scan_pixel_else_45
-	b	.scan_pixel_cont_46
-.scan_pixel_else_45:
+	bgt	a0, t6, .scan_pixel_else_41
+	bge	a0, zero, .scan_pixel_cont_43
 	li	a0, 0
-.scan_pixel_cont_46:
-	b	.scan_pixel_cont_44
-.scan_pixel_else_43:
+.scan_pixel_cont_43:
+	b	.scan_pixel_cont_42
+.scan_pixel_else_41:
 	li	a0, 255
-.scan_pixel_cont_44:
+.scan_pixel_cont_42:
 	call	min_caml_print_int
 	li	a0, 10
 	call	min_caml_print_char
@@ -11257,9 +11251,9 @@ scan_pixel_3002:
 	addi	a0, a0, 1
 	lw	a1, 16(sp)	# restore
 	lw	a2, 0(a1)
-	bgt	a2, a0, .scan_pixel_else_47
+	bgt	a2, a0, .scan_pixel_else_44
 	b	scan_pixel_ret
-.scan_pixel_else_47:
+.scan_pixel_else_44:
 	slli	a2, a0, 2
 	lw	a3, 12(sp)	# restore
 	add	t6, a3, a2
@@ -11275,31 +11269,31 @@ scan_pixel_3002:
 	lw	a2, 4(a1)
 	lw	a5, 8(sp)	# restore
 	addi	a6, a5, 1
-	bgt	a2, a6, .scan_pixel_else_49
+	bgt	a2, a6, .scan_pixel_else_46
 	li	a1, 0
-	b	.scan_pixel_cont_50
-.scan_pixel_else_49:
-	bgt	a5, zero, .scan_pixel_else_51
+	b	.scan_pixel_cont_47
+.scan_pixel_else_46:
+	bgt	a5, zero, .scan_pixel_else_48
 	li	a1, 0
-	b	.scan_pixel_cont_52
-.scan_pixel_else_51:
+	b	.scan_pixel_cont_49
+.scan_pixel_else_48:
 	lw	a1, 0(a1)
 	addi	a2, a0, 1
-	bgt	a1, a2, .scan_pixel_else_53
+	bgt	a1, a2, .scan_pixel_else_50
 	li	a1, 0
-	b	.scan_pixel_cont_54
-.scan_pixel_else_53:
-	bgt	a0, zero, .scan_pixel_else_55
+	b	.scan_pixel_cont_51
+.scan_pixel_else_50:
+	bgt	a0, zero, .scan_pixel_else_52
 	li	a1, 0
-	b	.scan_pixel_cont_56
-.scan_pixel_else_55:
+	b	.scan_pixel_cont_53
+.scan_pixel_else_52:
 	li	a1, 1
-.scan_pixel_cont_56:
-.scan_pixel_cont_54:
-.scan_pixel_cont_52:
-.scan_pixel_cont_50:
+.scan_pixel_cont_53:
+.scan_pixel_cont_51:
+.scan_pixel_cont_49:
+.scan_pixel_cont_47:
 	sw	a0, 84(sp)	# save
-	bne	a1, zero, .scan_pixel_else_57
+	bne	a1, zero, .scan_pixel_else_54
 	slli	a1, a0, 2
 	add	t6, a3, a1
 	lw	a0, 0(t6)
@@ -11311,12 +11305,12 @@ scan_pixel_3002:
 	lw	s2, 8(a0)
 	lw	s3, 4(a0)
 	lw	s4, 0(s2)
-	blt	s4, zero, .scan_pixel_cont_59
+	blt	s4, zero, .scan_pixel_cont_56
 	lw	s4, 0(s1)
 	sw	a0, 88(sp)	# save
 	sw	s1, 92(sp)	# save
 	sw	s2, 96(sp)	# save
-	beq	s4, zero, .scan_pixel_cont_60
+	beq	s4, zero, .scan_pixel_cont_57
 	lda	s4, min_caml_diffuse_ray
 	lw	a6, 0(a6)
 	flw	fa0, 0(a6)
@@ -11353,24 +11347,24 @@ scan_pixel_3002:
 	fmul	fa1, fa1, fa2
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 8(a1)
-.scan_pixel_cont_60:
+.scan_pixel_cont_57:
 	li	a1, 1
 	lw	a0, 96(sp)	# restore
 	lw	a0, 4(a0)
-	blt	a0, zero, .scan_pixel_cont_61
+	blt	a0, zero, .scan_pixel_cont_58
 	lw	a0, 92(sp)	# restore
 	lw	a0, 4(a0)
-	beq	a0, zero, .scan_pixel_cont_62
+	beq	a0, zero, .scan_pixel_cont_59
 	lw	a0, 88(sp)	# restore
 	call	calc_diffuse_using_1point_2950
-.scan_pixel_cont_62:
+.scan_pixel_cont_59:
 	li	a1, 2
 	lw	a0, 88(sp)	# restore
 	call	do_without_neighbors_2959
-.scan_pixel_cont_61:
-.scan_pixel_cont_59:
-	b	.scan_pixel_cont_58
-.scan_pixel_else_57:
+.scan_pixel_cont_58:
+.scan_pixel_cont_56:
+	b	.scan_pixel_cont_55
+.scan_pixel_else_54:
 	li	a1, 0
 	lw	a2, 4(sp)	# restore
 	lw	a4, 0(sp)	# restore
@@ -11378,17 +11372,30 @@ scan_pixel_3002:
 	mv	a5, a1
 	mv	a1, t4
 	call	try_exploit_neighbors_2975
-.scan_pixel_cont_58:
+.scan_pixel_cont_55:
 	lw	a0, 24(sp)	# restore
 	flw	fa0, 0(a0)
 	call	min_caml_int_of_float
 	li	t6, 255
-	bgt	a0, t6, .scan_pixel_else_63
-	blt	a0, zero, .scan_pixel_else_65
-	b	.scan_pixel_cont_66
-.scan_pixel_else_65:
+	bgt	a0, t6, .scan_pixel_else_60
+	bge	a0, zero, .scan_pixel_cont_62
 	li	a0, 0
-.scan_pixel_cont_66:
+.scan_pixel_cont_62:
+	b	.scan_pixel_cont_61
+.scan_pixel_else_60:
+	li	a0, 255
+.scan_pixel_cont_61:
+	call	min_caml_print_int
+	li	a0, 32
+	call	min_caml_print_char
+	lw	a0, 24(sp)	# restore
+	flw	fa0, 4(a0)
+	call	min_caml_int_of_float
+	li	t6, 255
+	bgt	a0, t6, .scan_pixel_else_63
+	bge	a0, zero, .scan_pixel_cont_65
+	li	a0, 0
+.scan_pixel_cont_65:
 	b	.scan_pixel_cont_64
 .scan_pixel_else_63:
 	li	a0, 255
@@ -11397,36 +11404,17 @@ scan_pixel_3002:
 	li	a0, 32
 	call	min_caml_print_char
 	lw	a0, 24(sp)	# restore
-	flw	fa0, 4(a0)
-	call	min_caml_int_of_float
-	li	t6, 255
-	bgt	a0, t6, .scan_pixel_else_67
-	blt	a0, zero, .scan_pixel_else_69
-	b	.scan_pixel_cont_70
-.scan_pixel_else_69:
-	li	a0, 0
-.scan_pixel_cont_70:
-	b	.scan_pixel_cont_68
-.scan_pixel_else_67:
-	li	a0, 255
-.scan_pixel_cont_68:
-	call	min_caml_print_int
-	li	a0, 32
-	call	min_caml_print_char
-	lw	a0, 24(sp)	# restore
 	flw	fa0, 8(a0)
 	call	min_caml_int_of_float
 	li	t6, 255
-	bgt	a0, t6, .scan_pixel_else_71
-	blt	a0, zero, .scan_pixel_else_73
-	b	.scan_pixel_cont_74
-.scan_pixel_else_73:
+	bgt	a0, t6, .scan_pixel_else_66
+	bge	a0, zero, .scan_pixel_cont_68
 	li	a0, 0
-.scan_pixel_cont_74:
-	b	.scan_pixel_cont_72
-.scan_pixel_else_71:
+.scan_pixel_cont_68:
+	b	.scan_pixel_cont_67
+.scan_pixel_else_66:
 	li	a0, 255
-.scan_pixel_cont_72:
+.scan_pixel_cont_67:
 	call	min_caml_print_int
 	li	a0, 10
 	call	min_caml_print_char
@@ -11495,9 +11483,7 @@ scan_line_3008:
 	li	a0, 0
 	lw	a1, 20(sp)	# restore
 	lw	a2, 0(a1)
-	bgt	a2, zero, .scan_line_else_4
-	b	.scan_line_cont_5
-.scan_line_else_4:
+	ble	a2, zero, .scan_line_cont_4
 	lda	a2, min_caml_rgb
 	lw	a3, 16(sp)	# restore
 	lw	a4, 0(a3)
@@ -11511,25 +11497,25 @@ scan_line_3008:
 	lw	a4, 4(a1)
 	lw	a5, 12(sp)	# restore
 	addi	a6, a5, 1
-	bgt	a4, a6, .scan_line_else_6
+	bgt	a4, a6, .scan_line_else_5
 	li	a4, 0
-	b	.scan_line_cont_7
-.scan_line_else_6:
-	bgt	a5, zero, .scan_line_else_8
+	b	.scan_line_cont_6
+.scan_line_else_5:
+	bgt	a5, zero, .scan_line_else_7
 	li	a4, 0
-	b	.scan_line_cont_9
-.scan_line_else_8:
+	b	.scan_line_cont_8
+.scan_line_else_7:
 	lw	a4, 0(a1)
-	bgti	a4, 1, .scan_line_else_10
+	bgti	a4, 1, .scan_line_else_9
 	li	a4, 0
-	b	.scan_line_cont_11
-.scan_line_else_10:
+	b	.scan_line_cont_10
+.scan_line_else_9:
 	li	a4, 0
-.scan_line_cont_11:
-.scan_line_cont_9:
-.scan_line_cont_7:
+.scan_line_cont_10:
+.scan_line_cont_8:
+.scan_line_cont_6:
 	sw	a2, 28(sp)	# save
-	bne	a4, zero, .scan_line_else_12
+	bne	a4, zero, .scan_line_else_11
 	lw	a0, 0(a3)
 	lw	a4, 28(a0)
 	lw	a6, 24(a0)
@@ -11539,12 +11525,12 @@ scan_line_3008:
 	lw	s3, 8(a0)
 	lw	s4, 4(a0)
 	lw	s5, 0(s3)
-	blt	s5, zero, .scan_line_cont_14
+	blt	s5, zero, .scan_line_cont_13
 	lw	s5, 0(s2)
 	sw	a0, 32(sp)	# save
 	sw	s2, 36(sp)	# save
 	sw	s3, 40(sp)	# save
-	beq	s5, zero, .scan_line_cont_15
+	beq	s5, zero, .scan_line_cont_14
 	lda	s5, min_caml_diffuse_ray
 	lw	a7, 0(a7)
 	flw	fa0, 0(a7)
@@ -11581,24 +11567,24 @@ scan_line_3008:
 	fmul	fa1, fa1, fa2
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 8(a1)
-.scan_line_cont_15:
+.scan_line_cont_14:
 	li	a1, 1
 	lw	a0, 40(sp)	# restore
 	lw	a0, 4(a0)
-	blt	a0, zero, .scan_line_cont_16
+	blt	a0, zero, .scan_line_cont_15
 	lw	a0, 36(sp)	# restore
 	lw	a0, 4(a0)
-	beq	a0, zero, .scan_line_cont_17
+	beq	a0, zero, .scan_line_cont_16
 	lw	a0, 32(sp)	# restore
 	call	calc_diffuse_using_1point_2950
-.scan_line_cont_17:
+.scan_line_cont_16:
 	li	a1, 2
 	lw	a0, 32(sp)	# restore
 	call	do_without_neighbors_2959
-.scan_line_cont_16:
-.scan_line_cont_14:
-	b	.scan_line_cont_13
-.scan_line_else_12:
+.scan_line_cont_15:
+.scan_line_cont_13:
+	b	.scan_line_cont_12
+.scan_line_else_11:
 	li	a4, 0
 	lw	a2, 8(sp)	# restore
 	lw	a6, 4(sp)	# restore
@@ -11606,21 +11592,19 @@ scan_line_3008:
 	mv	a5, a4
 	mv	a4, a6
 	call	try_exploit_neighbors_2975
-.scan_line_cont_13:
+.scan_line_cont_12:
 	lw	a0, 28(sp)	# restore
 	flw	fa0, 0(a0)
 	call	min_caml_int_of_float
 	li	t6, 255
-	bgt	a0, t6, .scan_line_else_18
-	blt	a0, zero, .scan_line_else_20
-	b	.scan_line_cont_21
-.scan_line_else_20:
+	bgt	a0, t6, .scan_line_else_17
+	bge	a0, zero, .scan_line_cont_19
 	li	a0, 0
-.scan_line_cont_21:
-	b	.scan_line_cont_19
-.scan_line_else_18:
-	li	a0, 255
 .scan_line_cont_19:
+	b	.scan_line_cont_18
+.scan_line_else_17:
+	li	a0, 255
+.scan_line_cont_18:
 	call	min_caml_print_int
 	li	a0, 32
 	call	min_caml_print_char
@@ -11628,16 +11612,14 @@ scan_line_3008:
 	flw	fa0, 4(a0)
 	call	min_caml_int_of_float
 	li	t6, 255
-	bgt	a0, t6, .scan_line_else_22
-	blt	a0, zero, .scan_line_else_24
-	b	.scan_line_cont_25
-.scan_line_else_24:
+	bgt	a0, t6, .scan_line_else_20
+	bge	a0, zero, .scan_line_cont_22
 	li	a0, 0
-.scan_line_cont_25:
-	b	.scan_line_cont_23
-.scan_line_else_22:
+.scan_line_cont_22:
+	b	.scan_line_cont_21
+.scan_line_else_20:
 	li	a0, 255
-.scan_line_cont_23:
+.scan_line_cont_21:
 	call	min_caml_print_int
 	li	a0, 32
 	call	min_caml_print_char
@@ -11645,16 +11627,14 @@ scan_line_3008:
 	flw	fa0, 8(a0)
 	call	min_caml_int_of_float
 	li	t6, 255
-	bgt	a0, t6, .scan_line_else_26
-	blt	a0, zero, .scan_line_else_28
-	b	.scan_line_cont_29
-.scan_line_else_28:
+	bgt	a0, t6, .scan_line_else_23
+	bge	a0, zero, .scan_line_cont_25
 	li	a0, 0
-.scan_line_cont_29:
-	b	.scan_line_cont_27
-.scan_line_else_26:
+.scan_line_cont_25:
+	b	.scan_line_cont_24
+.scan_line_else_23:
 	li	a0, 255
-.scan_line_cont_27:
+.scan_line_cont_24:
 	call	min_caml_print_int
 	li	a0, 10
 	call	min_caml_print_char
@@ -11664,22 +11644,22 @@ scan_line_3008:
 	lw	a3, 16(sp)	# restore
 	lw	a4, 4(sp)	# restore
 	call	scan_pixel_3002
-.scan_line_cont_5:
+.scan_line_cont_4:
 	lw	a0, 12(sp)	# restore
 	addi	a1, a0, 1
 	lw	a0, 0(sp)	# restore
 	addi	a0, a0, 2
-	blti	a0, 5, .scan_line_cont_30
+	blti	a0, 5, .scan_line_cont_26
 	addi	a0, a0, -5
-.scan_line_cont_30:
+.scan_line_cont_26:
 	lw	a2, 20(sp)	# restore
 	lw	a3, 4(a2)
-	ble	a3, a1, .scan_line_cont_31
+	ble	a3, a1, .scan_line_cont_27
 	lw	a3, 4(a2)
 	addi	a3, a3, -1
 	sw	a0, 52(sp)	# save
 	sw	a1, 56(sp)	# save
-	ble	a3, a1, .scan_line_cont_32
+	ble	a3, a1, .scan_line_cont_28
 	addi	a3, a1, 1
 	lda	a4, min_caml_scan_pitch
 	flw	fa0, 0(a4)
@@ -11713,7 +11693,7 @@ scan_line_3008:
 	fmv	fa0, fa1
 	fmv	fa1, ft8
 	call	pretrace_pixels_2991
-.scan_line_cont_32:
+.scan_line_cont_28:
 	li	a0, 0
 	lw	a1, 56(sp)	# restore
 	lw	a2, 16(sp)	# restore
@@ -11724,17 +11704,17 @@ scan_line_3008:
 	addi	a0, a0, 1
 	lw	a1, 52(sp)	# restore
 	addi	a1, a1, 2
-	blti	a1, 5, .scan_line_else_33
+	blti	a1, 5, .scan_line_else_29
 	addi	a4, a1, -5
-	b	.scan_line_cont_34
-.scan_line_else_33:
+	b	.scan_line_cont_30
+.scan_line_else_29:
 	mv	a4, a1
-.scan_line_cont_34:
+.scan_line_cont_30:
 	lw	a1, 4(sp)	# restore
 	lw	a2, 8(sp)	# restore
 	lw	a3, 16(sp)	# restore
 	call	scan_line_3008
-.scan_line_cont_31:
+.scan_line_cont_27:
 scan_line_ret:
 	lw	ra, 64(sp)
 	addi	sp, sp, 68
@@ -16485,9 +16465,7 @@ rt_3074:
 	lw	a3, 4(a2)
 	addi	a3, a3, -1
 	sw	a1, 248(sp)	# save
-	bgt	a3, zero, .rt_else_67
-	b	.rt_cont_68
-.rt_else_67:
+	ble	a3, zero, .rt_cont_67
 	li	a3, 1
 	lw	a4, 8(sp)	# restore
 	flw	fa0, 0(a4)
@@ -16522,7 +16500,7 @@ rt_3074:
 	fmv	fa0, fa1
 	fmv	fa1, ft8
 	call	pretrace_pixels_2991
-.rt_cont_68:
+.rt_cont_67:
 	li	a0, 0
 	lw	a1, 248(sp)	# restore
 	lw	a2, 28(sp)	# restore
