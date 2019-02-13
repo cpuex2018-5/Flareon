@@ -16,7 +16,7 @@ type t =
   | Div of Id.t * Id.t * id_or_imm
   | Sll of Id.t * Id.t * id_or_imm
   | Lw of Id.t * Id.t * imm_or_label * string option
-  | Sw of Id.t * Id.t * imm_or_label * string option
+  | Sw of [`V of Id.t | `Zero] * Id.t * imm_or_label * string option
   | FMv  of Id.t * Id.t
   | FNeg of Id.t * Id.t
   | FAdd of Id.t * Id.t * Id.t
@@ -71,8 +71,10 @@ let output_buffer' oc e = match e with
   | Sll(x, y, `C(z)) -> Printf.fprintf oc "\tslli\t%s, %s, %d\n" (reg x) (reg y) z
   | Lw(x, y, `L(Id.L(l)), _) -> Printf.fprintf oc "\tlwl\t%s, %s(%s)\n" (reg x) l (reg y)
   | Lw(x, y, `C(z), s)       -> Printf.fprintf oc "\tlw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
-  | Sw(x, y, `L(Id.L(l)), _) -> Printf.fprintf oc "\tswl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | Sw(x, y, `C(z), s)       -> Printf.fprintf oc "\tsw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
+  | Sw(`V(x), y, `L(Id.L(l)), _) -> Printf.fprintf oc "\tswl\t%s, %s(%s)\n" (reg x) l (reg y)
+  | Sw(`V(x), y, `C(z), s)       -> Printf.fprintf oc "\tsw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
+  | Sw(`Zero, y, `L(Id.L(l)), _) -> Printf.fprintf oc "\tswl\tzero, %s(%s)\n" l (reg y)
+  | Sw(`Zero, y, `C(z), s)       -> Printf.fprintf oc "\tsw\tzero, %d(%s)%s\n" z (reg y) (comment s)
   | FMv(x, y) when x = y -> ()
   | FMv(x, y)  -> Printf.fprintf oc "\tfmv\t%s, %s\n" (reg x) (reg y)
   | FNeg(x, y) -> Printf.fprintf oc "\tfneg\t%s, %s\n" (reg x) (reg y)

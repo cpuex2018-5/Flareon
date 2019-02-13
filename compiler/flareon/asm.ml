@@ -20,7 +20,7 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *
   | Div of Id.t * id_or_imm
   | Sll of Id.t * id_or_imm
   | Lw of Id.t * id_imm_or_label
-  | Sw of Id.t * Id.t * id_imm_or_label
+  | Sw of [`V of Id.t | `Zero] * Id.t * id_imm_or_label
   | FMv of Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
@@ -77,7 +77,7 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | Div(x, y)    -> Printf.sprintf "Div %s %s" x (unwrap y)
     | Sll(x, y)    -> Printf.sprintf "Sll %s %s" x (unwrap y)
     | Lw(x, y)     -> Printf.sprintf "Lw %s %s" x (unwrap y)
-    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" x (unwrap z) y
+    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" (match x with `V(x) -> x | `Zero -> "zero") (unwrap z) y
     | FMv(x)       -> Printf.sprintf "FMv %s" x
     | FNeg(x)      -> Printf.sprintf "FNeg %s" x
     | FAdd(x, y)   -> Printf.sprintf "FAdd %s %s" x y
@@ -149,7 +149,7 @@ let rec fv_exp = function
   | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) | FAbs(x) | FSqrt(x) -> [x]
   | Xor(x, y') | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | Sll(x, y') -> x :: fv_unwrap y'
   | Lw(x, y') | Flw(x, y') -> x :: fv_unwrap y'
-  | Sw(x, y, z') -> x :: y :: fv_unwrap z'
+  | Sw(x, y, z') -> (fv_unwrap x) @ y :: fv_unwrap z'
   | Fsw(x, y, z') -> (fv_unwrap x) @ y :: fv_unwrap z'
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
   | FEq(x, y) -> x :: (fv_unwrap y)

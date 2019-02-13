@@ -91,7 +91,7 @@ and g' (buf : Raw.func) e : Raw.func =
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
   | NonTail(_), Save(x, y) when List.mem x allregs && not (S.mem y !stackset) ->
     save y;
-    add (Sw(x, reg_sp, `C(offset y), Some("save"))) buf
+    add (Sw(`V(x), reg_sp, `C(offset y), Some("save"))) buf
   | NonTail(_), Save(x, y) when List.mem x allfregs && not (S.mem y !stackset) ->
     save y;
     add (Fsw(`V(x), reg_sp, `C(offset y), Some("save"))) buf
@@ -242,7 +242,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   let ss = stacksize () in
   let prologue =
     (if (Asm.has_call e) then
-       [Raw.Add("sp", "sp", `C(-1 * ss - 4)); Raw.Sw("ra", "sp", `C(ss), None)]
+       [Raw.Add("sp", "sp", `C(-1 * ss - 4)); Raw.Sw(`V("ra"), "sp", `C(ss), None)]
      else if ss > 0 then
        [Raw.Add("sp", "sp", `C(-1 * ss))]
      else

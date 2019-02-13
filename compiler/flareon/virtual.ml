@@ -92,12 +92,12 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
         (List.map (fun y -> (y, M.find y env)) ys)
         (4, e2')
         (fun y offset store_fv -> seq(Fsw(`V(y), x, `C(offset)), store_fv))
-        (fun y _ offset store_fv -> seq(Sw(y, x, `C(offset)), store_fv)) in
+        (fun y _ offset store_fv -> seq(Sw(`V(y), x, `C(offset)), store_fv)) in
     Let((x, t), Mv(reg_hp),
         Let((reg_hp, Type.Int), Add(reg_hp, `C(offset)),
             let z = Id.genid "l" in
             Let((z, Type.Int), SetL(l),
-                seq(Sw(z, x, `C(0)),
+                seq(Sw(`V(z), x, `C(0)),
                     store_fv))))
   | Closure.AppCls(x, ys) ->
     let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
@@ -160,7 +160,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
         (List.map (fun x -> (x, M.find x env)) xs)
         (0, seed)
         (fun x offset store -> seq(Fsw(`V(x), reg_hp, `C(offset)), store))
-        (fun x _ offset store -> seq(Sw(x, reg_hp, `C(offset)), store))  in
+        (fun x _ offset store -> seq(Sw(`V(x), reg_hp, `C(offset)), store))  in
     store
   | Closure.LetTuple(xts, y, e2) ->
     let s = Closure.fv e2 in
@@ -195,7 +195,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
            Ans(Fsw(`V(z), x, `V(offset))))
      | Type.Array(_) ->
        Let((offset, Type.Int), Sll(y, `C(2)),
-           Ans(Sw(z, x, `V(offset))))
+           Ans(Sw(`V(z), x, `V(offset))))
      | _ -> assert false)
   | Closure.ExtArray(Id.L(x)) -> Ans(SetDL(Id.L("min_caml_" ^ x)))
   | Closure.ExtTuple(Id.L(x)) -> Ans(SetDL(Id.L("min_caml_" ^ x)))
@@ -217,7 +217,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
     let e = Let((t, Type.Int), Mv(reg_hp), e) in
     let rec inner_ n e =
       if n = 0 then e else
-        inner_ (n - 1) (seq(Sw(y, reg_hp, `C((n - 1) * 4)), e))
+        inner_ (n - 1) (seq(Sw(`V(y), reg_hp, `C((n - 1) * 4)), e))
     in inner_ n e
 
 (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)

@@ -20,7 +20,7 @@ and exp =
   | Div of Id.t * id_or_imm
   | Sll of Id.t * id_or_imm
   | Lw of Id.t * id_imm_or_label
-  | Sw of Id.t * Id.t * id_imm_or_label
+  | Sw of [`V of Id.t | `Zero] * Id.t * id_imm_or_label
   | FMv of Id.t 
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
