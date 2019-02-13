@@ -543,7 +543,7 @@ uint32_t BinGen::branch (std::string mnemo, std::string rs1, std::string rs2, ui
 }
 
 // beqi, bnei, blti, bgti
-uint32_t BinGen::branch_imm (std::string mnemo, std::string rs1, int32_t imm, uint32_t offset) {
+uint32_t BinGen::branch_imm (std::string mnemo, std::string rs1, uint32_t imm, uint32_t offset) {
     CheckImmediate(offset, 13, "branch_imm");
     CheckImmediate(imm, 5, "branch_imm");
     uint32_t funct3;
