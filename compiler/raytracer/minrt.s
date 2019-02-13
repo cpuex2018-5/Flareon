@@ -6591,8 +6591,8 @@ get_nvector_second_2911:
 get_nvector_second_ret:
 	jr	ra
 utexture_2916:
-	addi	sp, sp, -40
-	sw	ra, 36(sp)
+	addi	sp, sp, -32
+	sw	ra, 28(sp)
 	lw	a2, 32(a0)
 	lw	a3, 20(a0)
 	lw	a4, 16(a0)
@@ -6646,8 +6646,8 @@ utexture_2916:
 .utexture_cont_7:
 .utexture_cont_3:
 	fsw	fa0, 4(a5)
-	lw	ra, 36(sp)
-	addi	sp, sp, 40
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
 	jr	ra
 .utexture_else_1:
 	bnei	a0, 2, .utexture_else_9
@@ -6668,8 +6668,8 @@ utexture_2916:
 	fsub	fa0, fa2, fa0
 	fmul	fa0, fa1, fa0
 	fsw	fa0, 4(a5)
-	lw	ra, 36(sp)
-	addi	sp, sp, 40
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
 	jr	ra
 .utexture_else_9:
 	bnei	a0, 3, .utexture_else_11
@@ -6691,13 +6691,8 @@ utexture_2916:
 	fsub	fa0, fa1, fa0
 	fli	fa1, l_data_12
 	fmul	fa0, fa0, fa1
-	fsw	fa0, 16(sp)	# save
 	call	min_caml_cos
-	fsw	fa0, 20(sp)	# save
-	flw	fa0, 16(sp)	# restore
-	call	min_caml_cos
-	flw	fa1, 20(sp)	# restore
-	fmul	fa0, fa1, fa0
+	fmul	fa0, fa0, fa0
 	fli	fa1, l_data_16
 	fmul	fa2, fa0, fa1
 	fsw	fa2, 4(a5)
@@ -6705,8 +6700,8 @@ utexture_2916:
 	fsub	fa0, fa2, fa0
 	fmul	fa0, fa0, fa1
 	fsw	fa0, 8(a5)
-	lw	ra, 36(sp)
-	addi	sp, sp, 40
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
 	jr	ra
 .utexture_else_11:
 	bnei	a0, 4, utexture_ret
@@ -6740,9 +6735,9 @@ utexture_2916:
 	fli	fa1, l_data_12
 	fdiv	fa0, fa0, fa1
 .utexture_cont_14:
-	fsw	fa0, 24(sp)	# save
+	fsw	fa0, 16(sp)	# save
 	call	min_caml_floor
-	flw	fa1, 24(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fsub	fa0, fa1, fa0
 	flw	fa1, 4(a1)
 	flw	fa4, 4(a3)
@@ -6752,7 +6747,7 @@ utexture_2916:
 	fmul	fa1, fa1, fa4
 	fabs	fa4, fa2
 	fle	a0, fa3, fa4
-	fsw	fa0, 28(sp)	# save
+	fsw	fa0, 20(sp)	# save
 	bne	a0, zero, .utexture_else_15
 	fli	fa0, l_data_13
 	b	.utexture_cont_16
@@ -6765,13 +6760,13 @@ utexture_2916:
 	fli	fa1, l_data_12
 	fdiv	fa0, fa0, fa1
 .utexture_cont_16:
-	fsw	fa0, 32(sp)	# save
+	fsw	fa0, 24(sp)	# save
 	call	min_caml_floor
-	flw	fa1, 32(sp)	# restore
+	flw	fa1, 24(sp)	# restore
 	fsub	fa0, fa1, fa0
 	fli	fa1, l_data_14
 	fli	fa2, l_data_15
-	flw	fa3, 28(sp)	# restore
+	flw	fa3, 20(sp)	# restore
 	fsub	fa3, fa2, fa3
 	fmul	fa3, fa3, fa3
 	fsub	fa1, fa1, fa3
@@ -6788,8 +6783,8 @@ utexture_2916:
 	fdiv	fa0, fa0, fa1
 	fsw	fa0, 8(a5)
 utexture_ret:
-	lw	ra, 36(sp)
-	addi	sp, sp, 40
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
 	jr	ra
 add_light_2919:
 	fle	a0, fa0, fzero
@@ -12401,8 +12396,8 @@ calc_dirvec_ret:
 	addi	sp, sp, 28
 	jr	ra
 calc_dirvecs_3036:
-	addi	sp, sp, -60
-	sw	ra, 56(sp)
+	addi	sp, sp, -76
+	sw	ra, 72(sp)
 	blt	a0, zero, calc_dirvecs_ret
 	fsw	fa0, 0(sp)	# save
 	sw	a0, 4(sp)	# save
@@ -12413,147 +12408,139 @@ calc_dirvecs_3036:
 	fsw	fa2, 8(sp)	# save
 	fsub	fa2, fa0, fa2
 	li	a0, 0
+	fsw	fa0, 12(sp)	# save
 	fmv	fa0, fzero
 	flw	fa3, 0(sp)	# restore
-	fsw	fa0, 12(sp)	# save
-	sw	a1, 16(sp)	# save
-	sw	a2, 20(sp)	# save
-	fsw	fa1, 24(sp)	# save
+	fsw	fa1, 16(sp)	# save
+	fsw	fa0, 20(sp)	# save
+	sw	a1, 24(sp)	# save
+	sw	a2, 28(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 4(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 24(sp)	# restore
-	fmul	fa0, fa0, fa1
-	fli	fa2, l_data_26
-	fsw	fa2, 28(sp)	# save
-	fadd	fa2, fa0, fa2
+	fli	fa0, l_data_26
+	flw	fa1, 12(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 20(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 12(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 0(sp)	# restore
-	lw	a1, 16(sp)	# restore
-	fmv	fa1, fa0
+	lw	a1, 24(sp)	# restore
+	fsw	fa0, 32(sp)	# save
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
 	lw	a0, 4(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 16(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	addi	a1, a1, 1
 	blti	a1, 5, .calc_dirvecs_cont_1
 	addi	a1, a1, -5
 .calc_dirvecs_cont_1:
 	blt	a0, zero, calc_dirvecs_ret
-	sw	a0, 32(sp)	# save
+	sw	a0, 36(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 24(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
 	flw	fa2, 8(sp)	# restore
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 12(sp)	# restore
+	fsw	fa0, 40(sp)	# save
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 0(sp)	# restore
-	lw	a2, 20(sp)	# restore
-	sw	a1, 36(sp)	# save
+	lw	a2, 28(sp)	# restore
+	sw	a1, 44(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 32(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 24(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 28(sp)	# restore
-	fadd	fa2, fa0, fa2
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 40(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 20(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 12(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 0(sp)	# restore
-	lw	a1, 36(sp)	# restore
-	fmv	fa1, fa0
+	lw	a1, 44(sp)	# restore
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
-	lw	a0, 32(sp)	# restore
+	lw	a0, 36(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 36(sp)	# restore
+	lw	a1, 44(sp)	# restore
 	addi	a1, a1, 1
 	blti	a1, 5, .calc_dirvecs_cont_2
 	addi	a1, a1, -5
 .calc_dirvecs_cont_2:
 	blt	a0, zero, calc_dirvecs_ret
-	sw	a0, 40(sp)	# save
+	sw	a0, 48(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 24(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
 	flw	fa2, 8(sp)	# restore
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 12(sp)	# restore
+	fsw	fa0, 52(sp)	# save
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 0(sp)	# restore
-	lw	a2, 20(sp)	# restore
-	sw	a1, 44(sp)	# save
+	lw	a2, 28(sp)	# restore
+	sw	a1, 56(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 40(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 24(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 28(sp)	# restore
-	fadd	fa2, fa0, fa2
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 52(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 20(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 12(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 0(sp)	# restore
-	lw	a1, 44(sp)	# restore
-	fmv	fa1, fa0
+	lw	a1, 56(sp)	# restore
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
-	lw	a0, 40(sp)	# restore
+	lw	a0, 48(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 44(sp)	# restore
+	lw	a1, 56(sp)	# restore
 	addi	a1, a1, 1
 	blti	a1, 5, .calc_dirvecs_cont_3
 	addi	a1, a1, -5
 .calc_dirvecs_cont_3:
 	blt	a0, zero, calc_dirvecs_ret
-	sw	a0, 48(sp)	# save
+	sw	a0, 60(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 24(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa2, 8(sp)	# restore
-	fsub	fa2, fa0, fa2
+	flw	fa1, 8(sp)	# restore
+	fsub	fa2, fa0, fa1
 	li	a0, 0
-	flw	fa0, 12(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 0(sp)	# restore
-	lw	a2, 20(sp)	# restore
-	sw	a1, 52(sp)	# save
-	fmv	fa1, fa0
+	lw	a2, 28(sp)	# restore
+	sw	a1, 64(sp)	# save
+	fsw	fa0, 68(sp)	# save
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
-	lw	a0, 48(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 24(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa1, 28(sp)	# restore
-	fadd	fa2, fa0, fa1
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 68(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 20(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 12(sp)	# restore
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 0(sp)	# restore
-	lw	a1, 52(sp)	# restore
+	lw	a1, 64(sp)	# restore
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 48(sp)	# restore
+	lw	a0, 60(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 52(sp)	# restore
+	lw	a1, 64(sp)	# restore
 	addi	a1, a1, 1
 	blti	a1, 5, .calc_dirvecs_cont_4
 	addi	a1, a1, -5
 .calc_dirvecs_cont_4:
 	flw	fa0, 0(sp)	# restore
-	lw	a2, 20(sp)	# restore
+	lw	a2, 28(sp)	# restore
 	call	calc_dirvecs_3036
 calc_dirvecs_ret:
-	lw	ra, 56(sp)
-	addi	sp, sp, 60
+	lw	ra, 72(sp)
+	addi	sp, sp, 76
 	jr	ra
 calc_dirvec_rows_3041:
 	addi	sp, sp, -116
@@ -12567,69 +12554,63 @@ calc_dirvec_rows_3041:
 	fsub	fa0, fa0, fa2
 	li	a0, 4
 	fsw	fa0, 4(sp)	# save
-	sw	a0, 8(sp)	# save
 	call	min_caml_float_of_int
 	fmul	fa0, fa0, fa1
-	fsw	fa2, 12(sp)	# save
+	fsw	fa2, 8(sp)	# save
 	fsub	fa2, fa0, fa2
 	li	a0, 0
+	fsw	fa0, 12(sp)	# save
 	fmv	fa0, fzero
 	flw	fa3, 4(sp)	# restore
-	fsw	fa0, 16(sp)	# save
-	sw	a1, 20(sp)	# save
-	sw	a2, 24(sp)	# save
-	fsw	fa1, 28(sp)	# save
+	fsw	fa1, 16(sp)	# save
+	fsw	fa0, 20(sp)	# save
+	sw	a1, 24(sp)	# save
+	sw	a2, 28(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 8(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
-	fmul	fa0, fa0, fa1
-	fli	fa2, l_data_26
-	fsw	fa2, 32(sp)	# save
-	fadd	fa2, fa0, fa2
+	fli	fa0, l_data_26
+	flw	fa1, 12(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 24(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 16(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 4(sp)	# restore
-	lw	a1, 20(sp)	# restore
-	fmv	fa1, fa0
+	lw	a1, 24(sp)	# restore
+	fsw	fa0, 32(sp)	# save
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
 	li	a0, 3
-	lw	a1, 20(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	addi	a2, a1, 1
 	blti	a2, 5, .calc_dirvec_rows_cont_1
 	addi	a2, a2, -5
 .calc_dirvec_rows_cont_1:
-	sw	a0, 36(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa2, 12(sp)	# restore
+	flw	fa2, 8(sp)	# restore
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 16(sp)	# restore
+	fsw	fa0, 36(sp)	# save
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 4(sp)	# restore
-	lw	a3, 24(sp)	# restore
+	lw	a3, 28(sp)	# restore
 	sw	a2, 40(sp)	# save
 	mv	a1, a2
 	mv	a2, a3
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 36(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 32(sp)	# restore
-	fadd	fa2, fa0, fa2
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 36(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 24(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 16(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 4(sp)	# restore
 	lw	a1, 40(sp)	# restore
-	fmv	fa1, fa0
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
 	li	a0, 2
 	lw	a1, 40(sp)	# restore
@@ -12637,32 +12618,29 @@ calc_dirvec_rows_3041:
 	blti	a1, 5, .calc_dirvec_rows_cont_2
 	addi	a1, a1, -5
 .calc_dirvec_rows_cont_2:
-	sw	a0, 44(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa2, 12(sp)	# restore
+	flw	fa2, 8(sp)	# restore
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 16(sp)	# restore
+	fsw	fa0, 44(sp)	# save
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 4(sp)	# restore
-	lw	a2, 24(sp)	# restore
+	lw	a2, 28(sp)	# restore
 	sw	a1, 48(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 44(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 32(sp)	# restore
-	fadd	fa2, fa0, fa2
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 44(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 24(sp)	# restore
+	lw	a1, 28(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 16(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 4(sp)	# restore
 	lw	a1, 48(sp)	# restore
-	fmv	fa1, fa0
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
 	li	a0, 1
 	lw	a1, 48(sp)	# restore
@@ -12671,50 +12649,47 @@ calc_dirvec_rows_3041:
 	addi	a1, a1, -5
 .calc_dirvec_rows_cont_3:
 	flw	fa0, 4(sp)	# restore
-	lw	a2, 24(sp)	# restore
+	lw	a2, 28(sp)	# restore
 	call	calc_dirvecs_3036
 	lw	a0, 0(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 20(sp)	# restore
+	lw	a1, 24(sp)	# restore
 	addi	a1, a1, 2
 	blti	a1, 5, .calc_dirvec_rows_cont_4
 	addi	a1, a1, -5
 .calc_dirvec_rows_cont_4:
-	lw	a2, 24(sp)	# restore
+	lw	a2, 28(sp)	# restore
 	addi	a2, a2, 4
 	blt	a0, zero, calc_dirvec_rows_ret
 	sw	a0, 52(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa2, 12(sp)	# restore
+	flw	fa2, 8(sp)	# restore
 	fsub	fa0, fa0, fa2
 	li	a0, 4
 	fsw	fa0, 56(sp)	# save
-	sw	a0, 60(sp)	# save
 	call	min_caml_float_of_int
 	fmul	fa0, fa0, fa1
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 16(sp)	# restore
+	fsw	fa0, 60(sp)	# save
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 56(sp)	# restore
 	sw	a1, 64(sp)	# save
 	sw	a2, 68(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 60(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 32(sp)	# restore
-	fadd	fa2, fa0, fa2
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 60(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
 	lw	a1, 68(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 16(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 56(sp)	# restore
 	lw	a1, 64(sp)	# restore
-	fmv	fa1, fa0
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
 	li	a0, 3
 	lw	a1, 64(sp)	# restore
@@ -12722,14 +12697,14 @@ calc_dirvec_rows_3041:
 	blti	a2, 5, .calc_dirvec_rows_cont_5
 	addi	a2, a2, -5
 .calc_dirvec_rows_cont_5:
-	sw	a0, 72(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa2, 12(sp)	# restore
+	flw	fa2, 8(sp)	# restore
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 16(sp)	# restore
+	fsw	fa0, 72(sp)	# save
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 56(sp)	# restore
 	lw	a3, 68(sp)	# restore
 	sw	a2, 76(sp)	# save
@@ -12737,19 +12712,16 @@ calc_dirvec_rows_3041:
 	mv	a2, a3
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 72(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 32(sp)	# restore
-	fadd	fa2, fa0, fa2
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 72(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
 	lw	a1, 68(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 16(sp)	# restore
+	flw	fa1, 20(sp)	# restore
 	flw	fa3, 56(sp)	# restore
 	lw	a1, 76(sp)	# restore
-	fmv	fa1, fa0
+	fmv	fa0, fa1
 	call	calc_dirvec_3028
 	li	a0, 2
 	lw	a1, 76(sp)	# restore
@@ -12772,33 +12744,30 @@ calc_dirvec_rows_3041:
 	blt	a0, zero, calc_dirvec_rows_ret
 	sw	a0, 80(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa2, 12(sp)	# restore
+	flw	fa2, 8(sp)	# restore
 	fsub	fa0, fa0, fa2
 	li	a0, 4
 	fsw	fa0, 84(sp)	# save
-	sw	a0, 88(sp)	# save
 	call	min_caml_float_of_int
 	fmul	fa0, fa0, fa1
 	fsub	fa2, fa0, fa2
 	li	a0, 0
-	flw	fa0, 16(sp)	# restore
+	fsw	fa0, 88(sp)	# save
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 84(sp)	# restore
 	sw	a1, 92(sp)	# save
 	sw	a2, 96(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 88(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 32(sp)	# restore
-	fadd	fa2, fa0, fa2
+	flw	fa0, 32(sp)	# restore
+	flw	fa1, 88(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
 	lw	a1, 96(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa0, 16(sp)	# restore
+	flw	fa0, 20(sp)	# restore
 	flw	fa3, 84(sp)	# restore
 	lw	a1, 92(sp)	# restore
 	fmv	fa1, fa0
@@ -12827,9 +12796,9 @@ calc_dirvec_rows_3041:
 	blt	a0, zero, calc_dirvec_rows_ret
 	sw	a0, 100(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 28(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa1, 12(sp)	# restore
+	flw	fa1, 8(sp)	# restore
 	fsub	fa0, fa0, fa1
 	li	a0, 4
 	sw	a2, 104(sp)	# save
@@ -16234,44 +16203,41 @@ rt_3074:
 	fsub	fa0, fa0, fa2
 	li	a0, 4
 	fsw	fa0, 208(sp)	# save
-	sw	a0, 212(sp)	# save
 	call	min_caml_float_of_int
 	fmul	fa0, fa0, fa1
-	fsw	fa2, 216(sp)	# save
+	fsw	fa2, 212(sp)	# save
 	fsub	fa2, fa0, fa2
 	li	a0, 0
+	fsw	fa0, 216(sp)	# save
 	flw	fa0, 196(sp)	# restore
 	flw	fa3, 208(sp)	# restore
-	sw	a2, 220(sp)	# save
-	sw	a1, 224(sp)	# save
-	fsw	fa1, 228(sp)	# save
+	fsw	fa1, 220(sp)	# save
+	sw	a2, 224(sp)	# save
+	sw	a1, 228(sp)	# save
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
-	lw	a0, 212(sp)	# restore
-	call	min_caml_float_of_int
-	flw	fa1, 228(sp)	# restore
-	fmul	fa0, fa0, fa1
-	fli	fa2, l_data_26
-	fadd	fa2, fa0, fa2
+	fli	fa0, l_data_26
+	flw	fa1, 216(sp)	# restore
+	fadd	fa2, fa1, fa0
 	li	a0, 0
 	li	a2, 2
 	flw	fa0, 196(sp)	# restore
 	flw	fa3, 208(sp)	# restore
-	lw	a1, 224(sp)	# restore
+	lw	a1, 228(sp)	# restore
 	fmv	fa1, fa0
 	call	calc_dirvec_3028
 	li	a0, 3
 	li	a1, 1
 	flw	fa0, 208(sp)	# restore
-	lw	a2, 220(sp)	# restore
+	lw	a2, 224(sp)	# restore
 	call	calc_dirvecs_3036
 	li	a0, 8
 	li	a1, 2
 	li	a2, 4
 	call	min_caml_float_of_int
-	flw	fa1, 228(sp)	# restore
+	flw	fa1, 220(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa1, 216(sp)	# restore
+	flw	fa1, 212(sp)	# restore
 	fsub	fa0, fa0, fa1
 	li	a0, 4
 	call	calc_dirvecs_3036

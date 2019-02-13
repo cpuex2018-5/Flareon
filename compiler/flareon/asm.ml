@@ -1,4 +1,3 @@
-(* PowerPC assembly with a few virtual instructions *)
 type id_or_imm = [`V of Id.t | `C of int]
 type id_imm_or_label = [`V of Id.t | `C of int | `L of Id.l]
 type id_or_fimm = [`V of Id.t | `FZero]
