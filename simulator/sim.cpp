@@ -215,7 +215,8 @@ void exec(Simulator *sim,Op *op){
           }
         }
         else if(op->funct3 == 0b010){//beqi
-          if(sim->registers[op->rs1] == op->rs2){
+          int rs2_imm = op->rs2 | ((op->rs2 & 0b10000) ? 0xfffffff0 : 0);
+          if(sim->registers[op->rs1] == rs2_imm){
             sim -> pc = sim -> pc + s_imm;
             jump_counter[sim->pc]++;
           }
@@ -224,7 +225,8 @@ void exec(Simulator *sim,Op *op){
           }
         }
         else if(op->funct3 == 0b011){//bnei
-          if(sim->registers[op->rs1] != op->rs2){
+          int rs2_imm = op->rs2 | ((op->rs2 & 0b10000) ? 0xfffffff0 : 0);
+          if(sim->registers[op->rs1] != rs2_imm){
             sim -> pc = sim -> pc + s_imm;
             jump_counter[sim->pc]++;
           }
@@ -233,7 +235,8 @@ void exec(Simulator *sim,Op *op){
           }
         }
         else if(op->funct3 == 0b110){//blti
-          if(sim->registers[op->rs1] < op->rs2){
+          int rs2_imm = op->rs2 | ((op->rs2 & 0b10000) ? 0xfffffff0 : 0);
+          if(sim->registers[op->rs1] < rs2_imm){
             sim -> pc = sim -> pc + s_imm;
             jump_counter[sim->pc]++;
           }
@@ -242,7 +245,8 @@ void exec(Simulator *sim,Op *op){
           }
         }
         else if(op->funct3 == 0b111){//bgti
-          if(sim->registers[op->rs1] > op->rs2){
+          int rs2_imm = op->rs2 | ((op->rs2 & 0b10000) ? 0xfffffff0 : 0);
+          if(sim->registers[op->rs1] > rs2_imm){
             sim -> pc = sim -> pc + s_imm;
             jump_counter[sim->pc]++;
           }
