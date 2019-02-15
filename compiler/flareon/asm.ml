@@ -197,8 +197,9 @@ let callee_save_funs =
    ("min_caml_create_array", ["%a0"]);
    ("min_caml_create_float_array", ["%a0"]);
    ("min_caml_atan", ["%fa0"; "%s1"; "%ft0"; "%ft8"]);
-   ("min_caml_sin", ["%fa0"; "%s1"; "%t2"; "%ft0"; "%ft7"; "%ft8"]);
-   ("min_caml_cos", ["%fa0"; "%s1"; "%t2"; "%ft0"; "%ft7"; "%ft8"]);
+   ("min_caml_sin", ["%fa0"; "%s1"; "%t2"; "%ft7"; "%ft8"]);
+   ("min_caml_cos", ["%fa0"; "%s1"; "%t2"; "%ft7"; "%ft8"]);
+   ("min_caml_tan", ["%fa0"; "%s1"; "%t2"; "%ft7"; "%ft8"]);
    ("min_caml_floor", ["%fa0"]);
    ("min_caml_float_of_int", ["%a0"; "%fa0"]);
    ("min_caml_int_of_float", ["%fa0"; "%a0"])]

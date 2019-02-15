@@ -20,37 +20,52 @@ min_caml_print_int:
 	neg	a0, a0
 ############# 何桁あるか調べる
 .print_int_L0:
-	li	s1, 100000
-	bge	a0, s1, .print_int_L1	# bgeってあるよね？
-# < 10 ** 5
-	li	s1, 1000
-	bge	a0, s1, .print_int_L2
-# < 10 ** 3
 	li	s1, 100
-	bge	a0, s1, .print_int_body
+	bge	a0, s1, .print_int_L4
+# a0 < 10 ** 2
 	li	s1, 10
 	bge	a0, s1, .print_int_body
 	li	s1, 1
 	b	.print_int_body
-.print_int_L2:	# >= 10 ** 3, < 10 ** 5
+.print_int_L4:
+# a0 >= 10 ** 2
+	li	s1, 1000
+	bge	a0, s1, .print_int_L5
+	li	s1, 100
+	b	.print_int_body
+.print_int_L5:
+# a0 >= 1000
+	li	s1, 100000
+	bge	a0, s1, .print_int_L1
+# 1000 <= a0 < 10 ** 5
+	li	s1, 10000
+	bge	a0, s1, .print_int_body
+# 10 ** 3 <= a0 < 10 ** 4
+	li	s1, 1000
+	b	.print_int_body
+###
+.print_int_L2:
+# 10 ** 3 <= a0 < 10 ** 5
 	li	s1, 10000
 	bge	a0, s1, .print_int_body
 	li	s1, 1000
 	b	.print_int_body
-.print_int_L1:	# >= 10 ** 5
+.print_int_L1:
+# a0 >= 10 ** 5
 	li	s1, 100000000
 	bge	a0, s1, .print_int_L3
-# >= 10 ** 5, < 10 ** 8
+# 10 ** 5 <= a0 < 10 ** 8
 	li	s1, 10000000
 	bge	a0, s1, .print_int_body
 	li	s1, 1000000
 	bge	a0, s1, .print_int_body
 	li	s1, 100000
 	b	.print_int_body
-.print_int_L3:	# >= 10 ** 8
+.print_int_L3:
+# a0 >= 10 ** 8
 	li	s1, 1000000000
 	bge	a0, s1, .print_int_body
-# >= 10 ** 8, < 10 ** 9
+# 10 ** 8 <= a0 < 10 ** 9
 	li	s1, 100000000
 	b	.print_int_body
 ###############
@@ -212,8 +227,7 @@ min_caml_div_rem:
 
 # sin/cos
 .kernel_sin:	# use: ft7,8,9,10
-	fmv	ft7, fa0
-	fmul	ft7, ft7, ft7	# ft7: A ^ 2
+	fmul	ft7, fa0, fa0	# ft7: A ^ 2
 	fli	ft8, L_S3	# ft8: 係数
 	fmul	ft9, fa0, ft7	# ft9: A ^ 3
 	fmul	ft10, ft9, ft8
@@ -229,8 +243,7 @@ min_caml_div_rem:
 	jr	ra
 
 .kernel_cos:	# use: ft7,8,9,10
-	fmv	ft7, fa0
-	fmul	ft7, ft7, ft7	# ft7: A ^ 2
+	fmul	ft7, fa0, fa0	# ft7: A ^ 2
 	fli	fa0, L_1
 	fli	ft8, L_C2
 	fmv	ft9, ft7	# ft9: A ^ 2
@@ -248,7 +261,7 @@ min_caml_div_rem:
 
 .reduction_2pi:	# 呼ばれた時点でft8 = 2.0である必要がある use: ft9, ft10
 	fli	ft9, L_2PI		# ft9: P (2pi)
-	fli	ft10, L_2PI		# ft10: 2pi (const)
+	fmv	ft10, ft9		# ft10: 2pi (const)
 .reduction_2pi_L0:	# loop
 	fle	t2, ft9, fa0	# P <= A
 	beq	t2, zero, .reduction_2pi_L1
@@ -267,13 +280,12 @@ min_caml_div_rem:
 .reduction_2pi_end:
 	jr	ra
 
-min_caml_sin:	# s1, t2, ft0
+min_caml_sin:	# s1, t2
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
 	fli	ft7, L_PI	# pi
 	fli	ft8, L_2	# 2.0
-	fle	s1, fzero, fa0	# s1: FLAG
-	xori	s1, s1, 1
+	fle	s1, fzero, fa0	# s1: FLAG (fa0 >= 0なら1)
 	fabs	fa0, fa0
 	call	.reduction_2pi
 	fle	t2, ft7, fa0	# pi <= A
@@ -298,22 +310,19 @@ min_caml_sin:	# s1, t2, ft0
 	fsub	fa0, ft9, fa0
 	call	.kernel_cos
 .sin_L3:
-	beq	s1, zero, .sin_end
-	fneg	fa0, fa0	# FLAG == 1ならneg
+	bne	s1, zero, .sin_end
+	fneg	fa0, fa0	# FLAG == 0ならneg
 .sin_end:
 	lw	ra, 0(sp)
 	addi	sp, sp, 4
 	jr	ra
 
 min_caml_cos:
-	addi	sp, sp, -36
-	fsw	ft0, 32(sp)
-	sw	t2, 12(sp)
-	sw	s1, 8(sp)
-	sw	ra, 4(sp)
+	addi	sp, sp, -4
+	sw	ra, 0(sp)
 	fli	ft7, L_PI	# pi
 	fli	ft8, L_2	# 2.0
-	li	s1, 0		# s1: FLAG
+	li	s1, 1		# s1: FLAG (fa0 >= 0なら1)
 	fabs	fa0, fa0
 	call	.reduction_2pi
 	fle	t2, ft7, fa0	# pi <= A
@@ -339,14 +348,66 @@ min_caml_cos:
 	fsub	fa0, ft9, fa0
 	call	.kernel_sin
 .cos_L3:
-	beq	s1, zero, .cos_end
-	fneg	fa0, fa0	# FLAG == 1ならneg
+	bne	s1, zero, .cos_end
+	fneg	fa0, fa0	# FLAG == 0ならneg
 .cos_end:
-	lw	ra, 4(sp)
-	lw	s1, 8(sp)
-	flw	ft0, 32(sp)
-	lw	t2, 12(sp)
-	addi	sp, sp, 36
+	lw	ra, 0(sp)
+	addi	sp, sp, 4
+	jr	ra
+
+# 誤差が大きい
+min_caml_tan:
+	sw	ra, -4(sp)
+	fle	s1, fzero, fa0	# s1: FLAG (fa0 >= 0なら0)
+	xori	s1, s1, 1
+	fabs	fa0, fa0
+.reduction_pi:
+	fli	ft8, L_2
+	fli	ft9, L_PI		# ft9: P (pi)
+	fmv	ft10, ft9		# ft10: pi (const)
+.reduction_pi_L0:	# loop
+	fle	t2, ft9, fa0	# P <= A
+	beq	t2, zero, .reduction_pi_L1
+	fmul	ft9, ft9, ft8
+	b	.reduction_pi_L0
+.reduction_pi_L1:	# loop
+	fle	t2, ft10, fa0	# pi <= A
+	beq	t2, zero, .reduction_pi_end
+	fle	t2, ft9, fa0	# P <= A
+	beq	t2, zero, .reduction_pi_L2
+# if (A >= P)
+	fsub	fa0, fa0, ft9
+.reduction_pi_L2:
+	fdiv	ft9, ft9, ft8
+	b	.reduction_pi_L1
+.reduction_pi_end:
+# =============== reduction_pi ここまで
+	fli	ft10, L_PI2
+	fle	t2, ft10, fa0
+	beq	t2, zero, .kernel_tan
+# if (A >= PI / 2)
+	fli	ft10, L_PI
+	fsub	fa0, ft10, fa0
+	xori	s1, s1, 1
+.kernel_tan:
+	fmul	ft7, fa0, fa0	# ft7 : A ^ 2
+	fli	ft8, L_T3
+	fmul	ft9, fa0, ft7	# ft9 : A ^ 3
+	fmul	ft10, ft9, ft8
+	fadd	fa0, fa0, ft10
+	fli	ft8, L_T5
+	fmul	ft9, ft9, ft7	# ft9 : A ^ 5
+	fmul	ft10, ft9, ft8
+	fadd	fa0, fa0, ft10
+	fli	ft8, L_T7
+	fmul	ft9, ft9, ft7	# ft9 : A ^ 7
+	fmul	ft10, ft9, ft8
+	fadd	fa0, fa0, ft10
+# ================ kernel_tan
+	beq	s1, zero, .tan_end
+	fneg	fa0, fa0
+.tan_end:
+	lw	ra, -4(sp)
 	jr	ra
 
 .kernel_atan:
@@ -528,3 +589,9 @@ L_A11:	# 0.08976446
 	.word	1035458158
 L_A13:	# 0.060035485
 	.word	1031137221
+L_T3:	# 0.333333
+	.word	1051372203
+L_T5:	# 0.133333
+	.word	1040746633
+L_T7:	# 0.053968
+	.word	1029508561
