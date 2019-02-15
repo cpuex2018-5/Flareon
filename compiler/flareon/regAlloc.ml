@@ -180,8 +180,8 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
   | Div(x, y') -> (Ans(Div(find x Type.Int regenv, find'_i y' regenv)), regenv)
   | Sll(x, y') -> (Ans(Sll(find x Type.Int regenv, find'_i y' regenv)), regenv)
   | Lw(x, y') -> (Ans(Lw(find x Type.Int regenv, find'_i y' regenv)), regenv)
-  | Sw(`Zero, y, z') -> (Ans(Sw(`Zero, find y Type.Int regenv, find'_i z' regenv)), regenv)
-  | Sw(`V(x), y, z') -> (Ans(Sw(`V(find x Type.Int regenv), find y Type.Int regenv, find'_i z' regenv)), regenv)
+  | Sw(`Zero, y, z) -> (Ans(Sw(`Zero, find'_i y regenv, find z Type.Int regenv)), regenv)
+  | Sw(`V(x), y, z) -> (Ans(Sw(`V(find x Type.Int regenv), find'_i y regenv, find z Type.Int regenv)), regenv)
   | FMv(x) -> (Ans(FMv(find x Type.Float regenv)), regenv)
   | FNeg(x) -> (Ans(FNeg(find x Type.Float regenv)), regenv)
   | FAdd(x, y) -> (Ans(FAdd(find x Type.Float regenv, find y Type.Float regenv)), regenv)
@@ -193,7 +193,7 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
   | FAbs(x) -> (Ans(FAbs(find x Type.Float regenv)), regenv)
   | FSqrt(x) -> (Ans(FSqrt(find x Type.Float regenv)), regenv)
   | Flw(x, y') -> (Ans(Flw(find x Type.Int regenv, find'_i y' regenv)), regenv)
-  | Fsw(x, y, z') -> (Ans(Fsw(find'_f x regenv, find y Type.Int regenv, find'_i z' regenv)), regenv)
+  | Fsw(x, y, z) -> (Ans(Fsw(find'_f x regenv, find'_i y regenv, find z Type.Int regenv)), regenv)
   | Write(x) -> (Ans(Write(find x Type.Int regenv)), regenv)
   | IfEq(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfEq(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2
   | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2

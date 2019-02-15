@@ -87,7 +87,7 @@ let rec set_edges graph insts =
          current.children := children @ !(current.children);
          List.iter (fun ch -> let node = graph.(ch) in node.parents := n :: !(node.parents)) children;
          inner_ graph xl (n + 1)
-       | Sw(_, y, _) | Fsw(_, y, _) ->
+       | Sw(_, _, y) | Fsw(_, _, y) ->
          (* RAW, WAWの順番を守るという制約を追加 *)
          let children = List.map (fun x -> x + n + 1) (find_all (fun i -> is_mem_fv y i && effect i) xl) in
          current.children := children @ !(current.children);

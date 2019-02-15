@@ -20,7 +20,7 @@ and exp =
   | Div of Id.t * id_or_imm
   | Sll of Id.t * id_or_imm
   | Lw of Id.t * id_imm_or_label
-  | Sw of [`V of Id.t | `Zero] * Id.t * id_imm_or_label
+  | Sw of [`V of Id.t | `Zero] * id_imm_or_label * Id.t
   | FMv of Id.t 
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
@@ -32,7 +32,7 @@ and exp =
   | FAbs of Id.t
   | FSqrt of Id.t
   | Flw of Id.t * id_imm_or_label
-  | Fsw of id_or_fimm * Id.t * id_imm_or_label
+  | Fsw of id_or_fimm * id_imm_or_label * Id.t
   | Write of Id.t
   | Comment of string
   (* virtual instructions *)

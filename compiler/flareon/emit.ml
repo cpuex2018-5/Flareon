@@ -65,9 +65,9 @@ and g' (buf : Raw.func) e : Raw.func =
   | NonTail(x), Lw(y, `V(z)) -> adds [Add(reg_tmp, y, `V(z)); Lw(x, reg_tmp, `C(0), None)] buf
   | NonTail(x), Lw(y, `C(z)) -> add (Lw(x, y, `C(z), None)) buf
   | NonTail(x), Lw(y, `L(z)) -> add (Lw(x, y, `L(z), None)) buf
-  | NonTail(_), Sw(x, y, `V(z)) -> adds [Add(reg_tmp, y, `V(z)); Sw(x, reg_tmp, `C(0), None)] buf
-  | NonTail(_), Sw(x, y, `C(z)) -> add (Sw(x, y, `C(z), None)) buf
-  | NonTail(_), Sw(x, y, `L(z)) -> add (Sw(x, y, `L(z), None)) buf
+  | NonTail(_), Sw(x, `V(z), y) -> adds [Add(reg_tmp, y, `V(z)); Sw(x, `C(0), reg_tmp, None)] buf
+  | NonTail(_), Sw(x, `C(z), y) -> add (Sw(x, `C(z), y, None)) buf
+  | NonTail(_), Sw(x, `L(z), y) -> add (Sw(x, `L(z), y, None)) buf
   | NonTail(x), FMv(y) when x = y -> buf
   | NonTail(x), FMv(y) -> add (FMv(x, y)) buf
   | NonTail(x), FNeg(y) -> add (FNeg(x, y)) buf
@@ -83,19 +83,19 @@ and g' (buf : Raw.func) e : Raw.func =
     adds [Add(reg_tmp, y, `V(z)); Flw(x, reg_tmp, `C(0), None)] buf
   | NonTail(x), Flw(y, `C(z)) -> add (Flw(x, y, `C(z), None)) buf
   | NonTail(x), Flw(y, `L(z)) -> add (Flw(x, y, `L(z), None)) buf
-  | NonTail(_), Fsw(x, y, `V(z)) ->
-    adds [Add(reg_tmp, y, `V(z)); Fsw(x, reg_tmp, `C(0), None)] buf
-  | NonTail(_), Fsw(x, y, `C(z)) -> add (Fsw(x, y, `C(z), None)) buf
-  | NonTail(_), Fsw(x, y, `L(z)) -> add (Fsw(x, y, `L(z), None)) buf
+  | NonTail(_), Fsw(x, `V(z), y) ->
+    adds [Add(reg_tmp, y, `V(z)); Fsw(x, `C(0), reg_tmp, None)] buf
+  | NonTail(_), Fsw(x, `C(z), y) -> add (Fsw(x, `C(z), y, None)) buf
+  | NonTail(_), Fsw(x, `L(z), y) -> add (Fsw(x, `L(z), y, None)) buf
   | NonTail(_), Write(x) -> add (Write(x)) buf
   | NonTail(_), Comment(s) -> add (Comment(s)) buf
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
   | NonTail(_), Save(x, y) when List.mem x allregs && not (S.mem y !stackset) ->
     save y;
-    add (Sw(`V(x), reg_sp, `C(offset y), Some("save"))) buf
+    add (Sw(`V(x), `C(offset y), reg_sp, Some("save"))) buf
   | NonTail(_), Save(x, y) when List.mem x allfregs && not (S.mem y !stackset) ->
     save y;
-    add (Fsw(`V(x), reg_sp, `C(offset y), Some("save"))) buf
+    add (Fsw(`V(x), `C(offset y), reg_sp, Some("save"))) buf
   | NonTail(_), Save(x, y) -> assert (S.mem y !stackset); buf
   (* 復帰の仮想命令の実装 (caml2html: emit_restore) *)
   | NonTail(x), Restore(y) when List.mem x allregs ->
@@ -241,7 +241,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   let ss = stacksize () in
   let prologue =
     (if (Asm.has_call e) then
-       [Raw.Add("sp", "sp", `C(-1 * ss - 4)); Raw.Sw(`V("ra"), "sp", `C(ss), None)]
+       [Raw.Add("sp", "sp", `C(-1 * ss - 4)); Raw.Sw(`V("ra"), `C(ss), "sp", None)]
      else if ss > 0 then
        [Raw.Add("sp", "sp", `C(-1 * ss))]
      else
