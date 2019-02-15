@@ -47,6 +47,7 @@ let comment s = match s with
   | None -> ""
 
 let output_buffer' oc e = match e with
+  | Li(x, -1) -> Printf.fprintf oc "\txori\t%s, zero, -1\t# li -1\n" (reg x)
   | Li(x, n) -> Printf.fprintf oc "\tli\t%s, %d\n" (reg x) n
   | FLi(x, Id.L(l)) -> Printf.fprintf oc "\tfli\t%s, %s\n" (reg x) l
   | SetL(x, Id.L(y)) -> Printf.fprintf oc "\tla\t%s, %s\n" (reg x) y
