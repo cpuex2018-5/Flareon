@@ -11415,7 +11415,7 @@ scan_pixel_2998:
 .scan_pixel_cont_36:
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 24(sp)	# restore
 	flw	fa0, 4(a0)
 	call	min_caml_int_of_float
@@ -11429,7 +11429,7 @@ scan_pixel_2998:
 .scan_pixel_cont_39:
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 24(sp)	# restore
 	flw	fa0, 8(a0)
 	call	min_caml_int_of_float
@@ -11443,7 +11443,7 @@ scan_pixel_2998:
 .scan_pixel_cont_42:
 	call	min_caml_print_int
 	li	a0, 10
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 20(sp)	# restore
 	addi	a0, a0, 1
 	lw	a1, 16(sp)	# restore
@@ -11583,7 +11583,7 @@ scan_pixel_2998:
 .scan_pixel_cont_61:
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 24(sp)	# restore
 	flw	fa0, 4(a0)
 	call	min_caml_int_of_float
@@ -11597,7 +11597,7 @@ scan_pixel_2998:
 .scan_pixel_cont_64:
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 24(sp)	# restore
 	flw	fa0, 8(a0)
 	call	min_caml_int_of_float
@@ -11611,7 +11611,7 @@ scan_pixel_2998:
 .scan_pixel_cont_67:
 	call	min_caml_print_int
 	li	a0, 10
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 84(sp)	# restore
 	addi	a0, a0, 1
 	lw	a1, 8(sp)	# restore
@@ -11800,7 +11800,7 @@ scan_line_3004:
 .scan_line_cont_18:
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 28(sp)	# restore
 	flw	fa0, 4(a0)
 	call	min_caml_int_of_float
@@ -11814,7 +11814,7 @@ scan_line_3004:
 .scan_line_cont_21:
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 28(sp)	# restore
 	flw	fa0, 8(a0)
 	call	min_caml_int_of_float
@@ -11828,7 +11828,7 @@ scan_line_3004:
 .scan_line_cont_24:
 	call	min_caml_print_int
 	li	a0, 10
-	call	min_caml_print_char
+	w	a0
 	li	a0, 1
 	lw	a1, 12(sp)	# restore
 	lw	a2, 8(sp)	# restore
@@ -15935,25 +15935,25 @@ rt_3070:
 	lw	a1, 136(sp)	# restore
 	sw	a0, 0(a1)
 	li	a0, 80
-	call	min_caml_print_char
+	w	a0
 	li	a0, 51
-	call	min_caml_print_char
+	w	a0
 	li	a0, 10
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 12(sp)	# restore
 	lw	a0, 0(a0)
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	lw	a0, 12(sp)	# restore
 	lw	a0, 4(a0)
 	call	min_caml_print_int
 	li	a0, 32
-	call	min_caml_print_char
+	w	a0
 	li	a0, 255
 	call	min_caml_print_int
 	li	a0, 10
-	call	min_caml_print_char
+	w	a0
 	lda	a0, min_caml_dirvecs
 	fmv	fa0, fzero
 	fsw	fzero, 0(gp)

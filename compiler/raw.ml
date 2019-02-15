@@ -29,6 +29,7 @@ type t =
   | FSqrt of Id.t * Id.t
   | Flw of Id.t * Id.t * imm_or_label * string option
   | Fsw of id_or_fimm * Id.t * imm_or_label * string option
+  | Write of Id.t
   | Comment of string
   | Call of Id.l
   | Bc of string * Id.t * id_or_imm * Id.l (* branch on condition *)
@@ -96,6 +97,7 @@ let output_buffer' oc e = match e with
   | Fsw(`FZero, y, `L(Id.L(l)), _) -> Printf.fprintf oc "\tfswl\tfzero, %s(%s)\n" l (reg y)
   | Fsw(`V(x), y, `C(z), s)        -> Printf.fprintf oc "\tfsw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
   | Fsw(`FZero, y, `C(z), s)       -> Printf.fprintf oc "\tfsw\tfzero, %d(%s)%s\n" z (reg y) (comment s)
+  | Write(x)   -> Printf.fprintf oc "\tw\t%s\n" (reg x)
   | Comment(s) -> Printf.fprintf oc "#\t%s\n" s
   | Call(Id.L(f)) -> Printf.fprintf oc "\tcall\t%s\n" f
   | Bc(b, x, `V(y), Id.L(z)) -> Printf.fprintf oc "\t%s\t%s, %s, %s\n"  b (reg x) (reg y) z

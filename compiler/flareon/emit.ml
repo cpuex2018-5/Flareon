@@ -87,6 +87,7 @@ and g' (buf : Raw.func) e : Raw.func =
     adds [Add(reg_tmp, y, `V(z)); Fsw(x, reg_tmp, `C(0), None)] buf
   | NonTail(_), Fsw(x, y, `C(z)) -> add (Fsw(x, y, `C(z), None)) buf
   | NonTail(_), Fsw(x, y, `L(z)) -> add (Fsw(x, y, `L(z), None)) buf
+  | NonTail(_), Write(x) -> add (Write(x)) buf
   | NonTail(_), Comment(s) -> add (Comment(s)) buf
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
   | NonTail(_), Save(x, y) when List.mem x allregs && not (S.mem y !stackset) ->
@@ -103,7 +104,7 @@ and g' (buf : Raw.func) e : Raw.func =
     assert (List.mem x allfregs);
     add (Flw(x, reg_sp, `C(offset y), Some("restore"))) buf
   (* 末尾だったら計算結果を%a0か%fa0にセットしてリターン (caml2html: emit_tailret) *)
-  | Tail, (Nop | Sw _ | Fsw _ | Comment _ | Save _ as exp) ->
+  | Tail, (Nop | Sw _ | Fsw _ | Comment _ | Write _ | Save _ as exp) ->
     g' buf (NonTail(Id.gentmp Type.Unit), exp);
   | Tail, (Li _ | SetL _ | SetDL _ | Mv _ | Neg _ | Not _ | Xor _ | Add _ | Sub _ | Mul _ | Div _ | Sll _ | Lw _ as exp) ->
     g' buf (NonTail(regs.(0)), exp);

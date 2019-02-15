@@ -1,19 +1,12 @@
 ## ft9, ft10はlibで自由に使ってよい
 
-min_caml_print_char:
-# a0の下位8bitに出力したい文字のasciiコードが入っている
-	w	a0
-	jr	ra
-
 min_caml_print_newline:
-	addi	sp, sp, -4
-	sw	t1, 0(sp)
+	sw	t1, -4(sp)
 	li	t1, 13
 	w	t1
 	li	t1, 10
 	w	t1
-	lw	t1, 0(sp)
-	addi	sp, sp, 4
+	lw	t1, -4(sp)
 	jr	ra
 
 min_caml_print_int:

@@ -194,6 +194,7 @@ and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml
   | FSqrt(x) -> (Ans(FSqrt(find x Type.Float regenv)), regenv)
   | Flw(x, y') -> (Ans(Flw(find x Type.Int regenv, find'_i y' regenv)), regenv)
   | Fsw(x, y, z') -> (Ans(Fsw(find'_f x regenv, find y Type.Int regenv, find'_i z' regenv)), regenv)
+  | Write(x) -> (Ans(Write(find x Type.Int regenv)), regenv)
   | IfEq(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfEq(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2
   | IfLE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfLE(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2
   | IfGE(x, y', e1, e2) as exp -> g'_if dest cont regenv exp (fun e1' e2' -> IfGE(find x Type.Int regenv, find'_i y' regenv, e1', e2')) e1 e2

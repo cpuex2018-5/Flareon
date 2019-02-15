@@ -33,6 +33,7 @@ and exp =
   | FSqrt of Id.t
   | Flw of Id.t * id_imm_or_label
   | Fsw of id_or_fimm * Id.t * id_imm_or_label
+  | Write of Id.t
   | Comment of string
   (* virtual instructions *)
   | IfEq of Id.t * id_or_imm * t * t

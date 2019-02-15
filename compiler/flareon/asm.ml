@@ -33,6 +33,7 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *
   | FSqrt of Id.t
   | Flw of Id.t * id_imm_or_label
   | Fsw of id_or_fimm * Id.t * id_imm_or_label
+  | Write of Id.t
   | Comment of string
   (* virtual instructions *)
   | IfEq of Id.t * id_or_imm * t * t
@@ -90,6 +91,7 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | FSqrt(x)     -> Printf.sprintf "FSqrt %s" x
     | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (unwrap y)
     | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" (unwrap x) (unwrap z) y
+    | Write(x)     -> Printf.sprintf "Write %s" x
     | Comment _    -> ""
     | IfEq(x, y, e1, e2)  -> Printf.sprintf "(If %s = %s THEN\n%s ELSE\n%s)"  x (unwrap y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
     | IfLE(x, y, e1, e2)  -> Printf.sprintf "(If %s <= %s THEN\n%s ELSE\n%s)" x (unwrap y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
@@ -146,7 +148,7 @@ let rec remove_and_uniq xs = function
 let fv_unwrap e = match e with `V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Li(_) | FLi(_) | SetL(_) | SetDL(_) | Comment(_) | Restore(_) -> []
-  | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) | FAbs(x) | FSqrt(x) -> [x]
+  | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) | FAbs(x) | FSqrt(x) | Write(x) -> [x]
   | Xor(x, y') | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | Sll(x, y') -> x :: fv_unwrap y'
   | Lw(x, y') | Flw(x, y') -> x :: fv_unwrap y'
   | Sw(x, y, z') -> (fv_unwrap x) @ y :: fv_unwrap z'
