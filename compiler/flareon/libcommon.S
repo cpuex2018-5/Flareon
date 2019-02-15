@@ -131,58 +131,58 @@ min_caml_print_int:
 	addi	sp, sp, 8
 	jr	ra
 
-min_caml_print_hex:
-	addi	sp, sp, -12
-	sw	a1, 8(sp)
-	sw	t1, 4(sp)
-	sw	ra, 0(sp)
-	mv	a1, a0	# a1に元の数を保存　
-	srai	a0, a1, 28
-	call	.print_hex_write
-	srai	a0, a1, 24
-	call	.print_hex_write
-	srai	a0, a1, 20
-	call	.print_hex_write
-	srai	a0, a1, 16
-	call	.print_hex_write
-	srai	a0, a1, 12
-	call	.print_hex_write
-	srai	a0, a1, 8
-	call	.print_hex_write
-	srai	a0, a1, 4
-	call	.print_hex_write
-	mv	a0, a1
-	call	.print_hex_write
-	lw	a1, 8(sp)
-	lw	t1, 4(sp)
-	lw	ra, 0(sp)
-	addi	sp, sp, 12
-	jr	ra
-.print_hex_write:	# a0の下位4bitをhexで出力
-	srai	t1, a0, 4
-	slli	t1, t1, 4
-	sub	a0, a0, t1
-	li	t1, 10
-	bge	a0, t1, .print_hex_write_L0
-	addi	a0, a0, 48
-	w	a0
-	jr	ra
-.print_hex_write_L0:
-	addi	a0, a0, 87
-	w	a0
-	jr	ra
+# min_caml_print_hex:
+# 	addi	sp, sp, -12
+# 	sw	a1, 8(sp)
+# 	sw	t1, 4(sp)
+# 	sw	ra, 0(sp)
+# 	mv	a1, a0	# a1に元の数を保存　
+# 	srai	a0, a1, 28
+# 	call	.print_hex_write
+# 	srai	a0, a1, 24
+# 	call	.print_hex_write
+# 	srai	a0, a1, 20
+# 	call	.print_hex_write
+# 	srai	a0, a1, 16
+# 	call	.print_hex_write
+# 	srai	a0, a1, 12
+# 	call	.print_hex_write
+# 	srai	a0, a1, 8
+# 	call	.print_hex_write
+# 	srai	a0, a1, 4
+# 	call	.print_hex_write
+# 	mv	a0, a1
+# 	call	.print_hex_write
+# 	lw	a1, 8(sp)
+# 	lw	t1, 4(sp)
+# 	lw	ra, 0(sp)
+# 	addi	sp, sp, 12
+# 	jr	ra
+# .print_hex_write:	# a0の下位4bitをhexで出力
+# 	srai	t1, a0, 4
+# 	slli	t1, t1, 4
+# 	sub	a0, a0, t1
+# 	li	t1, 10
+# 	bge	a0, t1, .print_hex_write_L0
+# 	addi	a0, a0, 48
+# 	w	a0
+# 	jr	ra
+# .print_hex_write_L0:
+# 	addi	a0, a0, 87
+# 	w	a0
+# 	jr	ra
 
-min_caml_print_float:	# print float in hex
-	addi	sp, sp, -12
-	sw	a0, 8(sp)
-	sw	ra, 4(sp)
-	fsw	fa0, 0(sp)
-	lw	a0, 0(sp)
-	call	min_caml_print_hex
-	lw	a0, 8(sp)
-	lw	ra, 4(sp)
-	addi	sp, sp, 12
-	jr	ra
+# min_caml_print_float:	# print float in hex
+# 	addi	sp, sp, -12
+# 	sw	a0, 8(sp)
+# 	sw	ra, 4(sp)
+# 	fsw	fa0, 0(sp)
+# 	lw	a0, 0(sp)
+# 	call	min_caml_print_hex
+# 	lw	a0, 8(sp)
+# 	lw	ra, 4(sp)
+# 	addi	sp, sp, 12
+# 	jr	ra
 
 min_caml_create_array:
 	mv	t6, gp
