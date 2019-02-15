@@ -25,5 +25,23 @@ let rec g (e : func) = match e with
   | (x, ([_; _; Ret] as ret)) :: xs -> (x, ret) :: g (dir_ret x ret xs)
   | xe :: xs -> xe :: (g xs)
 
+(*
+    bne     a0, zero, .solver_rect_else_24
+    li      a0, 0
+  のような無駄なliを減らす
+*)
+let rec cond env (e : Raw.t list) = match e with
+  | [] -> []
+  | x :: xs -> (match x with
+      | Li(rd, n) when List.mem (rd, n) env -> cond env xs
+      | Bc("bne", rs1, `C(n), _) -> x :: cond ((rs1, n) :: env) xs
+      | SetL(y, _) | Mv(y, _) | Not(y, _) | Neg(y, _) | Xor(y, _, _)
+      | Add(y, _, _) | Sub(y, _, _) | Mul(y, _, _) | Div(y, _, _)
+      | Sll(y, _, _) | Lw(y, _, _, _) when Id.mem y env ->
+        x :: cond (List.filter (fun (z, _) -> z <> y) env) xs
+      | _ -> x :: cond env xs)
+
 let f (e : func) =
-  List.rev (g (List.rev e))
+  let e = List.rev (g (List.rev e)) in
+  let e = List.map (fun (x, body) -> (x, cond [] body)) e in
+  e

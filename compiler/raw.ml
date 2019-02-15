@@ -100,6 +100,7 @@ let output_buffer' oc e = match e with
   | Comment(s) -> Printf.fprintf oc "#\t%s\n" s
   | Call(Id.L(f)) -> Printf.fprintf oc "\tcall\t%s\n" f
   | Bc(b, x, `V(y), Id.L(z)) -> Printf.fprintf oc "\t%s\t%s, %s, %s\n"  b (reg x) (reg y) z
+  | Bc(b, x, `C(0), Id.L(z)) -> Printf.fprintf oc "\t%s\t%s, zero, %s\n" b (reg x) z
   | Bc(b, x, `C(y), Id.L(z)) -> Printf.fprintf oc "\t%si\t%s, %d, %s\n" b (reg x) y z
   | B(Id.L(l)) -> Printf.fprintf oc "\tb\t%s\n" l
   | Jalr -> Printf.fprintf oc "\tjalr\tra, ra, 0\n"

@@ -1606,25 +1606,21 @@ solver_rect_2750:
 	fsw	fa2, 0(a0)
 	li	a0, 1
 	bne	a0, zero, .solver_rect_else_24
-	li	a0, 0
 	jr	ra
 .solver_rect_else_22:
 	li	a0, 0
 .solver_rect_cont_23:
 	bne	a0, zero, .solver_rect_else_24
-	li	a0, 0
 	jr	ra
 .solver_rect_else_20:
 	li	a0, 0
 .solver_rect_cont_21:
 	bne	a0, zero, .solver_rect_else_24
-	li	a0, 0
 	jr	ra
 .solver_rect_else_17:
 	li	a0, 0
 .solver_rect_cont_18:
 	bne	a0, zero, .solver_rect_else_24
-	li	a0, 0
 	jr	ra
 .solver_rect_else_24:
 	li	a0, 3
@@ -1903,25 +1899,21 @@ solver_2781:
 	fsw	fa2, 0(a0)
 	li	a0, 1
 	bne	a0, zero, .solver_else_25
-	li	a0, 0
 	jr	ra
 .solver_else_23:
 	li	a0, 0
 .solver_cont_24:
 	bne	a0, zero, .solver_else_25
-	li	a0, 0
 	jr	ra
 .solver_else_21:
 	li	a0, 0
 .solver_cont_22:
 	bne	a0, zero, .solver_else_25
-	li	a0, 0
 	jr	ra
 .solver_else_18:
 	li	a0, 0
 .solver_cont_19:
 	bne	a0, zero, .solver_else_25
-	li	a0, 0
 	jr	ra
 .solver_else_25:
 	li	a0, 3
@@ -2173,19 +2165,16 @@ solver_rect_fast_2785:
 	feq	a0, fa0, fzero
 	xori	a0, a0, 1
 	bne	a0, zero, .solver_rect_fast_else_15
-	li	a0, 0
 	jr	ra
 .solver_rect_fast_else_13:
 	li	a0, 0
 .solver_rect_fast_cont_14:
 	bne	a0, zero, .solver_rect_fast_else_15
-	li	a0, 0
 	jr	ra
 .solver_rect_fast_else_11:
 	li	a0, 0
 .solver_rect_fast_cont_12:
 	bne	a0, zero, .solver_rect_fast_else_15
-	li	a0, 0
 	jr	ra
 .solver_rect_fast_else_15:
 	lda	a0, min_caml_solver_dist
@@ -3481,7 +3470,6 @@ shadow_check_and_group_2870:
 	lda	a1, min_caml_solver_dist
 	flw	fa0, 0(a1)
 	bne	a0, zero, .shadow_check_and_group_else_8
-	li	a0, 0
 	b	.shadow_check_and_group_cont_9
 .shadow_check_and_group_else_8:
 	fli	fa1, l_data_7
@@ -3494,7 +3482,6 @@ shadow_check_and_group_2870:
 	lwl	a0, min_caml_objects(a0)
 	lw	a0, 24(a0)
 	bne	a0, zero, .shadow_check_and_group_else_11
-	li	a0, 0
 	lw	ra, 28(sp)
 	addi	sp, sp, 32
 	jr	ra
@@ -3961,7 +3948,6 @@ shadow_check_one_or_matrix_2876:
 .shadow_check_one_or_matrix_cont_7:
 .shadow_check_one_or_matrix_cont_5:
 	bne	a0, zero, .shadow_check_one_or_matrix_else_10
-	li	a0, 0
 	b	.shadow_check_one_or_matrix_cont_11
 .shadow_check_one_or_matrix_else_10:
 	fli	fa0, l_data_9
@@ -4080,7 +4066,6 @@ shadow_check_one_or_matrix_2876:
 .shadow_check_one_or_matrix_cont_17:
 .shadow_check_one_or_matrix_cont_15:
 	bne	a0, zero, .shadow_check_one_or_matrix_else_42
-	li	a0, 0
 	b	.shadow_check_one_or_matrix_cont_13
 .shadow_check_one_or_matrix_else_42:
 	li	a0, 1
@@ -4116,7 +4101,6 @@ shadow_check_one_or_matrix_2876:
 	lda	a2, min_caml_intersection_point
 	call	solver_fast_2804
 	bne	a0, zero, .shadow_check_one_or_matrix_else_48
-	li	a0, 0
 	b	.shadow_check_one_or_matrix_cont_49
 .shadow_check_one_or_matrix_else_48:
 	fli	fa0, l_data_9
@@ -4220,7 +4204,6 @@ shadow_check_one_or_matrix_2876:
 .shadow_check_one_or_matrix_cont_55:
 .shadow_check_one_or_matrix_cont_53:
 	bne	a0, zero, .shadow_check_one_or_matrix_else_76
-	li	a0, 0
 	b	.shadow_check_one_or_matrix_cont_51
 .shadow_check_one_or_matrix_else_76:
 	li	a0, 1
@@ -4484,7 +4467,6 @@ shadow_check_one_or_matrix_2876:
 	lda	a2, min_caml_intersection_point
 	call	solver_fast_2804
 	bne	a0, zero, .shadow_check_one_or_matrix_else_136
-	li	a0, 0
 	b	.shadow_check_one_or_matrix_cont_137
 .shadow_check_one_or_matrix_else_136:
 	fli	fa0, l_data_9
@@ -4588,7 +4570,6 @@ shadow_check_one_or_matrix_2876:
 .shadow_check_one_or_matrix_cont_143:
 .shadow_check_one_or_matrix_cont_141:
 	bne	a0, zero, .shadow_check_one_or_matrix_else_164
-	li	a0, 0
 	b	.shadow_check_one_or_matrix_cont_139
 .shadow_check_one_or_matrix_else_164:
 	li	a0, 1
@@ -6841,7 +6822,6 @@ trace_reflections_2923:
 	lda	a2, min_caml_intersection_point
 	call	solver_fast_2804
 	bne	a0, zero, .trace_reflections_else_9
-	li	a0, 0
 	b	.trace_reflections_cont_10
 .trace_reflections_else_9:
 	lda	a0, min_caml_solver_dist
@@ -6945,7 +6925,6 @@ trace_reflections_2923:
 .trace_reflections_cont_16:
 .trace_reflections_cont_14:
 	bne	a0, zero, .trace_reflections_else_37
-	li	a0, 0
 	b	.trace_reflections_cont_12
 .trace_reflections_else_37:
 	li	a0, 1
@@ -7634,7 +7613,6 @@ trace_ray_2928:
 	mv	a2, a3
 	call	solver_fast_2804
 	bne	a0, zero, .trace_ray_else_21
-	li	a0, 0
 	b	.trace_ray_cont_22
 .trace_ray_else_21:
 	lda	a0, min_caml_solver_dist
@@ -7738,7 +7716,6 @@ trace_ray_2928:
 .trace_ray_cont_28:
 .trace_ray_cont_26:
 	bne	a0, zero, .trace_ray_else_49
-	li	a0, 0
 	b	.trace_ray_cont_24
 .trace_ray_else_49:
 	li	a0, 1
@@ -8288,7 +8265,6 @@ trace_diffuse_ray_2934:
 	lw	a2, 28(sp)	# restore
 	call	solver_fast_2804
 	bne	a0, zero, .trace_diffuse_ray_else_17
-	li	a0, 0
 	b	.trace_diffuse_ray_cont_18
 .trace_diffuse_ray_else_17:
 	lda	a0, min_caml_solver_dist
@@ -8392,7 +8368,6 @@ trace_diffuse_ray_2934:
 .trace_diffuse_ray_cont_24:
 .trace_diffuse_ray_cont_22:
 	bne	a0, zero, .trace_diffuse_ray_else_45
-	li	a0, 0
 	b	.trace_diffuse_ray_cont_20
 .trace_diffuse_ray_else_45:
 	li	a0, 1

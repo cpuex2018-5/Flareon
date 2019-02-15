@@ -174,9 +174,7 @@ and g'_branch buf mnemo rs1 rs2 label =
   match rs2 with
   | `V(rs2) ->
     add (Raw.Bc(mnemo, rs1, `V(rs2), label)) buf
-  | `C(0) ->
-    add (Raw.Bc(mnemo, rs1, `V "zero", label)) buf
-  | `C(n) when 0 < n && n < 32 ->
+  | `C(n) when 0 <= n && n < 32 ->
     add (Raw.Bc(mnemo, rs1, `C n, label)) buf
   | `C(n) ->
     adds [Li(reg_tmp, n); Raw.Bc(mnemo, rs1, `V(reg_tmp), label)] buf
@@ -257,7 +255,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
      else
        []) @ [Raw.Ret] in
   (add_prologue prologue buf') @ [return]
-  |> Peephole.f(* [XXX] peephole optimization *)
+  |> Peephole.f (* [XXX] peephole optimization *)
   |> Raw.output_buffer oc
 
 let f oc globals (Prog(data, fundefs, e)) =
