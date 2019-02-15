@@ -98,9 +98,34 @@ bne     a0, zero, .solver_rect_else_24
 li      a0, 0
 ```
 * 下のような式が多かったので、`not (xor x (not y)) = xor x y` と簡約(1833296271 -> 1817094652)
-```
-xori    a0, a0, 1
-xor     a1, a0, a1
-xori    a1, a1, 1
+```diff
+-xori    a0, a0, 1
+ xor     a1, a0, a1
+-xori    a1, a1, 1
 ```
 * `print_int`, `sin`, `cos` の無駄を省く (-> 1816767717)
+* レジスタの中身の値に関する(ブロック単位での)推論
+```diff
+-       li      a0, 1
+-       bne     a0, zero, .solver_else_25
++       li      a0, 3
+        jr      ra
+ .solver_else_23:
+        li      a0, 0
+-.solver_cont_24:
+-       bne     a0, zero, .solver_else_25
+        jr      ra
+ .solver_else_21:
+        li      a0, 0
+-.solver_cont_22:
+-       bne     a0, zero, .solver_else_25
+        jr      ra
+ .solver_else_18:
+        li      a0, 0
+-.solver_cont_19:
+-       bne     a0, zero, .solver_else_25
+-       jr      ra
+-.solver_else_25:
+-       li      a0, 3
+        jr      ra
+```

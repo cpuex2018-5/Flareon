@@ -72,7 +72,6 @@ read_screen_settings_2716:
 	flw	fa1, 8(a1)
 	fsub	fa0, fa0, fa1
 	fsw	fa0, 8(a2)
-read_screen_settings_ret:
 	lw	ra, 20(sp)
 	addi	sp, sp, 24
 	jr	ra
@@ -178,7 +177,6 @@ rotate_quadratic_matrix_2720:
 	fadd	fa0, fa0, fa1
 	fmul	fa0, fs5, fa0
 	fsw	fa0, 8(a1)
-rotate_quadratic_matrix_ret:
 	lw	ra, 20(sp)
 	addi	sp, sp, 24
 	jr	ra
@@ -392,7 +390,6 @@ read_nth_object_2723:
 	call	rotate_quadratic_matrix_2720
 .read_nth_object_cont_24:
 	li	a0, 1
-read_nth_object_ret:
 	lw	ra, 20(sp)
 	addi	sp, sp, 24
 	jr	ra
@@ -544,7 +541,6 @@ read_object_2725:
 	lw	a0, 28(sp)	# restore
 	addi	a0, a0, 1
 	call	read_object_2725
-read_object_ret:
 	lw	ra, 32(sp)
 	addi	sp, sp, 36
 	jr	ra
@@ -686,7 +682,6 @@ read_net_item_2729:
 	lw	a2, 4(sp)	# restore
 	add	t6, a0, a1
 	sw	a2, 0(t6)
-read_net_item_ret:
 	lw	ra, 64(sp)
 	addi	sp, sp, 68
 	jr	ra
@@ -1099,7 +1094,6 @@ read_or_network_2731:
 	lw	a2, 32(sp)	# restore
 	add	t6, a0, a1
 	sw	a2, 0(t6)
-read_or_network_ret:
 	lw	ra, 120(sp)
 	addi	sp, sp, 124
 	jr	ra
@@ -1479,7 +1473,6 @@ read_and_network_2733:
 	swl	a0, min_caml_and_net(a2)
 	addi	a0, a1, 1
 	call	read_and_network_2733
-read_and_network_ret:
 	lw	ra, 104(sp)
 	addi	sp, sp, 108
 	jr	ra
@@ -1604,33 +1597,22 @@ solver_rect_2746:
 	bne	a0, zero, .solver_rect_else_22
 	lda	a0, min_caml_solver_dist
 	fsw	fa2, 0(a0)
-	li	a0, 1
-	bne	a0, zero, .solver_rect_else_24
+	li	a0, 3
 	jr	ra
 .solver_rect_else_22:
 	li	a0, 0
-.solver_rect_cont_23:
-	bne	a0, zero, .solver_rect_else_24
 	jr	ra
 .solver_rect_else_20:
 	li	a0, 0
-.solver_rect_cont_21:
-	bne	a0, zero, .solver_rect_else_24
 	jr	ra
 .solver_rect_else_17:
 	li	a0, 0
-.solver_rect_cont_18:
-	bne	a0, zero, .solver_rect_else_24
-	jr	ra
-.solver_rect_else_24:
-	li	a0, 3
 	jr	ra
 .solver_rect_else_16:
 	li	a0, 2
 	jr	ra
 .solver_rect_else_8:
 	li	a0, 1
-solver_rect_ret:
 	jr	ra
 solver_second_2771:
 	flw	fa3, 0(a1)
@@ -1762,7 +1744,6 @@ solver_second_2771:
 	jr	ra
 .solver_second_else_3:
 	li	a0, 0
-solver_second_ret:
 	jr	ra
 solver_2777:
 	slli	a0, a0, 2
@@ -1897,26 +1878,16 @@ solver_2777:
 	bne	a0, zero, .solver_else_23
 	lda	a0, min_caml_solver_dist
 	fsw	fa2, 0(a0)
-	li	a0, 1
-	bne	a0, zero, .solver_else_25
+	li	a0, 3
 	jr	ra
 .solver_else_23:
 	li	a0, 0
-.solver_cont_24:
-	bne	a0, zero, .solver_else_25
 	jr	ra
 .solver_else_21:
 	li	a0, 0
-.solver_cont_22:
-	bne	a0, zero, .solver_else_25
 	jr	ra
 .solver_else_18:
 	li	a0, 0
-.solver_cont_19:
-	bne	a0, zero, .solver_else_25
-	jr	ra
-.solver_else_25:
-	li	a0, 3
 	jr	ra
 .solver_else_17:
 	li	a0, 2
@@ -2081,7 +2052,6 @@ solver_2777:
 	jr	ra
 .solver_else_30:
 	li	a0, 0
-solver_ret:
 	jr	ra
 solver_rect_fast_2781:
 	flw	fa3, 0(a2)
@@ -2168,13 +2138,9 @@ solver_rect_fast_2781:
 	jr	ra
 .solver_rect_fast_else_13:
 	li	a0, 0
-.solver_rect_fast_cont_14:
-	bne	a0, zero, .solver_rect_fast_else_15
 	jr	ra
 .solver_rect_fast_else_11:
 	li	a0, 0
-.solver_rect_fast_cont_12:
-	bne	a0, zero, .solver_rect_fast_else_15
 	jr	ra
 .solver_rect_fast_else_15:
 	lda	a0, min_caml_solver_dist
@@ -2190,7 +2156,6 @@ solver_rect_fast_2781:
 	lda	a0, min_caml_solver_dist
 	fsw	fa3, 0(a0)
 	li	a0, 1
-solver_rect_fast_ret:
 	jr	ra
 solver_second_fast_2794:
 	flw	fa3, 0(a1)
@@ -2262,7 +2227,6 @@ solver_second_fast_2794:
 	flw	fa1, 16(a1)
 	fmul	fa0, fa0, fa1
 	fsw	fa0, 0(a0)
-.solver_second_fast_cont_7:
 	li	a0, 1
 	jr	ra
 .solver_second_fast_else_5:
@@ -2270,7 +2234,6 @@ solver_second_fast_2794:
 	jr	ra
 .solver_second_fast_else_1:
 	li	a0, 0
-solver_second_fast_ret:
 	jr	ra
 solver_fast_2800:
 	addi	sp, sp, -4
@@ -2403,7 +2366,6 @@ solver_fast_2800:
 	jr	ra
 .solver_fast_else_4:
 	li	a0, 0
-solver_fast_ret:
 	lw	ra, 0(sp)
 	addi	sp, sp, 4
 	jr	ra
@@ -2495,7 +2457,6 @@ solver_fast2_2818:
 	jr	ra
 .solver_fast2_else_4:
 	li	a0, 0
-solver_fast2_ret:
 	lw	ra, 0(sp)
 	addi	sp, sp, 4
 	jr	ra
@@ -2570,12 +2531,11 @@ setup_rect_table_2821:
 	flw	fa1, 8(a0)
 	fdiv	fa0, fa0, fa1
 	fsw	fa0, 20(a2)
-	b	.setup_rect_table_cont_8
+	mv	a0, a2
+	jr	ra
 .setup_rect_table_else_7:
 	fsw	fzero, 20(a2)
-.setup_rect_table_cont_8:
 	mv	a0, a2
-setup_rect_table_ret:
 	jr	ra
 setup_second_table_2827:
 	fsw	fzero, 0(gp)
@@ -2677,7 +2637,6 @@ setup_second_table_2827:
 	fsw	fa0, 16(a2)
 .setup_second_table_cont_5:
 	mv	a0, a2
-setup_second_table_ret:
 	jr	ra
 iter_setup_dirvec_constants_2830:
 	addi	sp, sp, -24
@@ -3044,14 +3003,10 @@ is_outside_2855:
 	jr	ra
 .is_outside_else_4:
 	li	a0, 0
-.is_outside_cont_5:
-	bne	a0, zero, .is_outside_else_6
 	xori	a0, a2, 1
 	jr	ra
 .is_outside_else_2:
 	li	a0, 0
-.is_outside_cont_3:
-	bne	a0, zero, .is_outside_else_6
 	xori	a0, a2, 1
 	jr	ra
 .is_outside_else_6:
@@ -3105,7 +3060,6 @@ is_outside_2855:
 .is_outside_cont_10:
 	fle	a0, fzero, fa0
 	xor	a0, a2, a0
-is_outside_ret:
 	jr	ra
 check_all_inside_2860:
 	addi	sp, sp, -24
@@ -3462,7 +3416,6 @@ check_all_inside_2860:
 	jr	ra
 .check_all_inside_else_15:
 	li	a0, 0
-check_all_inside_ret:
 	lw	ra, 20(sp)
 	addi	sp, sp, 24
 	jr	ra
@@ -3816,7 +3769,6 @@ shadow_check_and_group_2866:
 	jr	ra
 .shadow_check_and_group_else_50:
 	li	a0, 1
-shadow_check_and_group_ret:
 	lw	ra, 28(sp)
 	addi	sp, sp, 32
 	jr	ra
@@ -4017,7 +3969,6 @@ shadow_check_one_or_group_2869:
 	jr	ra
 .shadow_check_one_or_group_else_2:
 	li	a0, 1
-shadow_check_one_or_group_ret:
 	lw	ra, 36(sp)
 	addi	sp, sp, 40
 	jr	ra
@@ -4842,7 +4793,6 @@ shadow_check_one_or_matrix_2872:
 	jr	ra
 .shadow_check_one_or_matrix_else_132:
 	li	a0, 1
-shadow_check_one_or_matrix_ret:
 	lw	ra, 28(sp)
 	addi	sp, sp, 32
 	jr	ra
@@ -5218,7 +5168,6 @@ solve_each_element_2875:
 	lw	a1, 12(sp)	# restore
 	lw	a2, 8(sp)	# restore
 	call	solve_each_element_2875
-solve_each_element_ret:
 	lw	ra, 44(sp)
 	addi	sp, sp, 48
 	jr	ra
@@ -5372,7 +5321,6 @@ solve_one_or_network_2879:
 	lw	a1, 0(sp)	# restore
 	lw	a2, 8(sp)	# restore
 	call	solve_one_or_network_2879
-solve_one_or_network_ret:
 	lw	ra, 40(sp)
 	addi	sp, sp, 44
 	jr	ra
@@ -5762,7 +5710,6 @@ trace_or_matrix_2883:
 	lw	a1, 4(sp)	# restore
 	lw	a2, 0(sp)	# restore
 	call	trace_or_matrix_2883
-trace_or_matrix_ret:
 	lw	ra, 24(sp)
 	addi	sp, sp, 28
 	jr	ra
@@ -6158,7 +6105,6 @@ solve_each_element_fast_2889:
 	lw	a1, 12(sp)	# restore
 	lw	a2, 4(sp)	# restore
 	call	solve_each_element_fast_2889
-solve_each_element_fast_ret:
 	lw	ra, 44(sp)
 	addi	sp, sp, 48
 	jr	ra
@@ -6312,7 +6258,6 @@ solve_one_or_network_fast_2893:
 	lw	a1, 0(sp)	# restore
 	lw	a2, 8(sp)	# restore
 	call	solve_one_or_network_fast_2893
-solve_one_or_network_fast_ret:
 	lw	ra, 40(sp)
 	addi	sp, sp, 44
 	jr	ra
@@ -6720,7 +6665,6 @@ trace_or_matrix_fast_2897:
 	lw	a1, 4(sp)	# restore
 	lw	a2, 0(sp)	# restore
 	call	trace_or_matrix_fast_2897
-trace_or_matrix_fast_ret:
 	lw	ra, 24(sp)
 	addi	sp, sp, 28
 	jr	ra
@@ -6815,7 +6759,6 @@ get_nvector_second_2907:
 	flw	fa1, 8(a0)
 	fmul	fa0, fa1, fa0
 	fsw	fa0, 8(a0)
-get_nvector_second_ret:
 	jr	ra
 utexture_2912:
 	addi	sp, sp, -32
@@ -9514,7 +9457,6 @@ trace_diffuse_ray_80percent_2942:
 	lw	a1, 0(sp)	# restore
 	lw	a2, 4(sp)	# restore
 	call	iter_trace_diffuse_rays_2933
-trace_diffuse_ray_80percent_ret:
 	lw	ra, 32(sp)
 	addi	sp, sp, 36
 	jr	ra
@@ -9827,7 +9769,6 @@ calc_diffuse_using_1point_2946:
 	fmul	fa1, fa1, fa2
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 8(a0)
-calc_diffuse_using_1point_ret:
 	lw	ra, 44(sp)
 	addi	sp, sp, 48
 	jr	ra
@@ -9950,7 +9891,6 @@ calc_diffuse_using_5points_2949:
 	fmul	fa1, fa1, fa2
 	fadd	fa0, fa0, fa1
 	fsw	fa0, 8(a1)
-calc_diffuse_using_5points_ret:
 	jr	ra
 do_without_neighbors_2955:
 	addi	sp, sp, -92
@@ -11619,7 +11559,6 @@ scan_pixel_2998:
 	lw	a3, 12(sp)	# restore
 	lw	a4, 0(sp)	# restore
 	call	scan_pixel_2998
-scan_pixel_ret:
 	lw	ra, 108(sp)
 	addi	sp, sp, 112
 	jr	ra
@@ -11906,7 +11845,6 @@ scan_line_3004:
 	lw	a3, 16(sp)	# restore
 	call	scan_line_3004
 .scan_line_cont_27:
-scan_line_ret:
 	lw	ra, 64(sp)
 	addi	sp, sp, 68
 	jr	ra
@@ -12087,7 +12025,6 @@ create_pixel_3012:
 	sw	a0, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 32
-create_pixel_ret:
 	jr	ra
 init_line_elements_3014:
 	addi	sp, sp, -16
@@ -12493,7 +12430,6 @@ init_line_elements_3014:
 	addi	sp, sp, 16
 	jr	ra
 .init_line_elements_else_1:
-init_line_elements_ret:
 	lw	ra, 12(sp)
 	addi	sp, sp, 16
 	jr	ra
@@ -12602,7 +12538,6 @@ calc_dirvec_3024:
 	fmul	fa1, fa0, fa1
 	flw	fa0, 12(sp)	# restore
 	call	calc_dirvec_3024
-calc_dirvec_ret:
 	lw	ra, 24(sp)
 	addi	sp, sp, 28
 	jr	ra
@@ -14753,7 +14688,6 @@ setup_rect_reflection_3062:
 	addi	a0, a0, 3
 	lw	a1, 8(sp)	# restore
 	sw	a0, 0(a1)
-setup_rect_reflection_ret:
 	lw	ra, 92(sp)
 	addi	sp, sp, 96
 	jr	ra
@@ -14911,7 +14845,6 @@ setup_surface_reflection_3065:
 	addi	a0, a1, 1
 	lw	a1, 4(sp)	# restore
 	sw	a0, 0(a1)
-setup_surface_reflection_ret:
 	lw	ra, 28(sp)
 	addi	sp, sp, 32
 	jr	ra
@@ -16577,7 +16510,6 @@ rt_3070:
 	lw	a2, 60(sp)	# restore
 	lw	a3, 28(sp)	# restore
 	call	scan_line_3004
-rt_ret:
 	lw	ra, 256(sp)
 	addi	sp, sp, 260
 	jr	ra
