@@ -98,3 +98,9 @@ addi  gp, gp, 8
 bne     a0, zero, .solver_rect_else_24
 li      a0, 0
 ```
+* 下のような式が多かったので、`not (xor x (not y)) = xor x y` と簡約(1833296271 -> 1817094652)
+```
+xori    a0, a0, 1
+xor     a1, a0, a1
+xori    a1, a1, 1
+```

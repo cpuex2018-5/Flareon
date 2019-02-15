@@ -169,6 +169,7 @@ let rec unfold_extfun (exp : Syntax.t) : Syntax.t =
   | App(Var("fispos"), [e], p) -> Not(LE(unfold_extfun e, Float(0.0), Type.Float, p), p)
   | App(Var("fisneg"), [e], p) -> Not(LE(Float(0.0), unfold_extfun e, Type.Float, p), p)
   | App(Var("fless"), [e1; e2], p) -> Not(LE(unfold_extfun e2, unfold_extfun e1, Type.Float, p), p)
+  | App(Var("xor"), [e1; e2], p) -> Xor(unfold_extfun e1, unfold_extfun e2, p)
   | App(e1, e2, p) -> App(unfold_extfun e1, List.map unfold_extfun e2, p)
   | Tuple(es) -> Tuple(List.map unfold_extfun es)
   | LetTuple(xts, e1, e2, p) -> LetTuple(xts, unfold_extfun e1, unfold_extfun e2, p)
@@ -191,12 +192,18 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
   | Syntax.Bool(b) -> Int(if b then 1 else 0), Type.Int (* true -> 1, false -> 0 (caml2html: knormal_bool) *)
   | Syntax.Int(i) -> Int(i), Type.Int
   | Syntax.Float(d) -> Float(d), Type.Float
+  | Syntax.Not(Xor(e1, Not(e2, _), _), p) | Syntax.Not(Xor(Not(e1, _), e2, _), p) ->
+    g env (Xor(e1, e2, p))
   | Syntax.Not(e, p) ->
     insert_let (g env e)
       (fun x -> Not(x), Type.Bool)
   | Syntax.Neg(e, _) ->
     insert_let (g env e)
       (fun x -> Neg(x), Type.Int)
+  | Syntax.Xor(e1, e2, _) ->
+    insert_let (g env e1)
+      (fun x -> insert_let (g env e2)
+          (fun y -> Xor(x, y), Type.Int))
   | Syntax.Add(e1, e2, _) ->
     insert_let (g env e1)
       (fun x -> insert_let (g env e2)
@@ -290,10 +297,6 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
     let e2', t2 = g env' e2 in
     let e1', t1 = g (M.add_list yts env') e1 in
     LetRec({ name = (x, t); args = yts; body = e1' }, e2'), t2
-  | Syntax.App(Syntax.Var("xor"), [e1; e2], _) ->
-    insert_let (g env e1)
-      (fun x -> insert_let (g env e2)
-          (fun y -> Xor(x, y), Type.Int))
   | Syntax.App(Syntax.Var(f), e2s, _) when not (M.mem f env) ->
     (match M.find f !Typing.extenv with
      | Type.Fun(_, t) ->

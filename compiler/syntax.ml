@@ -7,6 +7,7 @@ type t =
   | Float of float
   | Not of t * pos
   | Neg of t * pos
+  | Xor of t * t * pos
   | Add of t * t * pos
   | Sub of t * t * pos
   | Mul of t * t * pos
@@ -45,6 +46,7 @@ let rec string_of_t ?(do_indent = true) ?(endline = "\n") (exp : t) (depth : int
   | Float f -> prefix ^ "FLOAT " ^ (string_of_float f) ^ endline
   | Not (e, _) -> prefix ^ "NOT\n" ^ (string_of_t e (depth + 1))
   | Neg (e, _) -> prefix ^ "NEG\n" ^ (string_of_t e (depth + 1))
+  | Xor (e1, e2, _)  -> prefix ^ "XOR\n" ^ (string_of_t e1 (depth + 1)) ^ (string_of_t e2 (depth + 1))
   | Add (e1, e2, _)  -> prefix ^ "ADD\n" ^ (string_of_t e1 (depth + 1)) ^ (string_of_t e2 (depth + 1))
   | Sub (e1, e2, _)  -> prefix ^ "SUB\n" ^ (string_of_t e1 (depth + 1)) ^ (string_of_t e2 (depth + 1))
   | Mul (e1, e2, _)  -> prefix ^ "MUL\n" ^ (string_of_t e1 (depth + 1)) ^ (string_of_t e2 (depth + 1))
