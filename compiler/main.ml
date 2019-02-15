@@ -50,6 +50,7 @@ let lexbuf outchan l = (* compile the buffer and put it to outchan (caml2html: m
   print_endline "-----------After Virtual.f-----------------";
   let e = Virtual.f e in
   let e = Simm.f e in
+  let e = Simm.f e in
   let e = Cond.f e in
   (* let e = Schedule.f Schedule.resource e in *)
   if !print_asm then Asm.print_prog e;
