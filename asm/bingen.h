@@ -100,6 +100,7 @@ class BinGen {
         uint32_t f_cmp(std::string mnemo, std::string rd, std::string frs1, std::string frs2);
 
         uint32_t Pack(Fields fields);
+        bool IsImmOutOfRange(uint32_t imm, int range);
         void CheckImmediate(uint32_t imm, int range, std::string func_name);
         void WriteInst(uint32_t inst);
         void WriteData(uint32_t data);

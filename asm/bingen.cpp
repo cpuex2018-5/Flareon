@@ -73,7 +73,7 @@ void BinGen::ReadLabels(std::string input) {
             return;
         }
 
-        if (mnemo == "li" && MyStoi(arg[1]) > (1 << 11) - 1) {
+        if (mnemo == "li" && IsImmOutOfRange(MyStoi(arg[1]), 12)) {
             nline_ += 2;
             return;
         }
@@ -342,12 +342,12 @@ BinGen::Inst BinGen::Convert(std::string input) {
     else if (mnemo == "li") {
         assert(2 == arg.size());
         uint32_t tmp = MyStoi(arg[1]);
-        if (tmp > (1 << 11) - 1) {
+        if (IsImmOutOfRange(tmp, 12)) {
             inst.set_fst(lui(arg[0], ((tmp >> 12) + ((tmp >> 11) & 0x1)) & 0xfffff));
             nline_++;
             inst.set_snd(op_imm("addi", arg[0], arg[0], tmp & 0xfff));
         } else {
-            inst.set_fst(op_imm("addi", arg[0], "zero", tmp));
+            inst.set_fst(op_imm("addi", arg[0], "zero", (int)tmp));
         }
     }
 
@@ -698,9 +698,16 @@ uint32_t BinGen::Pack(Fields fields) {
     return ret;
 }
 
+bool BinGen::IsImmOutOfRange(uint32_t imm, int range) {
+    uint32_t mask = -1 << range;
+    return (mask & imm && mask & (~imm));
+}
+
 // immの上位(32 - range)bitが全部0(imm >= 0の場合)、もしくは全部1(imm < 0の場合)でなければダメ
 void BinGen::CheckImmediate(uint32_t imm, int range, std::string func_name) {
     uint32_t mask = -1 << range;
+    // mask & imm  : immの上位(32 - range)bitが全部0なら0
+    // mask & ~imm : immの上位(32 - range)bitが全部1なら0
     if (mask & imm && mask & (~imm)) {
         //$BId9fIU(B range bit$B?t$N:GBg$H:G>.$KF~$C$F$$$k$+!)(B
         std::cerr << "\x1b[31m[ERROR](" << func_name << "): The immediate value " << imm << " should be smaller than 2 ^ " << range << "\x1b[39m\n";
