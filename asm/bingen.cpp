@@ -255,13 +255,11 @@ BinGen::Inst BinGen::Convert(std::string input) {
     }
     else if (mnemo == "beq" || mnemo == "bne" || mnemo == "blt" || mnemo == "bge") {
         assert(3 == arg.size());
-        inst.set_fst(branch(mnemo,arg[0], arg[1], MyStoi(arg[2])));
-
+        inst.set_fst(branch(mnemo, arg[0], arg[1], MyStoi(arg[2])));
     }
     else if (mnemo == "beqi" || mnemo == "bnei" || mnemo == "blti" || mnemo == "bgti") {
         assert(3 == arg.size());
-        inst.set_fst(branch_imm(mnemo,arg[0], std::stoi(arg[1], nullptr, 10), MyStoi(arg[2])));
-
+        inst.set_fst(branch_imm(mnemo, arg[0], std::stoi(arg[1], nullptr, 10), MyStoi(arg[2])));
     }
     else if (mnemo == "lw") {
         assert(2 == arg.size());
@@ -527,7 +525,7 @@ uint32_t BinGen::jalr (std::string rd, std::string rs1, uint32_t imm) {
 
 // beq, bne, blt, bge
 uint32_t BinGen::branch (std::string mnemo, std::string rs1, std::string rs2, uint32_t offset) {
-    CheckImmediate(offset, 12, "branch");
+    CheckImmediate(offset, 13, "branch");
     uint32_t funct3;
     if (mnemo == "beq") funct3 = 0b000;
     if (mnemo == "bne") funct3 = 0b001;
@@ -546,7 +544,7 @@ uint32_t BinGen::branch (std::string mnemo, std::string rs1, std::string rs2, ui
 
 // beqi, bnei, blti, bgti
 uint32_t BinGen::branch_imm (std::string mnemo, std::string rs1, uint32_t imm, uint32_t offset) {
-    CheckImmediate(offset, 12, "branch_imm");
+    CheckImmediate(offset, 13, "branch_imm");
     CheckImmediate(imm, 5, "branch_imm");
     uint32_t funct3;
     if (mnemo == "beqi") funct3 = 0b010;
@@ -558,7 +556,7 @@ uint32_t BinGen::branch_imm (std::string mnemo, std::string rs1, uint32_t imm, u
                     {4, (offset & 0x1e) >> 1},
                     {3, funct3},
                     {5, regmap_.at(rs1)},
-                    {5, imm},
+                    {5, imm & 0x1f},
                     {6, (offset & 0x7e0) >> 5},
                     {1, (offset & 0x1000) >> 12} };
     return Pack(fields);
@@ -724,7 +722,7 @@ uint32_t BinGen::f_cmp(std::string mnemo, std::string rd, std::string frs1, std:
 
 uint32_t BinGen::Pack(Fields fields) {
     uint32_t ret = 0;
-    for (auto itr = fields.rbegin();itr != fields.rend();++itr) {
+    for (auto itr = fields.rbegin(); itr != fields.rend(); ++itr) {
         ret <<= itr->first;
         ret += itr->second;
     }
