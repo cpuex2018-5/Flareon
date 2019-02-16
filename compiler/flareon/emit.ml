@@ -177,7 +177,7 @@ and g'_branch buf mnemo rs1 rs2 label =
   match rs2 with
   | `V(rs2) ->
     add (Raw.Bc(mnemo, rs1, `V(rs2), label)) buf
-  | `C(n) when 0 <= n && n < 32 ->
+  | `C(n) when -16 <= n && n < 16 ->
     add (Raw.Bc(mnemo, rs1, `C n, label)) buf
   | `C(n) ->
     adds [Li(reg_tmp, n); Raw.Bc(mnemo, rs1, `V(reg_tmp), label)] buf

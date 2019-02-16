@@ -70,7 +70,7 @@ class BinGen {
         // beq, bne, blt, bge
         uint32_t branch(std::string mnemo, std::string rs1, std::string rs2, uint32_t offset);
         // beqi, bnei, blti, bgti
-        uint32_t branch_imm(std::string mnemo, std::string rs1, uint32_t imm, uint32_t offset);
+        uint32_t branch_imm(std::string mnemo, std::string rs1, int32_t imm, uint32_t offset);
 
         uint32_t lw(std::string rd, std::string rs1, uint32_t offset);
         uint32_t sw(std::string rs2, std::string rs1, uint32_t offset);
