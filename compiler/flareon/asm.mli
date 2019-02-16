@@ -19,8 +19,8 @@ and exp =
   | Mul of Id.t * id_or_imm
   | Div of Id.t * id_or_imm
   | Sll of Id.t * id_or_imm
-  | Lw of Id.t * id_imm_or_label
-  | Sw of [`V of Id.t | `Zero] * id_imm_or_label * Id.t
+  | Lw of id_imm_or_label * id_or_imm
+  | Sw of [`V of Id.t | `Zero] * id_imm_or_label * id_or_imm
   | FMv of Id.t 
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
@@ -31,8 +31,8 @@ and exp =
   | FLE of id_or_fimm * id_or_fimm
   | FAbs of Id.t
   | FSqrt of Id.t
-  | Flw of Id.t * id_imm_or_label
-  | Fsw of id_or_fimm * id_imm_or_label * Id.t
+  | Flw of id_imm_or_label * id_or_imm
+  | Fsw of id_or_fimm * id_imm_or_label * id_or_imm
   | Write of Id.t
   | Comment of string
   (* virtual instructions *)

@@ -62,10 +62,12 @@ and g' (buf : Raw.func) e : Raw.func =
   | NonTail(x), Mul(y, z) -> add (Mul(x, y, z)) buf
   | NonTail(x), Div(y, z) -> add (Div(x, y, z)) buf
   | NonTail(x), Sll(y, z) -> add (Sll(x, y, z)) buf
-  | NonTail(x), Lw(y, `V(z)) -> adds [Add(reg_tmp, y, `V(z)); Lw(x, reg_tmp, `C(0), None)] buf
-  | NonTail(x), Lw(y, `C(z)) -> add (Lw(x, y, `C(z), None)) buf
-  | NonTail(x), Lw(y, `L(z)) -> add (Lw(x, y, `L(z), None)) buf
-  | NonTail(_), Sw(x, `V(z), y) -> adds [Add(reg_tmp, y, `V(z)); Sw(x, `C(0), reg_tmp, None)] buf
+  | NonTail(x), Lw(`V(z), `V(y)) -> adds [Add(reg_tmp, y, `V(z)); Lw(x, `C(0), `V(reg_tmp), None)] buf
+  | NonTail(x), Lw(`V(z), `C(y)) -> add (Lw(x, `C(y), `V(z), None)) buf
+  | NonTail(x), Lw(`C(z), y) -> add (Lw(x, `C(z), y, None)) buf
+  | NonTail(x), Lw(`L(z), y) -> add (Lw(x, `L(z), y, None)) buf
+  | NonTail(_), Sw(x, `V(z), `V(y)) -> adds [Add(reg_tmp, y, `V(z)); Sw(x, `C(0), `V(reg_tmp), None)] buf
+  | NonTail(_), Sw(x, `V(z), `C(y)) -> add (Sw(x, `C(y), `V(z), None)) buf
   | NonTail(_), Sw(x, `C(z), y) -> add (Sw(x, `C(z), y, None)) buf
   | NonTail(_), Sw(x, `L(z), y) -> add (Sw(x, `L(z), y, None)) buf
   | NonTail(x), FMv(y) when x = y -> buf
@@ -79,12 +81,12 @@ and g' (buf : Raw.func) e : Raw.func =
   | NonTail(x), FLE(y, z)  -> add (FLE(x, y, z)) buf
   | NonTail(x), FAbs(y)    -> add (FAbs(x, y)) buf
   | NonTail(x), FSqrt(y)   -> add (FSqrt(x, y)) buf
-  | NonTail(x), Flw(y, `V(z)) ->
-    adds [Add(reg_tmp, y, `V(z)); Flw(x, reg_tmp, `C(0), None)] buf
-  | NonTail(x), Flw(y, `C(z)) -> add (Flw(x, y, `C(z), None)) buf
-  | NonTail(x), Flw(y, `L(z)) -> add (Flw(x, y, `L(z), None)) buf
-  | NonTail(_), Fsw(x, `V(z), y) ->
-    adds [Add(reg_tmp, y, `V(z)); Fsw(x, `C(0), reg_tmp, None)] buf
+  | NonTail(x), Flw(`V(z), `V(y)) -> adds [Add(reg_tmp, y, `V(z)); Flw(x, `C(0), `V(reg_tmp), None)] buf
+  | NonTail(x), Flw(`V(z), `C(y)) -> add (Flw(x, `C(y), `V(z), None)) buf
+  | NonTail(x), Flw(`C(z), y) -> add (Flw(x, `C(z), y, None)) buf
+  | NonTail(x), Flw(`L(z), y) -> add (Flw(x, `L(z), y, None)) buf
+  | NonTail(_), Fsw(x, `V(z), `V(y)) -> adds [Add(reg_tmp, y, `V(z)); Fsw(x, `C(0), `V(reg_tmp), None)] buf
+  | NonTail(_), Fsw(x, `V(z), `C(y)) -> add (Fsw(x, `C(y), `V(z), None)) buf
   | NonTail(_), Fsw(x, `C(z), y) -> add (Fsw(x, `C(z), y, None)) buf
   | NonTail(_), Fsw(x, `L(z), y) -> add (Fsw(x, `L(z), y, None)) buf
   | NonTail(_), Write(x) -> add (Write(x)) buf
@@ -92,17 +94,17 @@ and g' (buf : Raw.func) e : Raw.func =
   (* 退避の仮想命令の実装 (caml2html: emit_save) *)
   | NonTail(_), Save(x, y) when List.mem x allregs && not (S.mem y !stackset) ->
     save y;
-    add (Sw(`V(x), `C(offset y), reg_sp, Some("save"))) buf
+    add (Sw(`V(x), `C(offset y), `V(reg_sp), Some("save"))) buf
   | NonTail(_), Save(x, y) when List.mem x allfregs && not (S.mem y !stackset) ->
     save y;
-    add (Fsw(`V(x), `C(offset y), reg_sp, Some("save"))) buf
+    add (Fsw(`V(x), `C(offset y), `V(reg_sp), Some("save"))) buf
   | NonTail(_), Save(x, y) -> assert (S.mem y !stackset); buf
   (* 復帰の仮想命令の実装 (caml2html: emit_restore) *)
   | NonTail(x), Restore(y) when List.mem x allregs ->
-    add (Lw(x, reg_sp, `C(offset y), Some("restore"))) buf
+    add (Lw(x, `C(offset y), `V(reg_sp), Some("restore"))) buf
   | NonTail(x), Restore(y) ->
     assert (List.mem x allfregs);
-    add (Flw(x, reg_sp, `C(offset y), Some("restore"))) buf
+    add (Flw(x, `C(offset y), `V(reg_sp), Some("restore"))) buf
   (* 末尾だったら計算結果を%a0か%fa0にセットしてリターン (caml2html: emit_tailret) *)
   | Tail, (Nop | Sw _ | Fsw _ | Comment _ | Write _ | Save _ as exp) ->
     g' buf (NonTail(Id.gentmp Type.Unit), exp);
@@ -134,7 +136,7 @@ and g' (buf : Raw.func) e : Raw.func =
   (* INFO: caller-save regs: ra, t*, a* / callee-save regs: sp, fp, s* *)
   | Tail, CallCls(f, iargs, fargs) ->
     (* TODO: tレジスタから使うようにする(?) *)
-    adds [Lw("ra", reg_cl, `C(0), None); Jalr] buf
+    adds [Lw("ra", `C(0), `V(reg_cl), None); Jalr] buf
   | Tail, CallDir(f, iargs, fargs) ->
     add (Call(f)) buf
   | NonTail(a), CallCls(f, iargs, fargs) ->
@@ -143,7 +145,7 @@ and g' (buf : Raw.func) e : Raw.func =
     Printf.bprintf buf "\taddi\tsp, sp, %d\n" (-1 * ss);
     Printf.bprintf buf "\tsw\tra, %d(sp)\n" (ss - 4);
 *)
-    let buf' = adds [Lw("ra", reg_cl, `C(0), None); Jalr] buf in
+    let buf' = adds [Lw("ra", `C(0), `V(reg_cl), None); Jalr] buf in
     if List.mem a allregs && a <> regs.(0) then
       add (Mv(a, regs.(0))) buf'
     else if List.mem a allfregs && a <> fregs.(0) then
@@ -241,7 +243,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   let ss = stacksize () in
   let prologue =
     (if (Asm.has_call e) then
-       [Raw.Add("sp", "sp", `C(-1 * ss - 4)); Raw.Sw(`V("ra"), `C(ss), "sp", None)]
+       [Raw.Add("sp", "sp", `C(-1 * ss - 4)); Raw.Sw(`V("ra"), `C(ss), `V("sp"), None)]
      else if ss > 0 then
        [Raw.Add("sp", "sp", `C(-1 * ss))]
      else
@@ -250,7 +252,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   let return =
     [Id.L(!funcname ^ "_ret")],
     (if (Asm.has_call e) then
-       [Raw.Lw("ra", "sp", `C(ss), None); Raw.Add("sp", "sp", `C(ss + 4))]
+       [Raw.Lw("ra", `C(ss), `V("sp"), None); Raw.Add("sp", "sp", `C(ss + 4))]
      else if ss > 0 then
        [Raw.Add("sp", "sp", `C(ss))]
      else

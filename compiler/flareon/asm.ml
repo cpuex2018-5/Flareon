@@ -19,8 +19,8 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *
   | Mul of Id.t * id_or_imm
   | Div of Id.t * id_or_imm
   | Sll of Id.t * id_or_imm
-  | Lw of Id.t * id_imm_or_label
-  | Sw of [`V of Id.t | `Zero] * id_imm_or_label * Id.t
+  | Lw of id_imm_or_label * id_or_imm
+  | Sw of [`V of Id.t | `Zero] * id_imm_or_label * id_or_imm (* immになるのはlabelのときだけ *)
   | FMv of Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
@@ -31,8 +31,8 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *
   | FLE of id_or_fimm * id_or_fimm
   | FAbs of Id.t
   | FSqrt of Id.t
-  | Flw of Id.t * id_imm_or_label
-  | Fsw of id_or_fimm * id_imm_or_label * Id.t
+  | Flw of id_imm_or_label * id_or_imm
+  | Fsw of id_or_fimm * id_imm_or_label * id_or_imm (* immになるのはlabelのときだけ *)
   | Write of Id.t
   | Comment of string
   (* virtual instructions *)
@@ -77,8 +77,8 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | Mul(x, y)    -> Printf.sprintf "Mul %s %s" x (unwrap y)
     | Div(x, y)    -> Printf.sprintf "Div %s %s" x (unwrap y)
     | Sll(x, y)    -> Printf.sprintf "Sll %s %s" x (unwrap y)
-    | Lw(x, y)     -> Printf.sprintf "Lw %s %s" x (unwrap y)
-    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" (match x with `V(x) -> x | `Zero -> "zero") (unwrap y) z
+    | Lw(x, y)     -> Printf.sprintf "Lw %s(%s)" (unwrap x) (unwrap y)
+    | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" (match x with `V(x) -> x | `Zero -> "zero") (unwrap y) (unwrap z)
     | FMv(x)       -> Printf.sprintf "FMv %s" x
     | FNeg(x)      -> Printf.sprintf "FNeg %s" x
     | FAdd(x, y)   -> Printf.sprintf "FAdd %s %s" x y
@@ -89,8 +89,8 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | FLE(x, y)    -> Printf.sprintf "FLE %s %s" (unwrap x) (unwrap y)
     | FAbs(x)      -> Printf.sprintf "FAbs %s" x
     | FSqrt(x)     -> Printf.sprintf "FSqrt %s" x
-    | Flw(x, y)    -> Printf.sprintf "Flw %s %s" x (unwrap y)
-    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" (unwrap x) (unwrap y) z
+    | Flw(x, y)    -> Printf.sprintf "Flw %s(%s)" (unwrap x) (unwrap y)
+    | Fsw(x, y, z) -> Printf.sprintf "Fsw %s %s(%s)" (unwrap x) (unwrap y) (unwrap z)
     | Write(x)     -> Printf.sprintf "Write %s" x
     | Comment _    -> ""
     | IfEq(x, y, e1, e2)  -> Printf.sprintf "(If %s = %s THEN\n%s ELSE\n%s)"  x (unwrap y) (string_of_t ~depth:(depth + 1) e1) (string_of_t ~depth:(depth + 1) e2)
@@ -150,9 +150,9 @@ let rec fv_exp = function
   | Nop | Li(_) | FLi(_) | SetL(_) | SetDL(_) | Comment(_) | Restore(_) -> []
   | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) | FAbs(x) | FSqrt(x) | Write(x) -> [x]
   | Xor(x, y') | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | Sll(x, y') -> x :: fv_unwrap y'
-  | Lw(x, y') | Flw(x, y') -> x :: fv_unwrap y'
-  | Sw(x, y, z) -> (fv_unwrap x) @ z :: fv_unwrap y
-  | Fsw(x, y, z) -> (fv_unwrap x) @ z :: fv_unwrap y
+  | Lw(x, y) | Flw(x, y) -> (fv_unwrap x) @ fv_unwrap y
+  | Sw(x, y, z) ->  (fv_unwrap x) @ (fv_unwrap y) @ fv_unwrap z
+  | Fsw(x, y, z) -> (fv_unwrap x) @ (fv_unwrap y) @ fv_unwrap z
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) -> [x; y]
   | FEq(x, y) -> x :: (fv_unwrap y)
   | FLE(x, y) -> (fv_unwrap x) @ (fv_unwrap y)

@@ -15,8 +15,8 @@ type t =
   | Mul of Id.t * Id.t * id_or_imm
   | Div of Id.t * Id.t * id_or_imm
   | Sll of Id.t * Id.t * id_or_imm
-  | Lw of Id.t * Id.t * imm_or_label * string option
-  | Sw of [`V of Id.t | `Zero] * imm_or_label * Id.t * string option
+  | Lw of Id.t * imm_or_label * id_or_imm * string option
+  | Sw of [`V of Id.t | `Zero] * imm_or_label * id_or_imm * string option
   | FMv  of Id.t * Id.t
   | FNeg of Id.t * Id.t
   | FAdd of Id.t * Id.t * Id.t
@@ -27,8 +27,8 @@ type t =
   | FLE of Id.t * id_or_fimm * id_or_fimm
   | FAbs  of Id.t * Id.t
   | FSqrt of Id.t * Id.t
-  | Flw of Id.t * Id.t * imm_or_label * string option
-  | Fsw of id_or_fimm * imm_or_label * Id.t * string option
+  | Flw of Id.t * imm_or_label * id_or_imm * string option
+  | Fsw of id_or_fimm * imm_or_label * id_or_imm * string option
   | Write of Id.t
   | Comment of string
   | Call of Id.l
@@ -46,6 +46,10 @@ let reg r =
 let comment s = match s with
   | Some s -> "\t# " ^ s
   | None -> ""
+let str' x = match x with
+  | `V(x) -> x
+  | `Zero -> "zero"
+  | `FZero -> "fzero"
 
 let output_buffer' oc e = match e with
   | Li(x, n) -> Printf.fprintf oc "\tli\t%s, %d\n" (reg x) n
@@ -70,12 +74,14 @@ let output_buffer' oc e = match e with
   | Div(x, y, `C(z)) -> Printf.fprintf oc "\tdivi\t%s, %s, %d\n" (reg x) (reg y) z         (* アセンブラ非対応 *)
   | Sll(x, y, `V(z)) -> Printf.fprintf oc "\tsll\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | Sll(x, y, `C(z)) -> Printf.fprintf oc "\tslli\t%s, %s, %d\n" (reg x) (reg y) z
-  | Lw(x, y, `L(Id.L(l)), _) -> Printf.fprintf oc "\tlwl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | Lw(x, y, `C(z), s)       -> Printf.fprintf oc "\tlw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
-  | Sw(`V(x), `L(Id.L(l)), y, _) -> Printf.fprintf oc "\tswl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | Sw(`V(x), `C(z), y, s)       -> Printf.fprintf oc "\tsw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
-  | Sw(`Zero, `L(Id.L(l)), y, _) -> Printf.fprintf oc "\tswl\tzero, %s(%s)\n" l (reg y)
-  | Sw(`Zero, `C(z), y, s)       -> Printf.fprintf oc "\tsw\tzero, %d(%s)%s\n" z (reg y) (comment s)
+  | Lw(x, `L(Id.L(l)), `V(y), _) -> Printf.fprintf oc "\tlwl\t%s, %s(%s)\n" (reg x) l (reg y)
+  | Lw(x, `L(Id.L(l)), `C(y), _) -> Printf.fprintf oc "\tlwd\t%s, %s(%d)\n" (reg x) l y
+  | Lw(x, `C(n), `V(y), s)       -> Printf.fprintf oc "\tlw\t%s, %d(%s)%s\n" (reg x) n (reg y) (comment s)
+  | Lw(x, `C(_), `C(_), _)       -> assert false
+  | Sw(x, `L(Id.L(l)), `V(y), _) -> Printf.fprintf oc "\tswl\t%s, %s(%s)\n" (reg (str' x)) l (reg y)
+  | Sw(x, `L(Id.L(l)), `C(y), _) -> Printf.fprintf oc "\tswd\t%s, %s(%d)\n" (reg (str' x)) l y
+  | Sw(x, `C(n), `V(y), s)       -> Printf.fprintf oc "\tsw\t%s, %d(%s)%s\n" (reg (str' x)) n (reg y) (comment s)
+  | Sw(x, `C(_), `C(_), _)       -> assert false
   | FMv(x, y) when x = y -> ()
   | FMv(x, y)  -> Printf.fprintf oc "\tfmv\t%s, %s\n" (reg x) (reg y)
   | FNeg(x, y) -> Printf.fprintf oc "\tfneg\t%s, %s\n" (reg x) (reg y)
@@ -83,20 +89,18 @@ let output_buffer' oc e = match e with
   | FSub(x, y, z) -> Printf.fprintf oc "\tfsub\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | FMul(x, y, z) -> Printf.fprintf oc "\tfmul\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | FDiv(x, y, z) -> Printf.fprintf oc "\tfdiv\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | FEq(x, y, `V(z))  -> Printf.fprintf oc "\tfeq\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | FEq(x, y, `FZero) -> Printf.fprintf oc "\tfeq\t%s, %s, fzero\n" (reg x) (reg y)
-  | FLE(x, `V(y), `V(z))   -> Printf.fprintf oc "\tfle\t%s, %s, %s\n" (reg x) (reg y) (reg z)
-  | FLE(x, `V(y), `FZero)  -> Printf.fprintf oc "\tfle\t%s, %s, fzero\n" (reg x) (reg y)
-  | FLE(x, `FZero, `V(z))  -> Printf.fprintf oc "\tfle\t%s, fzero, %s\n" (reg x) (reg z)
-  | FLE(x, `FZero, `FZero) -> Printf.fprintf oc "\tfle\t%s, fzero, fzero\n" (reg x) (* won't happen *)
+  | FEq(x, y, z)  -> Printf.fprintf oc "\tfeq\t%s, %s, %s\n" (reg x) (reg y) (reg (str' z))
+  | FLE(x, y, z)   -> Printf.fprintf oc "\tfle\t%s, %s, %s\n" (reg x) (reg (str' y)) (reg (str' z))
   | FAbs(x, y)  -> Printf.fprintf oc "\tfabs\t%s, %s\n" (reg x) (reg y)
   | FSqrt(x, y) -> Printf.fprintf oc "\tfsqrt\t%s, %s\n" (reg x) (reg y)
-  | Flw(x, y, `L(Id.L(l)), _) -> Printf.fprintf oc "\tflwl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | Flw(x, y, `C(z), s)       -> Printf.fprintf oc "\tflw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
-  | Fsw(`V(x), `L(Id.L(l)), y, _)  -> Printf.fprintf oc "\tfswl\t%s, %s(%s)\n" (reg x) l (reg y)
-  | Fsw(`FZero, `L(Id.L(l)),  y,_) -> Printf.fprintf oc "\tfswl\tfzero, %s(%s)\n" l (reg y)
-  | Fsw(`V(x), `C(z), y, s)        -> Printf.fprintf oc "\tfsw\t%s, %d(%s)%s\n" (reg x) z (reg y) (comment s)
-  | Fsw(`FZero, `C(z), y, s)       -> Printf.fprintf oc "\tfsw\tfzero, %d(%s)%s\n" z (reg y) (comment s)
+  | Flw(x, `L(Id.L(l)), `V(y), _) -> Printf.fprintf oc "\tflwl\t%s, %s(%s)\n" (reg x) l (reg y)
+  | Flw(x, `L(Id.L(l)), `C(y), _) -> Printf.fprintf oc "\tflwd\t%s, %s(%d)\n" (reg x) l y
+  | Flw(x, `C(n), `V(y), s)       -> Printf.fprintf oc "\tflw\t%s, %d(%s)%s\n" (reg x) n (reg y) (comment s)
+  | Flw(x, `C(_), `C(_), _)       -> assert false
+  | Fsw(x, `L(Id.L(l)), `V(y), _)  -> Printf.fprintf oc "\tfswl\t%s, %s(%s)\n"  (reg (str' x)) l (reg y)
+  | Fsw(x, `L(Id.L(l)), `C(y), _)  -> Printf.fprintf oc "\tfswd\t%s, %s(%d)\n"  (reg (str' x)) l y
+  | Fsw(x, `C(n), `V(y), s)        -> Printf.fprintf oc "\tfsw\t%s, %d(%s)%s\n" (reg (str' x)) n (reg y) (comment s)
+  | Fsw(x, `C(_), `C(_), _)        -> assert false
   | Write(x)   -> Printf.fprintf oc "\tw\t%s\n" (reg x)
   | Comment(s) -> Printf.fprintf oc "#\t%s\n" s
   | Call(Id.L(f)) -> Printf.fprintf oc "\tcall\t%s\n" f

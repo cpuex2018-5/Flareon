@@ -63,12 +63,23 @@ void BinGen::ReadLabels(std::string input) {
             std::string reg, label;
             ParseOffsetLabel(arg[1], &reg, &label);
             assert(data_map_.count(label) > 0);
-            if (data_map_[label] > (1 << 11) - 1) {
+            if (IsImmOutOfRange(data_map_[label], 12)) {
                 nline_ += 3;
                 return;
             }
         }
-        if (mnemo == "lda" && SolveDataLabel(arg[1]) > (1 << 11) - 1) {
+        if (mnemo == "lwd" || mnemo == "swd" || mnemo == "flwd" || mnemo == "fswd") {
+            std::string imm, label;
+            ParseOffsetLabel(arg[1], &imm, &label);
+            assert(data_map_.count(label) > 0);
+            if (IsImmOutOfRange(data_map_[label] + stoi(imm), 12)) {
+                printf("lwd/swd/flwd/fswd out of range ;(\n");
+                nline_ += 3;
+                return;
+            }
+        }
+        // ラベルの値は
+        if (mnemo == "lda" && IsImmOutOfRange(SolveDataLabel(arg[1]), 12)) {
             nline_ += 2;
             return;
         }
@@ -416,7 +427,7 @@ BinGen::Inst BinGen::Convert(std::string input) {
         std::string reg, label;
         ParseOffsetLabel(arg[1], &reg, &label);
         uint32_t imm = SolveDataLabel(label);
-        if (imm > (1 << 11) - 1) {
+        if (IsImmOutOfRange(imm, 12)) {
             inst.set_fst(lui(arg[0], ((imm >> 12) + ((imm >> 11) & 0x1)) & 0xfffff));
             nline_++;
             inst.set_snd(op("add", arg[0], arg[0], reg));
@@ -430,6 +441,28 @@ BinGen::Inst BinGen::Convert(std::string input) {
             if (mnemo == "swl") inst.set_fst(sw(arg[0], reg, imm));
             if (mnemo == "flwl") inst.set_fst(flw(arg[0], reg, imm));
             if (mnemo == "fswl") inst.set_fst(fsw(arg[0], reg, imm));
+        }
+    }
+
+    else if (mnemo == "lwd" || mnemo == "swd" || mnemo == "flwd" || mnemo == "fswd") {
+        assert(2 == arg.size());
+        std::string imms, label;
+        ParseOffsetLabel(arg[1], &imms, &label);
+        uint32_t imm = SolveDataLabel(label) + std::stoi(imms);
+        if (IsImmOutOfRange(imm, 12)) {
+            inst.set_fst(lui(arg[0], ((imm >> 12) + ((imm >> 11) & 0x1)) & 0xfffff));
+            nline_++;
+            inst.set_snd(op("add", arg[0], arg[0], "zero"));
+            nline_++;
+            if (mnemo == "lwd") inst.set_third(lw(arg[0], "zero", imm & 0xfff));
+            if (mnemo == "swd") inst.set_third(sw(arg[0], "zero", imm & 0xfff));
+            if (mnemo == "flwd") inst.set_third(flw(arg[0], "zero", imm & 0xfff));
+            if (mnemo == "fswd") inst.set_third(fsw(arg[0], "zero", imm & 0xfff));
+        } else {
+            if (mnemo == "lwd") inst.set_fst(lw(arg[0], "zero", imm));
+            if (mnemo == "swd") inst.set_fst(sw(arg[0], "zero", imm));
+            if (mnemo == "flwd") inst.set_fst(flw(arg[0], "zero", imm));
+            if (mnemo == "fswd") inst.set_fst(fsw(arg[0], "zero", imm));
         }
     }
 

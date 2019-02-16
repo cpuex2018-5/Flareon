@@ -129,3 +129,19 @@ li      a0, 0
 -       li      a0, 3
         jr      ra
 ```
+
+## 2/16
+* ラベル+定数オフセットで指定された場所へのload / storeをするpseudo-op `lwd`, `swd`, `flwd`, `fswd` をアセンブラに追加
+    * 1816767717 -> 1765850988
+```diff
+-       lda     a0, min_caml_screen
+        call    min_caml_read_float
+-       fswl    fa0, min_caml_screen(zero)
++       fswd    fa0, min_caml_screen(0)
+        call    min_caml_read_float
+-       fsw     fa0, 4(a0)
++       fswd    fa0, min_caml_screen(4)
+        call    min_caml_read_float
+-       fsw     fa0, 8(a0)
++       fswd    fa0, min_caml_screen(8)
+```
