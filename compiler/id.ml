@@ -46,3 +46,6 @@ let mem3 x (env : (t * 'a * 'b) list) =
 
 type id_or_imm = V of t | C of int
 let fv_id_or_imm (e : id_or_imm) = match e with V(x) -> [x] | _ -> []
+
+let print_labels l =
+  List.iter (fun (L(x)) -> print_endline x) l

@@ -145,3 +145,27 @@ li      a0, 0
 -       fsw     fa0, 8(a0)
 +       fswd    fa0, min_caml_screen(8)
 ```
+
+## 2/17
+* 静的に判断可能な分岐を解析する(完全ではない)
+    * 1723640532 -> 1710062209
+```diff
+        li      a2, 1
+-       b       .solver_rect_cont_2
++       li      a0, 1
++       jr      ra
+ .solver_rect_else_6:
+        li      a2, 0
+-       b       .solver_rect_cont_2
++       b       .solver_rect_cont_2+4
+ .solver_rect_else_4:
+        li      a2, 0
+-       b       .solver_rect_cont_2
++       b       .solver_rect_cont_2+4
+ .solver_rect_else_1:
+        li      a2, 0
+-.solver_rect_cont_2:
+-       bne     a2, zero, .solver_rect_else_8
++.solver_rect_cont_2+4:
+        flw     fa3, 4(a1)
+```

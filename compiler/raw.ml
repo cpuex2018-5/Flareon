@@ -38,6 +38,9 @@ type t =
   | Ret (* jr ra *)
 type func = (Id.l list * t list) list
 
+let print_func (e : func) =
+  List.iter (fun (l, x) -> Id.print_labels l; print_int (List.length x); print_newline ()) e
+
 let reg r =
   if Asm.is_reg r
   then String.sub r 1 (String.length r - 1)
