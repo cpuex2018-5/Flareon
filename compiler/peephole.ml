@@ -10,6 +10,22 @@ let subst (a : Id.l list) (b : Id.l) (e : func) =
   in
   List.map (fun (l, body) -> l, List.map subst_ body) e
 
+module Sl =
+  Set.Make
+    (struct
+      type t = Id.l
+      let compare = compare
+    end)
+
+let rec get_body (l : Id.t) (e : func) = match e with
+  | [] -> None
+  | (x, y) :: xs -> if List.mem (Id.L(l)) x then Some y else get_body l xs
+
+let rec tailb_label (e : t list) = match e with
+  | [] -> None
+  | [B(l)] -> Some l
+  | x :: xs -> tailb_label xs
+
 let rec appear_label' label e = match e with
   | [] -> false
   | x :: xs -> match x with
@@ -41,29 +57,12 @@ let rec early_return (e : func) = match e with
   | (x, [Ret]) :: xs -> (x, [Ret]) :: early_return (dir_ret x [Ret] xs)
   | (x, ([_; Ret] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
   | (x, ([_; _; Ret] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
-  | (x, ([_; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
-  | (x, ([_; _; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
-  | (x, ([_; _; _; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
-  | (x, ([_; _; _; _; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
+  | (x, ret) :: xs when List.length ret < 10 -> (match tailb_label ret with
+      | Some _ -> (x, ret) :: early_return (dir_ret x ret xs)
+      | None -> (x, ret) :: (early_return xs))
   | xe :: xs -> xe :: (early_return xs)
 
 (* 静的に判断可能な分岐をまとめる *)
-module Sl =
-  Set.Make
-    (struct
-      type t = Id.l
-      let compare = compare
-    end)
-
-let rec get_body (l : Id.t) (e : func) = match e with
-  | [] -> None
-  | (x, y) :: xs -> if List.mem (Id.L(l)) x then Some y else get_body l xs
-
-let rec tailb_label (e : t list) = match e with
-  | [] -> None
-  | [B(l)] -> Some l
-  | x :: xs -> tailb_label xs
-
 let extra_labels : Sl.t ref = ref Sl.empty
 let extra_labels_added : Sl.t ref = ref Sl.empty
 let rec add_extra_labels (e : func) = match e with
@@ -109,9 +108,45 @@ let rec elevate_bc (e : func) = match e with
   のような無駄なliを減らす
 *)
 
+let defined (e : t) = match e with
+  | Li(rd, _) | FLi(rd, _) | SetL(rd, _) | SetDL(rd, _) | Mv(rd, _)
+  | Not(rd, _) | Neg(rd, _)
+  | Xor(rd, _, _) | Add(rd, _, _) | Sub(rd, _, _) | Mul(rd, _, _) | Div(rd, _, _)
+  | Sll(rd, _, _) | Lw(rd, _, _, _)
+  | FMv(rd, _) | FNeg(rd, _)
+  | FAdd(rd, _, _) | FSub(rd, _, _) | FMul(rd, _, _) | FDiv(rd, _, _)
+  | FEq(rd, _, _) | FLE(rd, _, _)
+  | FAbs(rd, _) | FSqrt(rd, _) | Flw(rd, _, _, _) -> [rd]
+  | _ -> []
+
+let eq rs x = match rs with `V(y) -> y = x | _ -> false
+let used (x : Id.t) (e : t) = match e with
+  | Mv(_, rs) | Not(_, rs) | Neg(_, rs) | FMv(_, rs) | FNeg(_, rs) | FAbs(_, rs) | FSqrt(_, rs)
+  | Lw(_, _, `V(rs), _) -> rs = x
+  | Sw(rs1, _, rs2, _) -> eq rs1 x || eq rs2 x
+  | Xor(_, rs1, rs2) | Add(_, rs1, rs2) | Sub(_, rs1, rs2) | Mul(_, rs1, rs2) | Div(_, rs1, rs2)
+  | Sll(_, rs1, rs2) -> rs1 = x || eq rs2 x
+  | FAdd(_, rs1, rs2) | FSub(_, rs1, rs2) | FMul(_, rs1, rs2) | FDiv(_, rs1, rs2)
+    -> rs1 = x || rs2 = x
+  | FEq(_, rs1, rs2) -> rs1 = x || eq rs2 x
+  | FLE(_, rs1, rs2) -> eq rs1 x || eq rs2 x
+  | Flw(_, _, rs, _) -> eq rs x
+  | Fsw(rs1, _, rs2, _) -> eq rs1 x || eq rs2 x
+  | Write(rs) -> rs = x
+  | Bc _ | B _ | Call _ | Ret -> true
+  | _ -> false
+
+let rec overwritten_before_use r cont = match cont with
+  | x :: xs when not (used r x) && (defined x) = [r] -> true
+  | x :: xs when not (used r x) -> overwritten_before_use r xs
+  | x :: xs -> false
+  | [] -> false
+
 let rec cond env (e : Raw.t list) = match e with
   | [] -> []
-  | Li(rd1, n) :: Li(rd2, m) :: xs when rd1 = rd2 -> cond env (Li(rd2, m) :: xs)
+  | x :: xs when (defined x <> []) &&
+                 overwritten_before_use (List.hd @@ defined x) xs ->
+    cond env xs
   | x :: xs -> (match x with
       | Li(rd, n) when List.mem (rd, n) env -> cond env xs
       | Li(rd, n) -> x :: cond ((rd, n) :: (List.filter (fun (z, _) -> z <> rd) env)) xs
