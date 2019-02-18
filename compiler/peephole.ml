@@ -21,10 +21,12 @@ let rec appear_label label func =
   | (_, x) :: xs -> appear_label' label x || appear_label label xs
 
 let rec elim_label (e : func) = match e with
-  | ([x], e1) :: (((l, e2) :: xs') as xs) ->
-    if appear_label x xs then (([x], e1) :: elim_label xs)
-    else elim_label ((l, e2 @ e1) :: xs')
-  | _ -> e
+  | [] -> []
+  | (x, e1) :: (((l, e2) :: xs') as xs) ->
+    (match List.filter (fun y -> appear_label y xs) x with
+     | [] -> elim_label ((l, e2 @ e1) :: xs')
+     | x' -> (x', e1) :: (elim_label xs))
+  | x :: xs -> x :: elim_label xs
 
 let dir_ret (a : Id.l list) (ret : t list) (e : func) =
   let inner_ inst = match inst with
@@ -39,6 +41,10 @@ let rec early_return (e : func) = match e with
   | (x, [Ret]) :: xs -> (x, [Ret]) :: early_return (dir_ret x [Ret] xs)
   | (x, ([_; Ret] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
   | (x, ([_; _; Ret] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
+  | (x, ([_; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
+  | (x, ([_; _; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
+  | (x, ([_; _; _; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
+  | (x, ([_; _; _; _; B f] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
   | xe :: xs -> xe :: (early_return xs)
 
 (* 静的に判断可能な分岐をまとめる *)
@@ -124,6 +130,7 @@ let rec cond env (e : Raw.t list) = match e with
 
 let rec concat (e : func) = match e with
   | [] -> []
+  | ([], []) :: xs -> concat xs
   | (l, x) :: ([], y) :: xs -> concat ((l, x @ y) :: xs)
   | (l1, []) :: (l2, e') :: xs -> concat ((l1 @ l2, e') :: xs)
   | x :: xs -> x :: (concat xs)
@@ -131,11 +138,11 @@ let rec concat (e : func) = match e with
 let f (e : func) =
   let rec inner_ e n =
     if n = 0 then e else
-      (let e' = List.rev (elim_label @@ early_return (List.rev e)) in
-       let e' = concat e' in
+      (let e' = concat e in
+       let e' = List.rev (elim_label @@ early_return (List.rev e')) in
        let e' = elevate_bc e' in
        let e' = List.map (fun (x, body) -> (x, cond [] body)) e' in
        let e' = add_extra_labels e' in
-       if e' = e then e else inner_ e' (n - 1))
+       if e' = e then (print_func e; e) else inner_ e' (n - 1))
   in
-  inner_ e 5
+  inner_ e 100
