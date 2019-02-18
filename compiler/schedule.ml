@@ -206,14 +206,14 @@ let rec exec_time (graph, ans) : t =
     | _  -> node.pri := 4
   done;
   let rec inner_ graph taken =
-    print_endline "------------"; print_graph graph;
+    (* print_endline "------------"; print_graph graph; *)
     if (List.length taken) == (Array.length graph) then
-      (print_string "taken = "; print_intlist taken;
-       construct_new_prog (graph, ans) taken)
+      ((* print_string "taken = "; print_intlist taken; *)
+        construct_new_prog (graph, ans) taken)
     else
       (let ready_set = find_all_a (fun n i -> !(n.parents) = [] && not (List.mem i taken)) graph in
-       print_string "taken = "; print_intlist taken;
-       print_string "ready_set = "; print_intlist ready_set;
+       (* print_string "taken = "; print_intlist taken;
+          print_string "ready_set = "; print_intlist ready_set; *)
        let next = fst (minimum_score graph ready_set) in
        let graph = update_parents_with_score graph taken next in
        inner_ graph (next :: taken))

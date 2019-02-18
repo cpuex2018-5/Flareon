@@ -79,7 +79,7 @@ let string_of_t (exp : t) =
     | MakeArray(C(x), (y, _)) -> indent ^ Printf.sprintf "MakeArray(%d, %s)\n" x y
   and
     str_of_fundef (f : fundef) (depth : int) =
-    (fst f.name) ^ " (" ^ (String.concat ", " (List.map fst f.args)) ^ ") =\n" ^ (str_of_t f.body depth)
+    Printf.sprintf "%s (%s) : %s =\n%s" (fst f.name) (String.concat ", " (List.map fst f.args)) (Type.string_of_t (snd f.name)) (str_of_t f.body depth)
   in str_of_t exp 0
 
 (* [WEEK1 Q1] pretty print for KNormal.t *)
@@ -192,6 +192,7 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
   | Syntax.Bool(b) -> Int(if b then 1 else 0), Type.Int (* true -> 1, false -> 0 (caml2html: knormal_bool) *)
   | Syntax.Int(i) -> Int(i), Type.Int
   | Syntax.Float(d) -> Float(d), Type.Float
+  | Syntax.FDiv(Float(-1.0), f, p) -> g env (Syntax.FNeg(FDiv(Float(1.0), f, p), p)) (* hack for using finv *)
   | Syntax.Not(Xor(e1, Not(e2, _), _), p) | Syntax.Not(Xor(Not(e1, _), e2, _), p) ->
     g env (Xor(e1, e2, p))
   | Syntax.Not(e, p) ->

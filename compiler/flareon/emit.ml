@@ -73,6 +73,7 @@ and g' (buf : Raw.func) e : Raw.func =
   | NonTail(x), FMv(y) when x = y -> buf
   | NonTail(x), FMv(y) -> add (FMv(x, y)) buf
   | NonTail(x), FNeg(y) -> add (FNeg(x, y)) buf
+  | NonTail(x), FInv(y) -> add (FInv(x, y)) buf
   | NonTail(x), FAdd(y, z) -> add (FAdd(x, y, z)) buf
   | NonTail(x), FSub(y, z) -> add (FSub(x, y, z)) buf
   | NonTail(x), FMul(y, z) -> add (FMul(x, y, z)) buf
@@ -110,7 +111,7 @@ and g' (buf : Raw.func) e : Raw.func =
     g' buf (NonTail(Id.gentmp Type.Unit), exp);
   | Tail, (Li _ | SetL _ | SetDL _ | Mv _ | Neg _ | Not _ | Xor _ | Add _ | Sub _ | Mul _ | Div _ | Sll _ | Lw _ as exp) ->
     g' buf (NonTail(regs.(0)), exp);
-  | Tail, (FLi _ | FMv _ | FNeg _ | FAdd _ | FSub _ | FMul _ | FDiv _ | FEq _ | FLE _ | FAbs _ | FSqrt _ | Flw _ as exp) ->
+  | Tail, (FLi _ | FMv _ | FNeg _ | FInv _ | FAdd _ | FSub _ | FMul _ | FDiv _ | FEq _ | FLE _ | FAbs _ | FSqrt _ | Flw _ as exp) ->
     g' buf (NonTail(fregs.(0)), exp);
   | Tail, (Restore(x) as exp) ->
     (match locate x with
@@ -266,7 +267,7 @@ let f oc globals (Prog(data, fundefs, e)) =
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   let buf = addl (Id.L("_min_caml_start")) []
-            |> add (Raw.Li("gp", global_size * 4)) in
+            |> adds [Raw.Li("gp", global_size * 4); Li("a0", 0xaa); Write("a0")] in
   stackset := S.empty;
   stackmap := [];
   funcname := "main";

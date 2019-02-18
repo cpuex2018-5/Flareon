@@ -19,6 +19,7 @@ type t =
   | Sw of [`V of Id.t | `Zero] * imm_or_label * id_or_imm * string option
   | FMv  of Id.t * Id.t
   | FNeg of Id.t * Id.t
+  | FInv of Id.t * Id.t
   | FAdd of Id.t * Id.t * Id.t
   | FSub of Id.t * Id.t * Id.t
   | FMul of Id.t * Id.t * Id.t
@@ -37,6 +38,9 @@ type t =
   | Jalr (* jalr ra, ra, 0 *)
   | Ret (* jr ra *)
 type func = (Id.l list * t list) list
+
+let print_func (e : func) =
+  List.iter (fun (l, x) -> Id.print_labels l; print_int (List.length x); print_newline ()) e
 
 let reg r =
   if Asm.is_reg r
@@ -85,6 +89,7 @@ let output_buffer' oc e = match e with
   | FMv(x, y) when x = y -> ()
   | FMv(x, y)  -> Printf.fprintf oc "\tfmv\t%s, %s\n" (reg x) (reg y)
   | FNeg(x, y) -> Printf.fprintf oc "\tfneg\t%s, %s\n" (reg x) (reg y)
+  | FInv(x, y) -> Printf.fprintf oc "\tfinv\t%s, %s\n" (reg x) (reg y)
   | FAdd(x, y, z) -> Printf.fprintf oc "\tfadd\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | FSub(x, y, z) -> Printf.fprintf oc "\tfsub\t%s, %s, %s\n" (reg x) (reg y) (reg z)
   | FMul(x, y, z) -> Printf.fprintf oc "\tfmul\t%s, %s, %s\n" (reg x) (reg y) (reg z)

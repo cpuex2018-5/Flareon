@@ -83,8 +83,8 @@ let rec str_of_t ?(no_indent = false) ?(endline = "\n") (exp : t) (depth : int) 
 let string_of_t (exp : t) = str_of_t exp 0
 
 let string_of_fundef (f : fundef) =
-  let { name = (Id.L(l), _); args = _; fv = _; body = e } = f in
-  l ^ " (" ^ (String.concat ", " (List.map fst f.args)) ^ ") =\n" ^ (str_of_t e 1)
+  let { name = (Id.L(l), t); args = _; fv = _; body = e } = f in
+  Printf.sprintf "%s (%s) : %s =\n%s" l (String.concat ", " (List.map fst f.args)) (Type.string_of_t t) (str_of_t e 1)
 
 let rec string_of_prog (Prog (fundefs, e)) =
   String.concat "\n" (List.map string_of_fundef fundefs) ^ "\n" ^ string_of_t e

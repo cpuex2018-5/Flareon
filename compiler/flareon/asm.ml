@@ -23,6 +23,7 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *
   | Sw of [`V of Id.t | `Zero] * id_imm_or_label * id_or_imm (* immになるのはlabelのときだけ *)
   | FMv of Id.t
   | FNeg of Id.t
+  | FInv of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
@@ -81,6 +82,7 @@ and string_of_exp ?(depth = 0) (exp : exp) : string =
     | Sw(x, y, z)  -> Printf.sprintf "Sw %s %s(%s)" (match x with `V(x) -> x | `Zero -> "zero") (unwrap y) (unwrap z)
     | FMv(x)       -> Printf.sprintf "FMv %s" x
     | FNeg(x)      -> Printf.sprintf "FNeg %s" x
+    | FInv(x)      -> Printf.sprintf "FInv %s" x
     | FAdd(x, y)   -> Printf.sprintf "FAdd %s %s" x y
     | FSub(x, y)   -> Printf.sprintf "FSub %s %s" x y
     | FMul(x, y)   -> Printf.sprintf "FMul %s %s" x y
@@ -148,7 +150,7 @@ let rec remove_and_uniq xs = function
 let fv_unwrap e = match e with `V(x) -> [x] | _ -> []
 let rec fv_exp = function
   | Nop | Li(_) | FLi(_) | SetL(_) | SetDL(_) | Comment(_) | Restore(_) -> []
-  | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | Save(x, _) | FAbs(x) | FSqrt(x) | Write(x) -> [x]
+  | Not(x) | Mv(x) | Neg(x) | FMv(x) | FNeg(x) | FInv(x) | Save(x, _) | FAbs(x) | FSqrt(x) | Write(x) -> [x]
   | Xor(x, y') | Add(x, y') | Sub(x, y') | Mul(x, y') | Div(x, y') | Sll(x, y') -> x :: fv_unwrap y'
   | Lw(x, y) | Flw(x, y) -> (fv_unwrap x) @ fv_unwrap y
   | Sw(x, y, z) ->  (fv_unwrap x) @ (fv_unwrap y) @ fv_unwrap z

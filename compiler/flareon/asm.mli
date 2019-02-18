@@ -23,6 +23,7 @@ and exp =
   | Sw of [`V of Id.t | `Zero] * id_imm_or_label * id_or_imm
   | FMv of Id.t 
   | FNeg of Id.t
+  | FInv of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
