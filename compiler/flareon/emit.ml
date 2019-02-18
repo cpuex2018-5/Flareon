@@ -266,7 +266,7 @@ let f oc globals (Prog(data, fundefs, e)) =
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   let buf = addl (Id.L("_min_caml_start")) []
-            |> add (Raw.Li("gp", global_size * 4)) in
+            |> adds [Raw.Li("gp", global_size * 4); Li("a0", 0xaa); Write("a0")] in
   stackset := S.empty;
   stackmap := [];
   funcname := "main";
