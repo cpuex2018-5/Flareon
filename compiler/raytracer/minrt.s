@@ -2711,95 +2711,6 @@ iter_setup_dirvec_constants_ret:
 	lw	ra, 20(sp)
 	addi	sp, sp, 24
 	jr	ra
-setup_dirvec_constants_2833:
-	addi	sp, sp, -16
-	sw	ra, 12(sp)
-	lwd	a1, min_caml_n_objects(0)
-	addi	a1, a1, -1
-	blt	a1, zero, setup_dirvec_constants_ret
-	slli	a2, a1, 2
-	lwl	a2, min_caml_objects(a2)
-	lw	a3, 4(a0)
-	sw	a0, 0(sp)	# save
-	lw	a0, 0(a0)
-	lw	a4, 16(a2)
-	lw	a5, 4(a2)
-	bnei	a5, 1, .setup_dirvec_constants_else_1
-	sw	a3, 4(sp)	# save
-	sw	a1, 8(sp)	# save
-	mv	a1, a2
-	call	setup_rect_table_2821
-	lw	a1, 8(sp)	# restore
-	slli	a2, a1, 2
-	lw	a3, 4(sp)	# restore
-	add	t6, a3, a2
-	sw	a0, 0(t6)
-	b	.setup_dirvec_constants_cont_2
-.setup_dirvec_constants_else_1:
-	bnei	a5, 2, .setup_dirvec_constants_else_3
-	fsw	fzero, 0(gp)
-	fsw	fzero, 4(gp)
-	fsw	fzero, 8(gp)
-	fsw	fzero, 12(gp)
-	mv	a2, gp
-	addi	gp, gp, 16
-	flw	fa0, 0(a0)
-	flw	fa1, 0(a4)
-	fmul	fa0, fa0, fa1
-	flw	fa1, 4(a0)
-	flw	fa2, 4(a4)
-	fmul	fa1, fa1, fa2
-	fadd	fa0, fa0, fa1
-	flw	fa1, 8(a0)
-	flw	fa2, 8(a4)
-	fmul	fa1, fa1, fa2
-	fadd	fa0, fa0, fa1
-	fle	a0, fa0, fzero
-	bne	a0, zero, .setup_dirvec_constants_else_5
-	fli	fa1, l_data_6
-	fdiv	fa1, fa1, fa0
-	fsw	fa1, 0(a2)
-	flw	fa1, 0(a4)
-	fdiv	fa1, fa1, fa0
-	fneg	fa1, fa1
-	fsw	fa1, 4(a2)
-	flw	fa1, 4(a4)
-	fdiv	fa1, fa1, fa0
-	fneg	fa1, fa1
-	fsw	fa1, 8(a2)
-	flw	fa1, 8(a4)
-	fdiv	fa0, fa1, fa0
-	fneg	fa0, fa0
-	fsw	fa0, 12(a2)
-	slli	a0, a1, 2
-	add	t6, a3, a0
-	sw	a2, 0(t6)
-	b	.setup_dirvec_constants_cont_4
-.setup_dirvec_constants_else_5:
-	fsw	fzero, 0(a2)
-	slli	a0, a1, 2
-	add	t6, a3, a0
-	sw	a2, 0(t6)
-	b	.setup_dirvec_constants_cont_4
-.setup_dirvec_constants_else_3:
-	sw	a3, 4(sp)	# save
-	sw	a1, 8(sp)	# save
-	mv	a1, a2
-	call	setup_second_table_2827
-	lw	a1, 8(sp)	# restore
-	slli	a2, a1, 2
-	lw	a3, 4(sp)	# restore
-	add	t6, a3, a2
-	sw	a0, 0(t6)
-.setup_dirvec_constants_cont_4:
-.setup_dirvec_constants_cont_2:
-	addi	a1, a1, -1
-	lw	a0, 0(sp)	# restore
-	call	iter_setup_dirvec_constants_2830
-setup_dirvec_constants_ret:
-	lw	ra, 12(sp)
-	addi	sp, sp, 16
-	jr	ra
 setup_startp_constants_2835:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
@@ -10219,8 +10130,6 @@ pretrace_pixels_2987:
 	fmul	fa3, fa3, fa5
 	fadd	fa0, fa0, fa3
 	fsqrt	fa0, fa0
-	fsw	fa1, 12(sp)	# save
-	fmv	fa1, fzero
 	feq	a0, fa0, fzero
 	bne	a0, zero, .pretrace_pixels_else_1
 	fli	fa3, l_data_5
@@ -10251,10 +10160,12 @@ pretrace_pixels_2987:
 	fli	fa0, l_data_5
 	lw	a3, 8(sp)	# restore
 	slli	a4, a3, 2
-	sw	a2, 16(sp)	# save
+	sw	a2, 12(sp)	# save
 	lw	a5, 0(sp)	# restore
 	add	t6, a5, a4
 	lw	a2, 0(t6)
+	fsw	fa1, 16(sp)	# save
+	fmv	fa1, fzero
 	fsw	fa2, 20(sp)	# save
 	call	trace_ray_2924
 	lw	a0, 8(sp)	# restore
@@ -10273,7 +10184,7 @@ pretrace_pixels_2987:
 	add	t6, a2, a1
 	lw	a1, 0(t6)
 	lw	a1, 24(a1)
-	lw	a3, 16(sp)	# restore
+	lw	a3, 12(sp)	# restore
 	sw	a3, 0(a1)
 	slli	a1, a0, 2
 	add	t6, a2, a1
@@ -10358,7 +10269,7 @@ pretrace_pixels_2987:
 .pretrace_pixels_cont_3:
 	lw	a0, 8(sp)	# restore
 	addi	a1, a0, -1
-	lw	a0, 16(sp)	# restore
+	lw	a0, 12(sp)	# restore
 	addi	a0, a0, 1
 	blti	a0, 5, .pretrace_pixels_else_7
 	addi	a2, a0, -5
@@ -10367,7 +10278,7 @@ pretrace_pixels_2987:
 	mv	a2, a0
 .pretrace_pixels_cont_8:
 	flw	fa0, 4(sp)	# restore
-	flw	fa1, 12(sp)	# restore
+	flw	fa1, 16(sp)	# restore
 	flw	fa2, 20(sp)	# restore
 	lw	a0, 0(sp)	# restore
 	call	pretrace_pixels_2987
@@ -10376,12 +10287,12 @@ pretrace_pixels_ret:
 	addi	sp, sp, 48
 	jr	ra
 scan_pixel_2998:
-	addi	sp, sp, -92
-	sw	ra, 88(sp)
+	addi	sp, sp, -96
+	sw	ra, 92(sp)
 	lwd	a5, min_caml_image_size(0)
 	bgt	a5, a0, .scan_pixel_else_1
-	lw	ra, 88(sp)
-	addi	sp, sp, 92
+	lw	ra, 92(sp)
+	addi	sp, sp, 96
 	jr	ra
 .scan_pixel_else_1:
 	slli	a5, a0, 2
@@ -10405,8 +10316,8 @@ scan_pixel_2998:
 	b	.scan_pixel_cont_6
 .scan_pixel_else_5:
 	lwd	a5, min_caml_image_size(0)
-	addi	a6, a0, 1
-	bgt	a5, a6, .scan_pixel_else_7
+	addi	a7, a0, 1
+	bgt	a5, a7, .scan_pixel_else_7
 	li	a5, 0
 	b	.scan_pixel_cont_8
 .scan_pixel_else_7:
@@ -10422,41 +10333,42 @@ scan_pixel_2998:
 	sw	a4, 0(sp)	# save
 	sw	a2, 4(sp)	# save
 	sw	a1, 8(sp)	# save
-	sw	a3, 12(sp)	# save
-	sw	a0, 16(sp)	# save
+	sw	a6, 12(sp)	# save
+	sw	a3, 16(sp)	# save
+	sw	a0, 20(sp)	# save
 	bne	a5, zero, .scan_pixel_else_11
 	slli	a5, a0, 2
 	add	t6, a3, a5
 	lw	a0, 0(t6)
 	li	a1, 0
 	lw	a5, 28(a0)
-	lw	a6, 24(a0)
-	lw	a7, 20(a0)
-	lw	s1, 16(a0)
-	lw	s2, 12(a0)
-	lw	s3, 8(a0)
-	lw	s4, 4(a0)
-	lw	s5, 0(s3)
-	blt	s5, zero, .scan_pixel_cont_12
-	lw	s5, 0(s2)
-	sw	a0, 20(sp)	# save
-	sw	s1, 24(sp)	# save
-	sw	s4, 28(sp)	# save
-	sw	a5, 32(sp)	# save
-	sw	a6, 36(sp)	# save
+	lw	a7, 24(a0)
+	lw	s1, 20(a0)
+	lw	s2, 16(a0)
+	lw	s3, 12(a0)
+	lw	s4, 8(a0)
+	lw	s5, 4(a0)
+	lw	s6, 0(s4)
+	blt	s6, zero, .scan_pixel_cont_12
+	lw	s6, 0(s3)
+	sw	a0, 24(sp)	# save
+	sw	s2, 28(sp)	# save
+	sw	s5, 32(sp)	# save
+	sw	a5, 36(sp)	# save
 	sw	a7, 40(sp)	# save
-	sw	s2, 44(sp)	# save
+	sw	s1, 44(sp)	# save
 	sw	s3, 48(sp)	# save
-	beq	s5, zero, .scan_pixel_cont_14
+	sw	s4, 52(sp)	# save
+	beq	s6, zero, .scan_pixel_cont_14
 	call	calc_diffuse_using_1point_2946
 .scan_pixel_cont_14:
-	lw	a0, 48(sp)	# restore
+	lw	a0, 52(sp)	# restore
 	lw	a1, 4(a0)
 	blt	a1, zero, .scan_pixel_cont_12
-	lw	a1, 44(sp)	# restore
+	lw	a1, 48(sp)	# restore
 	lw	a2, 4(a1)
 	beq	a2, zero, .scan_pixel_cont_16
-	lw	a2, 40(sp)	# restore
+	lw	a2, 44(sp)	# restore
 	lw	a2, 4(a2)
 	flw	fa0, 0(a2)
 	fswd	fa0, min_caml_diffuse_ray(0)
@@ -10464,14 +10376,14 @@ scan_pixel_2998:
 	fswd	fa0, min_caml_diffuse_ray(4)
 	flw	fa0, 8(a2)
 	fswd	fa0, min_caml_diffuse_ray(8)
-	lw	a2, 36(sp)	# restore
+	lw	a2, 40(sp)	# restore
 	lw	a0, 0(a2)
-	lw	a2, 32(sp)	# restore
+	lw	a2, 36(sp)	# restore
 	lw	a1, 4(a2)
-	lw	a2, 28(sp)	# restore
+	lw	a2, 32(sp)	# restore
 	lw	a2, 4(a2)
 	call	trace_diffuse_ray_80percent_2942
-	lw	a0, 24(sp)	# restore
+	lw	a0, 28(sp)	# restore
 	lw	a0, 4(a0)
 	flwd	fa0, min_caml_rgb(0)
 	flw	fa1, 0(a0)
@@ -10493,17 +10405,17 @@ scan_pixel_2998:
 	fswd	fa0, min_caml_rgb(8)
 .scan_pixel_cont_16:
 	li	a1, 2
-	lw	a0, 48(sp)	# restore
+	lw	a0, 52(sp)	# restore
 	lw	a0, 8(a0)
 	blt	a0, zero, .scan_pixel_cont_12
-	lw	a0, 44(sp)	# restore
+	lw	a0, 48(sp)	# restore
 	lw	a0, 8(a0)
 	beq	a0, zero, .scan_pixel_cont_18
-	lw	a0, 20(sp)	# restore
+	lw	a0, 24(sp)	# restore
 	call	calc_diffuse_using_1point_2946
 .scan_pixel_cont_18:
 	li	a1, 3
-	lw	a0, 20(sp)	# restore
+	lw	a0, 24(sp)	# restore
 	call	do_without_neighbors_2955
 	flwd	fa0, min_caml_rgb(0)
 	call	min_caml_int_of_float
@@ -10514,77 +10426,77 @@ scan_pixel_2998:
 	b	.scan_pixel_cont_36
 .scan_pixel_else_11:
 	li	a5, 0
-	slli	a6, a0, 2
-	add	t6, a3, a6
-	lw	a6, 0(t6)
-	lw	a7, 12(a6)
-	lw	a6, 8(a6)
-	lw	a6, 0(a6)
-	blt	a6, zero, .scan_pixel_cont_19
-	slli	a6, a0, 2
-	add	t6, a3, a6
-	lw	a6, 0(t6)
-	lw	a6, 8(a6)
-	lw	a6, 0(a6)
-	slli	s1, a0, 2
-	add	t6, a2, s1
-	lw	s1, 0(t6)
-	lw	s1, 8(s1)
-	lw	s1, 0(s1)
-	bne	s1, a6, .scan_pixel_else_20
-	slli	s1, a0, 2
-	add	t6, a4, s1
-	lw	s1, 0(t6)
-	lw	s1, 8(s1)
-	lw	s1, 0(s1)
-	bne	s1, a6, .scan_pixel_else_20
-	addi	s1, a0, -1
-	slli	s1, s1, 2
-	add	t6, a3, s1
-	lw	s1, 0(t6)
-	lw	s1, 8(s1)
-	lw	s1, 0(s1)
-	bne	s1, a6, .scan_pixel_else_20
-	addi	s1, a0, 1
-	slli	s1, s1, 2
-	add	t6, a3, s1
-	lw	s1, 0(t6)
-	lw	s1, 8(s1)
-	lw	s1, 0(s1)
-	bne	s1, a6, .scan_pixel_else_20
-	li	a6, 1
+	slli	a7, a0, 2
+	add	t6, a3, a7
+	lw	a7, 0(t6)
+	lw	s1, 12(a7)
+	lw	a7, 8(a7)
+	lw	a7, 0(a7)
+	blt	a7, zero, .scan_pixel_cont_19
+	slli	a7, a0, 2
+	add	t6, a3, a7
+	lw	a7, 0(t6)
+	lw	a7, 8(a7)
+	lw	a7, 0(a7)
+	slli	s2, a0, 2
+	add	t6, a2, s2
+	lw	s2, 0(t6)
+	lw	s2, 8(s2)
+	lw	s2, 0(s2)
+	bne	s2, a7, .scan_pixel_else_20
+	slli	s2, a0, 2
+	add	t6, a4, s2
+	lw	s2, 0(t6)
+	lw	s2, 8(s2)
+	lw	s2, 0(s2)
+	bne	s2, a7, .scan_pixel_else_20
+	addi	s2, a0, -1
+	slli	s2, s2, 2
+	add	t6, a3, s2
+	lw	s2, 0(t6)
+	lw	s2, 8(s2)
+	lw	s2, 0(s2)
+	bne	s2, a7, .scan_pixel_else_20
+	addi	s2, a0, 1
+	slli	s2, s2, 2
+	add	t6, a3, s2
+	lw	s2, 0(t6)
+	lw	s2, 8(s2)
+	lw	s2, 0(s2)
+	bne	s2, a7, .scan_pixel_else_20
+	li	a7, 1
 	b	.scan_pixel_else_28
 .scan_pixel_else_20:
 	slli	a5, a0, 2
 	add	t6, a3, a5
 	lw	a0, 0(t6)
 	lw	a5, 28(a0)
-	lw	a6, 24(a0)
-	lw	a7, 20(a0)
-	lw	s1, 16(a0)
-	lw	s2, 12(a0)
-	lw	s3, 8(a0)
-	lw	s4, 4(a0)
-	lw	s5, 0(s3)
-	blt	s5, zero, .scan_pixel_cont_29
-	lw	s5, 0(s2)
-	sw	a0, 52(sp)	# save
-	sw	s2, 56(sp)	# save
+	lw	a7, 24(a0)
+	lw	s1, 20(a0)
+	lw	s2, 16(a0)
+	lw	s3, 12(a0)
+	lw	s4, 8(a0)
+	lw	s5, 4(a0)
+	lw	s6, 0(s4)
+	blt	s6, zero, .scan_pixel_cont_29
+	lw	s6, 0(s3)
+	sw	a0, 56(sp)	# save
 	sw	s3, 60(sp)	# save
-	beq	s5, zero, .scan_pixel_cont_31
-	lw	a7, 0(a7)
-	flw	fa0, 0(a7)
+	sw	s4, 64(sp)	# save
+	beq	s6, zero, .scan_pixel_cont_31
+	lw	s1, 0(s1)
+	flw	fa0, 0(s1)
 	fswd	fa0, min_caml_diffuse_ray(0)
-	flw	fa0, 4(a7)
+	flw	fa0, 4(s1)
 	fswd	fa0, min_caml_diffuse_ray(4)
-	flw	fa0, 8(a7)
+	flw	fa0, 8(s1)
 	fswd	fa0, min_caml_diffuse_ray(8)
-	lw	a0, 0(a6)
+	lw	a0, 0(a7)
 	lw	a1, 0(a5)
-	lw	a2, 0(s4)
-	sw	s1, 64(sp)	# save
+	lw	a2, 0(s5)
+	sw	s2, 68(sp)	# save
 	call	trace_diffuse_ray_80percent_2942
-	lw	a0, 64(sp)	# restore
+	lw	a0, 68(sp)	# restore
 	lw	a0, 0(a0)
 	flwd	fa0, min_caml_rgb(0)
 	flw	fa1, 0(a0)
@@ -10606,17 +10518,17 @@ scan_pixel_2998:
 	fswd	fa0, min_caml_rgb(8)
 .scan_pixel_cont_31:
 	li	a1, 1
-	lw	a0, 60(sp)	# restore
+	lw	a0, 64(sp)	# restore
 	lw	a0, 4(a0)
 	blt	a0, zero, .scan_pixel_cont_29
-	lw	a0, 56(sp)	# restore
+	lw	a0, 60(sp)	# restore
 	lw	a0, 4(a0)
 	beq	a0, zero, .scan_pixel_cont_33
-	lw	a0, 52(sp)	# restore
+	lw	a0, 56(sp)	# restore
 	call	calc_diffuse_using_1point_2946
 .scan_pixel_cont_33:
 	li	a1, 2
-	lw	a0, 52(sp)	# restore
+	lw	a0, 56(sp)	# restore
 	call	do_without_neighbors_2955
 	flwd	fa0, min_caml_rgb(0)
 	call	min_caml_int_of_float
@@ -10626,8 +10538,8 @@ scan_pixel_2998:
 	li	a0, 0
 	b	.scan_pixel_cont_36
 .scan_pixel_else_28:
-	lw	a6, 0(a7)
-	beq	a6, zero, .scan_pixel_cont_34
+	lw	a7, 0(s1)
+	beq	a7, zero, .scan_pixel_cont_34
 	mv	a1, a2
 	mv	a2, a3
 	mv	a3, a4
@@ -10635,10 +10547,10 @@ scan_pixel_2998:
 	call	calc_diffuse_using_5points_2949
 .scan_pixel_cont_34:
 	li	a5, 1
-	lw	a0, 16(sp)	# restore
+	lw	a0, 20(sp)	# restore
 	lw	a1, 8(sp)	# restore
 	lw	a2, 4(sp)	# restore
-	lw	a3, 12(sp)	# restore
+	lw	a3, 16(sp)	# restore
 	lw	a4, 0(sp)	# restore
 	call	try_exploit_neighbors_2971
 .scan_pixel_cont_29:
@@ -10683,16 +10595,16 @@ scan_pixel_2998:
 	call	min_caml_print_int
 	li	a0, 10
 	w	a0
-	lw	a0, 16(sp)	# restore
+	lw	a0, 20(sp)	# restore
 	addi	a0, a0, 1
 	lwd	a1, min_caml_image_size(0)
 	bgt	a1, a0, .scan_pixel_else_44
-	lw	ra, 88(sp)
-	addi	sp, sp, 92
+	lw	ra, 92(sp)
+	addi	sp, sp, 96
 	jr	ra
 .scan_pixel_else_44:
 	slli	a1, a0, 2
-	lw	a3, 12(sp)	# restore
+	lw	a3, 16(sp)	# restore
 	add	t6, a3, a1
 	lw	a1, 0(t6)
 	lw	a1, 0(a1)
@@ -10703,19 +10615,19 @@ scan_pixel_2998:
 	flw	fa0, 8(a1)
 	fswd	fa0, min_caml_rgb(8)
 	lwd	a1, min_caml_image_size(4)
-	lw	a2, 8(sp)	# restore
-	addi	a4, a2, 1
-	bgt	a1, a4, .scan_pixel_else_46
+	lw	a2, 12(sp)	# restore
+	bgt	a1, a2, .scan_pixel_else_46
 	li	a1, 0
 	b	.scan_pixel_cont_47
 .scan_pixel_else_46:
-	bgt	a2, zero, .scan_pixel_else_48
+	lw	a1, 8(sp)	# restore
+	bgt	a1, zero, .scan_pixel_else_48
 	li	a1, 0
 	b	.scan_pixel_cont_49
 .scan_pixel_else_48:
-	lwd	a1, min_caml_image_size(0)
+	lwd	a2, min_caml_image_size(0)
 	addi	a4, a0, 1
-	bgt	a1, a4, .scan_pixel_else_50
+	bgt	a2, a4, .scan_pixel_else_50
 	li	a1, 0
 	b	.scan_pixel_cont_51
 .scan_pixel_else_50:
@@ -10728,38 +10640,38 @@ scan_pixel_2998:
 .scan_pixel_cont_51:
 .scan_pixel_cont_49:
 .scan_pixel_cont_47:
-	sw	a0, 68(sp)	# save
+	sw	a0, 72(sp)	# save
 	bne	a1, zero, .scan_pixel_else_54
 	slli	a1, a0, 2
 	add	t6, a3, a1
 	lw	a0, 0(t6)
 	lw	a1, 28(a0)
-	lw	a4, 24(a0)
-	lw	a5, 20(a0)
-	lw	a6, 16(a0)
-	lw	a7, 12(a0)
-	lw	s1, 8(a0)
-	lw	s2, 4(a0)
-	lw	s3, 0(s1)
-	blt	s3, zero, .scan_pixel_cont_55
-	lw	s3, 0(a7)
-	sw	a0, 72(sp)	# save
-	sw	a7, 76(sp)	# save
-	sw	s1, 80(sp)	# save
-	beq	s3, zero, .scan_pixel_cont_57
-	lw	a5, 0(a5)
-	flw	fa0, 0(a5)
+	lw	a2, 24(a0)
+	lw	a4, 20(a0)
+	lw	a5, 16(a0)
+	lw	a6, 12(a0)
+	lw	a7, 8(a0)
+	lw	s1, 4(a0)
+	lw	s2, 0(a7)
+	blt	s2, zero, .scan_pixel_cont_55
+	lw	s2, 0(a6)
+	sw	a0, 76(sp)	# save
+	sw	a6, 80(sp)	# save
+	sw	a7, 84(sp)	# save
+	beq	s2, zero, .scan_pixel_cont_57
+	lw	a4, 0(a4)
+	flw	fa0, 0(a4)
 	fswd	fa0, min_caml_diffuse_ray(0)
-	flw	fa0, 4(a5)
+	flw	fa0, 4(a4)
 	fswd	fa0, min_caml_diffuse_ray(4)
-	flw	fa0, 8(a5)
+	flw	fa0, 8(a4)
 	fswd	fa0, min_caml_diffuse_ray(8)
-	lw	a0, 0(a4)
+	lw	a0, 0(a2)
 	lw	a1, 0(a1)
-	lw	a2, 0(s2)
-	sw	a6, 84(sp)	# save
+	lw	a2, 0(s1)
+	sw	a5, 88(sp)	# save
 	call	trace_diffuse_ray_80percent_2942
-	lw	a0, 84(sp)	# restore
+	lw	a0, 88(sp)	# restore
 	lw	a0, 0(a0)
 	flwd	fa0, min_caml_rgb(0)
 	flw	fa1, 0(a0)
@@ -10781,17 +10693,17 @@ scan_pixel_2998:
 	fswd	fa0, min_caml_rgb(8)
 .scan_pixel_cont_57:
 	li	a1, 1
-	lw	a0, 80(sp)	# restore
+	lw	a0, 84(sp)	# restore
 	lw	a0, 4(a0)
 	blt	a0, zero, .scan_pixel_cont_55
-	lw	a0, 76(sp)	# restore
+	lw	a0, 80(sp)	# restore
 	lw	a0, 4(a0)
 	beq	a0, zero, .scan_pixel_cont_59
-	lw	a0, 72(sp)	# restore
+	lw	a0, 76(sp)	# restore
 	call	calc_diffuse_using_1point_2946
 .scan_pixel_cont_59:
 	li	a1, 2
-	lw	a0, 72(sp)	# restore
+	lw	a0, 76(sp)	# restore
 	call	do_without_neighbors_2955
 	flwd	fa0, min_caml_rgb(0)
 	call	min_caml_int_of_float
@@ -10802,11 +10714,9 @@ scan_pixel_2998:
 	b	.scan_pixel_cont_61
 .scan_pixel_else_54:
 	li	a5, 0
-	lw	a1, 4(sp)	# restore
+	lw	a1, 8(sp)	# restore
+	lw	a2, 4(sp)	# restore
 	lw	a4, 0(sp)	# restore
-	mv	t4, a2
-	mv	a2, a1
-	mv	a1, t4
 	call	try_exploit_neighbors_2971
 .scan_pixel_cont_55:
 	flwd	fa0, min_caml_rgb(0)
@@ -10848,15 +10758,15 @@ scan_pixel_2998:
 	call	min_caml_print_int
 	li	a0, 10
 	w	a0
-	lw	a0, 68(sp)	# restore
+	lw	a0, 72(sp)	# restore
 	addi	a0, a0, 1
 	lw	a1, 8(sp)	# restore
 	lw	a2, 4(sp)	# restore
-	lw	a3, 12(sp)	# restore
+	lw	a3, 16(sp)	# restore
 	lw	a4, 0(sp)	# restore
 	call	scan_pixel_2998
-	lw	ra, 88(sp)
-	addi	sp, sp, 92
+	lw	ra, 92(sp)
+	addi	sp, sp, 96
 	jr	ra
 scan_line_3004:
 	addi	sp, sp, -56
@@ -11826,28 +11736,28 @@ calc_dirvecs_3032:
 	li	a0, 0
 	fsw	fa0, 12(sp)	# save
 	fmv	fa0, fzero
-	flw	fa3, 0(sp)	# restore
 	fsw	fa1, 16(sp)	# save
-	fsw	fa0, 20(sp)	# save
-	sw	a1, 24(sp)	# save
-	sw	a2, 28(sp)	# save
-	fmv	fa1, fa0
+	fmv	fa1, fzero
+	flw	fa3, 0(sp)	# restore
+	sw	a1, 20(sp)	# save
+	sw	a2, 24(sp)	# save
 	call	calc_dirvec_3024
 	fli	fa0, l_data_26
 	flw	fa1, 12(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 28(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
-	flw	fa3, 0(sp)	# restore
+	fsw	fa0, 28(sp)	# save
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	lw	a1, 24(sp)	# restore
-	fsw	fa0, 32(sp)	# save
-	fmv	fa0, fa1
+	addi	a2, a1, 2
+	flw	fa3, 0(sp)	# restore
+	lw	a1, 20(sp)	# restore
+	sw	a2, 32(sp)	# save
 	call	calc_dirvec_3024
 	lw	a0, 4(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 24(sp)	# restore
+	lw	a1, 20(sp)	# restore
 	addi	a1, a1, 1
 	blti	a1, 5, .calc_dirvecs_cont_1
 	addi	a1, a1, -5
@@ -11861,22 +11771,21 @@ calc_dirvecs_3032:
 	fsub	fa2, fa0, fa2
 	li	a0, 0
 	fsw	fa0, 40(sp)	# save
-	flw	fa0, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 0(sp)	# restore
-	lw	a2, 28(sp)	# restore
+	lw	a2, 24(sp)	# restore
 	sw	a1, 44(sp)	# save
-	fmv	fa1, fa0
 	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
+	flw	fa0, 28(sp)	# restore
 	flw	fa1, 40(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 28(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 0(sp)	# restore
 	lw	a1, 44(sp)	# restore
-	fmv	fa0, fa1
+	lw	a2, 32(sp)	# restore
 	call	calc_dirvec_3024
 	lw	a0, 36(sp)	# restore
 	addi	a0, a0, -1
@@ -11894,22 +11803,21 @@ calc_dirvecs_3032:
 	fsub	fa2, fa0, fa2
 	li	a0, 0
 	fsw	fa0, 52(sp)	# save
-	flw	fa0, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 0(sp)	# restore
-	lw	a2, 28(sp)	# restore
+	lw	a2, 24(sp)	# restore
 	sw	a1, 56(sp)	# save
-	fmv	fa1, fa0
 	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
+	flw	fa0, 28(sp)	# restore
 	flw	fa1, 52(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 28(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 0(sp)	# restore
 	lw	a1, 56(sp)	# restore
-	fmv	fa0, fa1
+	lw	a2, 32(sp)	# restore
 	call	calc_dirvec_3024
 	lw	a0, 48(sp)	# restore
 	addi	a0, a0, -1
@@ -11926,41 +11834,40 @@ calc_dirvecs_3032:
 	flw	fa1, 8(sp)	# restore
 	fsub	fa2, fa0, fa1
 	li	a0, 0
-	flw	fa1, 20(sp)	# restore
+	fsw	fa0, 64(sp)	# save
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 0(sp)	# restore
-	lw	a2, 28(sp)	# restore
-	sw	a1, 64(sp)	# save
-	fsw	fa0, 68(sp)	# save
-	fmv	fa0, fa1
+	lw	a2, 24(sp)	# restore
+	sw	a1, 68(sp)	# save
 	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
-	flw	fa1, 68(sp)	# restore
+	flw	fa0, 28(sp)	# restore
+	flw	fa1, 64(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 28(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa0, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 0(sp)	# restore
-	lw	a1, 64(sp)	# restore
-	fmv	fa1, fa0
+	lw	a1, 68(sp)	# restore
+	lw	a2, 32(sp)	# restore
 	call	calc_dirvec_3024
 	lw	a0, 60(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 64(sp)	# restore
+	lw	a1, 68(sp)	# restore
 	addi	a1, a1, 1
 	blti	a1, 5, .calc_dirvecs_cont_4
 	addi	a1, a1, -5
 .calc_dirvecs_cont_4:
 	flw	fa0, 0(sp)	# restore
-	lw	a2, 28(sp)	# restore
+	lw	a2, 24(sp)	# restore
 	call	calc_dirvecs_3032
 calc_dirvecs_ret:
 	lw	ra, 72(sp)
 	addi	sp, sp, 76
 	jr	ra
 calc_dirvec_rows_3037:
-	addi	sp, sp, -116
-	sw	ra, 112(sp)
+	addi	sp, sp, -88
+	sw	ra, 84(sp)
 	blt	a0, zero, calc_dirvec_rows_ret
 	sw	a0, 0(sp)	# save
 	call	min_caml_float_of_int
@@ -11977,27 +11884,27 @@ calc_dirvec_rows_3037:
 	li	a0, 0
 	fsw	fa0, 12(sp)	# save
 	fmv	fa0, fzero
-	flw	fa3, 4(sp)	# restore
 	fsw	fa1, 16(sp)	# save
-	fsw	fa0, 20(sp)	# save
-	sw	a1, 24(sp)	# save
-	sw	a2, 28(sp)	# save
-	fmv	fa1, fa0
+	fmv	fa1, fzero
+	flw	fa3, 4(sp)	# restore
+	sw	a1, 20(sp)	# save
+	sw	a2, 24(sp)	# save
 	call	calc_dirvec_3024
 	fli	fa0, l_data_26
 	flw	fa1, 12(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 28(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
-	flw	fa3, 4(sp)	# restore
+	fsw	fa0, 28(sp)	# save
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	lw	a1, 24(sp)	# restore
-	fsw	fa0, 32(sp)	# save
-	fmv	fa0, fa1
+	addi	a2, a1, 2
+	flw	fa3, 4(sp)	# restore
+	lw	a1, 20(sp)	# restore
+	sw	a2, 32(sp)	# save
 	call	calc_dirvec_3024
 	li	a0, 3
-	lw	a1, 24(sp)	# restore
+	lw	a1, 20(sp)	# restore
 	addi	a2, a1, 1
 	blti	a2, 5, .calc_dirvec_rows_cont_1
 	addi	a2, a2, -5
@@ -12009,24 +11916,23 @@ calc_dirvec_rows_3037:
 	fsub	fa2, fa0, fa2
 	li	a0, 0
 	fsw	fa0, 36(sp)	# save
-	flw	fa0, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 4(sp)	# restore
-	lw	a3, 28(sp)	# restore
+	lw	a3, 24(sp)	# restore
 	sw	a2, 40(sp)	# save
 	mv	a1, a2
 	mv	a2, a3
-	fmv	fa1, fa0
 	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
+	flw	fa0, 28(sp)	# restore
 	flw	fa1, 36(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 28(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 4(sp)	# restore
 	lw	a1, 40(sp)	# restore
-	fmv	fa0, fa1
+	lw	a2, 32(sp)	# restore
 	call	calc_dirvec_3024
 	li	a0, 2
 	lw	a1, 40(sp)	# restore
@@ -12041,22 +11947,21 @@ calc_dirvec_rows_3037:
 	fsub	fa2, fa0, fa2
 	li	a0, 0
 	fsw	fa0, 44(sp)	# save
-	flw	fa0, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 4(sp)	# restore
-	lw	a2, 28(sp)	# restore
+	lw	a2, 24(sp)	# restore
 	sw	a1, 48(sp)	# save
-	fmv	fa1, fa0
 	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
+	flw	fa0, 28(sp)	# restore
 	flw	fa1, 44(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 28(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 4(sp)	# restore
 	lw	a1, 48(sp)	# restore
-	fmv	fa0, fa1
+	lw	a2, 32(sp)	# restore
 	call	calc_dirvec_3024
 	li	a0, 1
 	lw	a1, 48(sp)	# restore
@@ -12065,16 +11970,16 @@ calc_dirvec_rows_3037:
 	addi	a1, a1, -5
 .calc_dirvec_rows_cont_3:
 	flw	fa0, 4(sp)	# restore
-	lw	a2, 28(sp)	# restore
+	lw	a2, 24(sp)	# restore
 	call	calc_dirvecs_3032
 	lw	a0, 0(sp)	# restore
 	addi	a0, a0, -1
-	lw	a1, 24(sp)	# restore
+	lw	a1, 20(sp)	# restore
 	addi	a1, a1, 2
 	blti	a1, 5, .calc_dirvec_rows_cont_4
 	addi	a1, a1, -5
 .calc_dirvec_rows_cont_4:
-	lw	a2, 28(sp)	# restore
+	lw	a2, 24(sp)	# restore
 	addi	a2, a2, 4
 	blt	a0, zero, calc_dirvec_rows_ret
 	sw	a0, 52(sp)	# save
@@ -12090,22 +11995,23 @@ calc_dirvec_rows_3037:
 	fsub	fa2, fa0, fa2
 	li	a0, 0
 	fsw	fa0, 60(sp)	# save
-	flw	fa0, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 56(sp)	# restore
 	sw	a1, 64(sp)	# save
 	sw	a2, 68(sp)	# save
-	fmv	fa1, fa0
 	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
+	flw	fa0, 28(sp)	# restore
 	flw	fa1, 60(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	lw	a1, 68(sp)	# restore
 	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
 	flw	fa3, 56(sp)	# restore
 	lw	a1, 64(sp)	# restore
-	fmv	fa0, fa1
+	sw	a2, 72(sp)	# save
 	call	calc_dirvec_3024
 	li	a0, 3
 	lw	a1, 64(sp)	# restore
@@ -12116,31 +12022,30 @@ calc_dirvec_rows_3037:
 	call	min_caml_float_of_int
 	flw	fa1, 16(sp)	# restore
 	fmul	fa0, fa0, fa1
-	flw	fa2, 8(sp)	# restore
-	fsub	fa2, fa0, fa2
+	flw	fa1, 8(sp)	# restore
+	fsub	fa2, fa0, fa1
 	li	a0, 0
-	fsw	fa0, 72(sp)	# save
-	flw	fa0, 20(sp)	# restore
+	fsw	fa0, 76(sp)	# save
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 56(sp)	# restore
 	lw	a3, 68(sp)	# restore
-	sw	a2, 76(sp)	# save
+	sw	a2, 80(sp)	# save
 	mv	a1, a2
 	mv	a2, a3
-	fmv	fa1, fa0
 	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
-	flw	fa1, 72(sp)	# restore
+	flw	fa0, 28(sp)	# restore
+	flw	fa1, 76(sp)	# restore
 	fadd	fa2, fa1, fa0
 	li	a0, 0
-	lw	a1, 68(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa1, 20(sp)	# restore
+	fmv	fa0, fzero
+	fmv	fa1, fzero
 	flw	fa3, 56(sp)	# restore
-	lw	a1, 76(sp)	# restore
-	fmv	fa0, fa1
+	lw	a1, 80(sp)	# restore
+	lw	a2, 72(sp)	# restore
 	call	calc_dirvec_3024
 	li	a0, 2
-	lw	a1, 76(sp)	# restore
+	lw	a1, 80(sp)	# restore
 	addi	a1, a1, 1
 	blti	a1, 5, .calc_dirvec_rows_cont_6
 	addi	a1, a1, -5
@@ -12157,82 +12062,10 @@ calc_dirvec_rows_3037:
 .calc_dirvec_rows_cont_7:
 	lw	a2, 68(sp)	# restore
 	addi	a2, a2, 4
-	blt	a0, zero, calc_dirvec_rows_ret
-	sw	a0, 80(sp)	# save
-	call	min_caml_float_of_int
-	flw	fa1, 16(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa2, 8(sp)	# restore
-	fsub	fa0, fa0, fa2
-	li	a0, 4
-	fsw	fa0, 84(sp)	# save
-	call	min_caml_float_of_int
-	fmul	fa0, fa0, fa1
-	fsub	fa2, fa0, fa2
-	li	a0, 0
-	fsw	fa0, 88(sp)	# save
-	flw	fa0, 20(sp)	# restore
-	flw	fa3, 84(sp)	# restore
-	sw	a1, 92(sp)	# save
-	sw	a2, 96(sp)	# save
-	fmv	fa1, fa0
-	call	calc_dirvec_3024
-	flw	fa0, 32(sp)	# restore
-	flw	fa1, 88(sp)	# restore
-	fadd	fa2, fa1, fa0
-	li	a0, 0
-	lw	a1, 96(sp)	# restore
-	addi	a2, a1, 2
-	flw	fa0, 20(sp)	# restore
-	flw	fa3, 84(sp)	# restore
-	lw	a1, 92(sp)	# restore
-	fmv	fa1, fa0
-	call	calc_dirvec_3024
-	li	a0, 3
-	lw	a1, 92(sp)	# restore
-	addi	a2, a1, 1
-	blti	a2, 5, .calc_dirvec_rows_else_8
-	addi	a1, a2, -5
-	b	.calc_dirvec_rows_cont_9
-.calc_dirvec_rows_else_8:
-	mv	a1, a2
-.calc_dirvec_rows_cont_9:
-	flw	fa0, 84(sp)	# restore
-	lw	a2, 96(sp)	# restore
-	call	calc_dirvecs_3032
-	lw	a0, 80(sp)	# restore
-	addi	a0, a0, -1
-	lw	a1, 92(sp)	# restore
-	addi	a1, a1, 2
-	blti	a1, 5, .calc_dirvec_rows_cont_10
-	addi	a1, a1, -5
-.calc_dirvec_rows_cont_10:
-	lw	a2, 96(sp)	# restore
-	addi	a2, a2, 4
-	blt	a0, zero, calc_dirvec_rows_ret
-	sw	a0, 100(sp)	# save
-	call	min_caml_float_of_int
-	flw	fa1, 16(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa1, 8(sp)	# restore
-	fsub	fa0, fa0, fa1
-	li	a0, 4
-	sw	a2, 104(sp)	# save
-	sw	a1, 108(sp)	# save
-	call	calc_dirvecs_3032
-	lw	a0, 100(sp)	# restore
-	addi	a0, a0, -1
-	lw	a1, 108(sp)	# restore
-	addi	a1, a1, 2
-	blti	a1, 5, .calc_dirvec_rows_cont_11
-	addi	a1, a1, -5
-.calc_dirvec_rows_cont_11:
-	lw	a2, 104(sp)	# restore
-	addi	a2, a2, 4
 	call	calc_dirvec_rows_3037
 calc_dirvec_rows_ret:
-	lw	ra, 112(sp)
-	addi	sp, sp, 116
+	lw	ra, 84(sp)
+	addi	sp, sp, 88
 	jr	ra
 create_dirvec_elements_3043:
 	addi	sp, sp, -40
@@ -13299,8 +13132,8 @@ create_dirvecs_ret:
 	addi	sp, sp, 36
 	jr	ra
 init_dirvec_constants_3048:
-	addi	sp, sp, -36
-	sw	ra, 32(sp)
+	addi	sp, sp, -48
+	sw	ra, 44(sp)
 	blt	a1, zero, init_dirvec_constants_ret
 	slli	a2, a1, 2
 	sw	a0, 0(sp)	# save
@@ -13417,21 +13250,103 @@ init_dirvec_constants_3048:
 	blt	a0, zero, init_dirvec_constants_ret
 	slli	a1, a0, 2
 	sw	a0, 28(sp)	# save
-	lw	a2, 0(sp)	# restore
-	add	t6, a2, a1
+	lw	a0, 0(sp)	# restore
+	add	t6, a0, a1
 	lw	a0, 0(t6)
-	call	setup_dirvec_constants_2833
+	lwd	a1, min_caml_n_objects(0)
+	addi	a1, a1, -1
+	blt	a1, zero, .init_dirvec_constants_cont_8
+	slli	a2, a1, 2
+	lwl	a2, min_caml_objects(a2)
+	lw	a3, 4(a0)
+	sw	a0, 32(sp)	# save
+	lw	a0, 0(a0)
+	lw	a4, 16(a2)
+	lw	a5, 4(a2)
+	bnei	a5, 1, .init_dirvec_constants_else_9
+	sw	a3, 36(sp)	# save
+	sw	a1, 40(sp)	# save
+	mv	a1, a2
+	call	setup_rect_table_2821
+	lw	a1, 40(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 36(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+	b	.init_dirvec_constants_cont_10
+.init_dirvec_constants_else_9:
+	bnei	a5, 2, .init_dirvec_constants_else_11
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
+	mv	a2, gp
+	addi	gp, gp, 16
+	flw	fa0, 0(a0)
+	flw	fa1, 0(a4)
+	fmul	fa0, fa0, fa1
+	flw	fa1, 4(a0)
+	flw	fa2, 4(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	flw	fa1, 8(a0)
+	flw	fa2, 8(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	fle	a0, fa0, fzero
+	bne	a0, zero, .init_dirvec_constants_else_13
+	fli	fa1, l_data_6
+	fdiv	fa1, fa1, fa0
+	fsw	fa1, 0(a2)
+	flw	fa1, 0(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 4(a2)
+	flw	fa1, 4(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 8(a2)
+	flw	fa1, 8(a4)
+	fdiv	fa0, fa1, fa0
+	fneg	fa0, fa0
+	fsw	fa0, 12(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_dirvec_constants_cont_12
+.init_dirvec_constants_else_13:
+	fsw	fzero, 0(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_dirvec_constants_cont_12
+.init_dirvec_constants_else_11:
+	sw	a3, 36(sp)	# save
+	sw	a1, 40(sp)	# save
+	mv	a1, a2
+	call	setup_second_table_2827
+	lw	a1, 40(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 36(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+.init_dirvec_constants_cont_12:
+.init_dirvec_constants_cont_10:
+	addi	a1, a1, -1
+	lw	a0, 32(sp)	# restore
+	call	iter_setup_dirvec_constants_2830
+.init_dirvec_constants_cont_8:
 	lw	a0, 28(sp)	# restore
 	addi	a1, a0, -1
 	lw	a0, 0(sp)	# restore
 	call	init_dirvec_constants_3048
 init_dirvec_constants_ret:
-	lw	ra, 32(sp)
-	addi	sp, sp, 36
+	lw	ra, 44(sp)
+	addi	sp, sp, 48
 	jr	ra
 init_vecset_constants_3051:
-	addi	sp, sp, -44
-	sw	ra, 40(sp)
+	addi	sp, sp, -80
+	sw	ra, 76(sp)
 	blt	a0, zero, init_vecset_constants_ret
 	slli	a1, a0, 2
 	lwl	a1, min_caml_dirvecs(a1)
@@ -13526,7 +13441,89 @@ init_vecset_constants_3051:
 	call	iter_setup_dirvec_constants_2830
 	lw	a0, 4(sp)	# restore
 	lw	a0, 468(a0)
-	call	setup_dirvec_constants_2833
+	lwd	a1, min_caml_n_objects(0)
+	addi	a1, a1, -1
+	blt	a1, zero, .init_vecset_constants_cont_8
+	slli	a2, a1, 2
+	lwl	a2, min_caml_objects(a2)
+	lw	a3, 4(a0)
+	sw	a0, 20(sp)	# save
+	lw	a0, 0(a0)
+	lw	a4, 16(a2)
+	lw	a5, 4(a2)
+	bnei	a5, 1, .init_vecset_constants_else_9
+	sw	a3, 24(sp)	# save
+	sw	a1, 28(sp)	# save
+	mv	a1, a2
+	call	setup_rect_table_2821
+	lw	a1, 28(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 24(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+	b	.init_vecset_constants_cont_10
+.init_vecset_constants_else_9:
+	bnei	a5, 2, .init_vecset_constants_else_11
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
+	mv	a2, gp
+	addi	gp, gp, 16
+	flw	fa0, 0(a0)
+	flw	fa1, 0(a4)
+	fmul	fa0, fa0, fa1
+	flw	fa1, 4(a0)
+	flw	fa2, 4(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	flw	fa1, 8(a0)
+	flw	fa2, 8(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	fle	a0, fa0, fzero
+	bne	a0, zero, .init_vecset_constants_else_13
+	fli	fa1, l_data_6
+	fdiv	fa1, fa1, fa0
+	fsw	fa1, 0(a2)
+	flw	fa1, 0(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 4(a2)
+	flw	fa1, 4(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 8(a2)
+	flw	fa1, 8(a4)
+	fdiv	fa0, fa1, fa0
+	fneg	fa0, fa0
+	fsw	fa0, 12(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_vecset_constants_cont_12
+.init_vecset_constants_else_13:
+	fsw	fzero, 0(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_vecset_constants_cont_12
+.init_vecset_constants_else_11:
+	sw	a3, 24(sp)	# save
+	sw	a1, 28(sp)	# save
+	mv	a1, a2
+	call	setup_second_table_2827
+	lw	a1, 28(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 24(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+.init_vecset_constants_cont_12:
+.init_vecset_constants_cont_10:
+	addi	a1, a1, -1
+	lw	a0, 20(sp)	# restore
+	call	iter_setup_dirvec_constants_2830
+.init_vecset_constants_cont_8:
 	li	a1, 116
 	lw	a0, 4(sp)	# restore
 	call	init_dirvec_constants_3048
@@ -13535,44 +13532,208 @@ init_vecset_constants_3051:
 	blt	a0, zero, init_vecset_constants_ret
 	slli	a1, a0, 2
 	lwl	a1, min_caml_dirvecs(a1)
-	sw	a0, 20(sp)	# save
+	sw	a0, 32(sp)	# save
 	lw	a0, 476(a1)
 	lwd	a2, min_caml_n_objects(0)
-	sw	a1, 24(sp)	# save
+	sw	a1, 36(sp)	# save
 	addi	a1, a2, -1
 	call	iter_setup_dirvec_constants_2830
-	lw	a0, 24(sp)	# restore
+	lw	a0, 36(sp)	# restore
 	lw	a0, 472(a0)
-	call	setup_dirvec_constants_2833
+	lwd	a1, min_caml_n_objects(0)
+	addi	a1, a1, -1
+	blt	a1, zero, .init_vecset_constants_cont_15
+	slli	a2, a1, 2
+	lwl	a2, min_caml_objects(a2)
+	lw	a3, 4(a0)
+	sw	a0, 40(sp)	# save
+	lw	a0, 0(a0)
+	lw	a4, 16(a2)
+	lw	a5, 4(a2)
+	bnei	a5, 1, .init_vecset_constants_else_16
+	sw	a3, 44(sp)	# save
+	sw	a1, 48(sp)	# save
+	mv	a1, a2
+	call	setup_rect_table_2821
+	lw	a1, 48(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 44(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+	b	.init_vecset_constants_cont_17
+.init_vecset_constants_else_16:
+	bnei	a5, 2, .init_vecset_constants_else_18
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
+	mv	a2, gp
+	addi	gp, gp, 16
+	flw	fa0, 0(a0)
+	flw	fa1, 0(a4)
+	fmul	fa0, fa0, fa1
+	flw	fa1, 4(a0)
+	flw	fa2, 4(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	flw	fa1, 8(a0)
+	flw	fa2, 8(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	fle	a0, fa0, fzero
+	bne	a0, zero, .init_vecset_constants_else_20
+	fli	fa1, l_data_6
+	fdiv	fa1, fa1, fa0
+	fsw	fa1, 0(a2)
+	flw	fa1, 0(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 4(a2)
+	flw	fa1, 4(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 8(a2)
+	flw	fa1, 8(a4)
+	fdiv	fa0, fa1, fa0
+	fneg	fa0, fa0
+	fsw	fa0, 12(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_vecset_constants_cont_19
+.init_vecset_constants_else_20:
+	fsw	fzero, 0(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_vecset_constants_cont_19
+.init_vecset_constants_else_18:
+	sw	a3, 44(sp)	# save
+	sw	a1, 48(sp)	# save
+	mv	a1, a2
+	call	setup_second_table_2827
+	lw	a1, 48(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 44(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+.init_vecset_constants_cont_19:
+.init_vecset_constants_cont_17:
+	addi	a1, a1, -1
+	lw	a0, 40(sp)	# restore
+	call	iter_setup_dirvec_constants_2830
+.init_vecset_constants_cont_15:
 	li	a1, 117
-	lw	a0, 24(sp)	# restore
+	lw	a0, 36(sp)	# restore
 	call	init_dirvec_constants_3048
-	lw	a0, 20(sp)	# restore
-	addi	a0, a0, -1
-	blt	a0, zero, init_vecset_constants_ret
-	slli	a1, a0, 2
-	lwl	a1, min_caml_dirvecs(a1)
-	sw	a0, 28(sp)	# save
-	lw	a0, 476(a1)
-	sw	a1, 32(sp)	# save
-	call	setup_dirvec_constants_2833
-	li	a1, 118
 	lw	a0, 32(sp)	# restore
-	call	init_dirvec_constants_3048
-	lw	a0, 28(sp)	# restore
 	addi	a0, a0, -1
 	blt	a0, zero, init_vecset_constants_ret
 	slli	a1, a0, 2
-	sw	a0, 36(sp)	# save
+	sw	a0, 52(sp)	# save
+	lwl	a0, min_caml_dirvecs(a1)
+	sw	a0, 56(sp)	# save
+	lw	a0, 476(a0)
+	lwd	a1, min_caml_n_objects(0)
+	addi	a1, a1, -1
+	blt	a1, zero, .init_vecset_constants_cont_22
+	slli	a2, a1, 2
+	lwl	a2, min_caml_objects(a2)
+	lw	a3, 4(a0)
+	sw	a0, 60(sp)	# save
+	lw	a0, 0(a0)
+	lw	a4, 16(a2)
+	lw	a5, 4(a2)
+	bnei	a5, 1, .init_vecset_constants_else_23
+	sw	a3, 64(sp)	# save
+	sw	a1, 68(sp)	# save
+	mv	a1, a2
+	call	setup_rect_table_2821
+	lw	a1, 68(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 64(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+	b	.init_vecset_constants_cont_24
+.init_vecset_constants_else_23:
+	bnei	a5, 2, .init_vecset_constants_else_25
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
+	mv	a2, gp
+	addi	gp, gp, 16
+	flw	fa0, 0(a0)
+	flw	fa1, 0(a4)
+	fmul	fa0, fa0, fa1
+	flw	fa1, 4(a0)
+	flw	fa2, 4(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	flw	fa1, 8(a0)
+	flw	fa2, 8(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	fle	a0, fa0, fzero
+	bne	a0, zero, .init_vecset_constants_else_27
+	fli	fa1, l_data_6
+	fdiv	fa1, fa1, fa0
+	fsw	fa1, 0(a2)
+	flw	fa1, 0(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 4(a2)
+	flw	fa1, 4(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 8(a2)
+	flw	fa1, 8(a4)
+	fdiv	fa0, fa1, fa0
+	fneg	fa0, fa0
+	fsw	fa0, 12(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_vecset_constants_cont_26
+.init_vecset_constants_else_27:
+	fsw	fzero, 0(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.init_vecset_constants_cont_26
+.init_vecset_constants_else_25:
+	sw	a3, 64(sp)	# save
+	sw	a1, 68(sp)	# save
+	mv	a1, a2
+	call	setup_second_table_2827
+	lw	a1, 68(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 64(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+.init_vecset_constants_cont_26:
+.init_vecset_constants_cont_24:
+	addi	a1, a1, -1
+	lw	a0, 60(sp)	# restore
+	call	iter_setup_dirvec_constants_2830
+.init_vecset_constants_cont_22:
+	li	a1, 118
+	lw	a0, 56(sp)	# restore
+	call	init_dirvec_constants_3048
+	lw	a0, 52(sp)	# restore
+	addi	a0, a0, -1
+	blt	a0, zero, init_vecset_constants_ret
+	slli	a1, a0, 2
+	sw	a0, 72(sp)	# save
 	lwl	a0, min_caml_dirvecs(a1)
 	li	a1, 119
 	call	init_dirvec_constants_3048
-	lw	a0, 36(sp)	# restore
+	lw	a0, 72(sp)	# restore
 	addi	a0, a0, -1
 	call	init_vecset_constants_3051
 init_vecset_constants_ret:
-	lw	ra, 40(sp)
-	addi	sp, sp, 44
+	lw	ra, 76(sp)
+	addi	sp, sp, 80
 	jr	ra
 setup_rect_reflection_3062:
 	addi	sp, sp, -84
@@ -14103,8 +14264,8 @@ setup_surface_reflection_3065:
 	addi	sp, sp, 28
 	jr	ra
 rt_3070:
-	addi	sp, sp, -220
-	sw	ra, 216(sp)
+	addi	sp, sp, -204
+	sw	ra, 200(sp)
 	swd	a0, min_caml_image_size(0)
 	swd	a1, min_caml_image_size(4)
 	srai	a2, a0, 1
@@ -15157,7 +15318,6 @@ rt_3070:
 	call	min_caml_print_int
 	li	a0, 10
 	w	a0
-	fmv	fa0, fzero
 	fsw	fzero, 0(gp)
 	fsw	fzero, 4(gp)
 	fsw	fzero, 8(gp)
@@ -15365,7 +15525,6 @@ rt_3070:
 	lw	a1, 160(sp)	# restore
 	sw	a0, 456(a1)
 	li	a0, 113
-	fsw	fa0, 164(sp)	# save
 	mv	t4, a1
 	mv	a1, a0
 	mv	a0, t4
@@ -15511,14 +15670,14 @@ rt_3070:
 	fsw	fzero, 8(gp)
 	mv	a1, gp
 	addi	gp, gp, 12
-	sw	a0, 168(sp)	# save
+	sw	a0, 164(sp)	# save
 	lwd	a0, min_caml_n_objects(0)
 	call	min_caml_create_array
 	sw	a0, 4(gp)
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 168(sp)	# restore
+	lw	a1, 164(sp)	# restore
 	sw	a0, 472(a1)
 	fsw	fzero, 0(gp)
 	fsw	fzero, 4(gp)
@@ -15532,7 +15691,7 @@ rt_3070:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 168(sp)	# restore
+	lw	a1, 164(sp)	# restore
 	sw	a0, 468(a1)
 	fsw	fzero, 0(gp)
 	fsw	fzero, 4(gp)
@@ -15546,7 +15705,7 @@ rt_3070:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 168(sp)	# restore
+	lw	a1, 164(sp)	# restore
 	sw	a0, 464(a1)
 	fsw	fzero, 0(gp)
 	fsw	fzero, 4(gp)
@@ -15560,7 +15719,7 @@ rt_3070:
 	sw	a1, 0(gp)
 	mv	a0, gp
 	addi	gp, gp, 8
-	lw	a1, 168(sp)	# restore
+	lw	a1, 164(sp)	# restore
 	sw	a0, 460(a1)
 	li	a0, 114
 	mv	t4, a1
@@ -15572,61 +15731,95 @@ rt_3070:
 	li	a0, 9
 	li	a1, 0
 	li	a2, 0
-	call	min_caml_float_of_int
-	fli	fa1, l_data_29
-	fmul	fa0, fa0, fa1
-	fli	fa2, l_data_30
-	fsub	fa0, fa0, fa2
-	li	a0, 4
-	fsw	fa0, 172(sp)	# save
-	call	min_caml_float_of_int
-	fmul	fa0, fa0, fa1
-	fsw	fa2, 176(sp)	# save
-	fsub	fa2, fa0, fa2
-	li	a0, 0
-	fsw	fa0, 180(sp)	# save
-	flw	fa0, 164(sp)	# restore
-	flw	fa3, 172(sp)	# restore
-	fsw	fa1, 184(sp)	# save
-	sw	a2, 188(sp)	# save
-	sw	a1, 192(sp)	# save
-	fmv	fa1, fa0
-	call	calc_dirvec_3024
-	fli	fa0, l_data_26
-	flw	fa1, 180(sp)	# restore
-	fadd	fa2, fa1, fa0
-	li	a0, 0
-	li	a2, 2
-	flw	fa0, 164(sp)	# restore
-	flw	fa3, 172(sp)	# restore
-	lw	a1, 192(sp)	# restore
-	fmv	fa1, fa0
-	call	calc_dirvec_3024
-	li	a0, 3
-	li	a1, 1
-	flw	fa0, 172(sp)	# restore
-	lw	a2, 188(sp)	# restore
-	call	calc_dirvecs_3032
-	li	a0, 8
-	li	a1, 2
-	li	a2, 4
-	call	min_caml_float_of_int
-	flw	fa1, 184(sp)	# restore
-	fmul	fa0, fa0, fa1
-	flw	fa1, 176(sp)	# restore
-	fsub	fa0, fa0, fa1
-	li	a0, 4
-	call	calc_dirvecs_3032
-	li	a0, 7
-	li	a1, 4
-	li	a2, 8
 	call	calc_dirvec_rows_3037
 	lwd	a0, min_caml_dirvecs(16)
-	sw	a0, 196(sp)	# save
+	sw	a0, 168(sp)	# save
 	lw	a0, 476(a0)
-	call	setup_dirvec_constants_2833
+	lwd	a1, min_caml_n_objects(0)
+	addi	a1, a1, -1
+	blt	a1, zero, .rt_cont_59
+	slli	a2, a1, 2
+	lwl	a2, min_caml_objects(a2)
+	lw	a3, 4(a0)
+	sw	a0, 172(sp)	# save
+	lw	a0, 0(a0)
+	lw	a4, 16(a2)
+	lw	a5, 4(a2)
+	bnei	a5, 1, .rt_else_60
+	sw	a3, 176(sp)	# save
+	sw	a1, 180(sp)	# save
+	mv	a1, a2
+	call	setup_rect_table_2821
+	lw	a1, 180(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 176(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+	b	.rt_cont_61
+.rt_else_60:
+	bnei	a5, 2, .rt_else_62
+	fsw	fzero, 0(gp)
+	fsw	fzero, 4(gp)
+	fsw	fzero, 8(gp)
+	fsw	fzero, 12(gp)
+	mv	a2, gp
+	addi	gp, gp, 16
+	flw	fa0, 0(a0)
+	flw	fa1, 0(a4)
+	fmul	fa0, fa0, fa1
+	flw	fa1, 4(a0)
+	flw	fa2, 4(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	flw	fa1, 8(a0)
+	flw	fa2, 8(a4)
+	fmul	fa1, fa1, fa2
+	fadd	fa0, fa0, fa1
+	fle	a0, fa0, fzero
+	bne	a0, zero, .rt_else_64
+	fli	fa1, l_data_6
+	fdiv	fa1, fa1, fa0
+	fsw	fa1, 0(a2)
+	flw	fa1, 0(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 4(a2)
+	flw	fa1, 4(a4)
+	fdiv	fa1, fa1, fa0
+	fneg	fa1, fa1
+	fsw	fa1, 8(a2)
+	flw	fa1, 8(a4)
+	fdiv	fa0, fa1, fa0
+	fneg	fa0, fa0
+	fsw	fa0, 12(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.rt_cont_63
+.rt_else_64:
+	fsw	fzero, 0(a2)
+	slli	a0, a1, 2
+	add	t6, a3, a0
+	sw	a2, 0(t6)
+	b	.rt_cont_63
+.rt_else_62:
+	sw	a3, 176(sp)	# save
+	sw	a1, 180(sp)	# save
+	mv	a1, a2
+	call	setup_second_table_2827
+	lw	a1, 180(sp)	# restore
+	slli	a2, a1, 2
+	lw	a3, 176(sp)	# restore
+	add	t6, a3, a2
+	sw	a0, 0(t6)
+.rt_cont_63:
+.rt_cont_61:
+	addi	a1, a1, -1
+	lw	a0, 172(sp)	# restore
+	call	iter_setup_dirvec_constants_2830
+.rt_cont_59:
 	li	a1, 118
-	lw	a0, 196(sp)	# restore
+	lw	a0, 168(sp)	# restore
 	call	init_dirvec_constants_3048
 	lwd	a0, min_caml_dirvecs(12)
 	li	a1, 119
@@ -15646,36 +15839,36 @@ rt_3070:
 	call	iter_setup_dirvec_constants_2830
 	lwd	a0, min_caml_n_objects(0)
 	addi	a0, a0, -1
-	blt	a0, zero, .rt_cont_59
+	blt	a0, zero, .rt_cont_66
 	slli	a1, a0, 2
 	lwl	a1, min_caml_objects(a1)
 	lw	a2, 28(a1)
 	lw	a3, 8(a1)
 	lw	a4, 4(a1)
-	bnei	a3, 2, .rt_cont_60
+	bnei	a3, 2, .rt_cont_67
 	fli	fa0, l_data_5
 	flw	fa1, 0(a2)
 	fle	a2, fa0, fa1
-	bne	a2, zero, .rt_cont_61
-	bnei	a4, 1, .rt_else_62
+	bne	a2, zero, .rt_cont_68
+	bnei	a4, 1, .rt_else_69
 	call	setup_rect_reflection_3062
-	b	.rt_cont_63
-.rt_else_62:
-	bnei	a4, 2, .rt_cont_64
+	b	.rt_cont_70
+.rt_else_69:
+	bnei	a4, 2, .rt_cont_71
 	call	setup_surface_reflection_3065
-.rt_cont_64:
-.rt_cont_63:
-.rt_cont_61:
-.rt_cont_60:
-.rt_cont_59:
+.rt_cont_71:
+.rt_cont_70:
+.rt_cont_68:
+.rt_cont_67:
+.rt_cont_66:
 	li	a0, 0
 	li	a1, 0
 	flwd	fa0, min_caml_scan_pitch(0)
 	lwd	a2, min_caml_image_center(4)
 	sub	a0, a0, a2
-	fsw	fa0, 200(sp)	# save
+	fsw	fa0, 184(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 200(sp)	# restore
+	flw	fa1, 184(sp)	# restore
 	fmul	fa0, fa1, fa0
 	flwd	fa1, min_caml_screeny_dir(0)
 	fmul	fa1, fa0, fa1
@@ -15704,23 +15897,23 @@ rt_3070:
 	li	a1, 0
 	li	a0, 2
 	lwd	a2, min_caml_image_size(4)
-	bgt	a2, zero, .rt_else_65
-	lw	ra, 216(sp)
-	addi	sp, sp, 220
+	bgt	a2, zero, .rt_else_72
+	lw	ra, 200(sp)
+	addi	sp, sp, 204
 	jr	ra
-.rt_else_65:
+.rt_else_72:
 	lwd	a2, min_caml_image_size(4)
 	addi	a2, a2, -1
-	sw	a1, 204(sp)	# save
-	ble	a2, zero, .rt_cont_67
+	sw	a1, 188(sp)	# save
+	ble	a2, zero, .rt_cont_74
 	li	a2, 1
 	flwd	fa0, min_caml_scan_pitch(0)
 	lwd	a3, min_caml_image_center(4)
-	sw	a0, 208(sp)	# save
+	sw	a0, 192(sp)	# save
 	sub	a0, a2, a3
-	fsw	fa0, 212(sp)	# save
+	fsw	fa0, 196(sp)	# save
 	call	min_caml_float_of_int
-	flw	fa1, 212(sp)	# restore
+	flw	fa1, 196(sp)	# restore
 	fmul	fa0, fa1, fa0
 	flwd	fa1, min_caml_screeny_dir(0)
 	fmul	fa1, fa0, fa1
@@ -15737,15 +15930,15 @@ rt_3070:
 	lwd	a0, min_caml_image_size(0)
 	addi	a1, a0, -1
 	lw	a0, 48(sp)	# restore
-	lw	a2, 208(sp)	# restore
+	lw	a2, 192(sp)	# restore
 	fmv	ft8, fa2
 	fmv	fa2, fa0
 	fmv	fa0, fa1
 	fmv	fa1, ft8
 	call	pretrace_pixels_2987
-.rt_cont_67:
+.rt_cont_74:
 	li	a0, 0
-	lw	a1, 204(sp)	# restore
+	lw	a1, 188(sp)	# restore
 	lw	a2, 16(sp)	# restore
 	lw	a3, 32(sp)	# restore
 	lw	a4, 48(sp)	# restore
@@ -15756,8 +15949,8 @@ rt_3070:
 	lw	a2, 48(sp)	# restore
 	lw	a3, 16(sp)	# restore
 	call	scan_line_3004
-	lw	ra, 216(sp)
-	addi	sp, sp, 220
+	lw	ra, 200(sp)
+	addi	sp, sp, 204
 	jr	ra
 	.data
 l_data_31:	# 128.000000

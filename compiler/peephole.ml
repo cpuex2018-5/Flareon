@@ -186,6 +186,6 @@ let f (e : func) =
        let e' = elevate_bc e' in
        let e' = List.map (fun (x, body) -> (x, cond [] body)) e' in
        let e' = add_extra_labels e' in
-       if e' = e then (print_func e; e) else inner_ e' (n - 1))
+       if e' = e then e else inner_ e' (n - 1))
   in
   inner_ e 100
