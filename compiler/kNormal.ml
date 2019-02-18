@@ -79,7 +79,7 @@ let string_of_t (exp : t) =
     | MakeArray(C(x), (y, _)) -> indent ^ Printf.sprintf "MakeArray(%d, %s)\n" x y
   and
     str_of_fundef (f : fundef) (depth : int) =
-    (fst f.name) ^ " (" ^ (String.concat ", " (List.map fst f.args)) ^ ") =\n" ^ (str_of_t f.body depth)
+    Printf.sprintf "%s (%s) : %s =\n%s" (fst f.name) (String.concat ", " (List.map fst f.args)) (Type.string_of_t (snd f.name)) (str_of_t f.body depth)
   in str_of_t exp 0
 
 (* [WEEK1 Q1] pretty print for KNormal.t *)
