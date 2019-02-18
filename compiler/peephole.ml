@@ -57,7 +57,7 @@ let rec early_return (e : func) = match e with
   | (x, [Ret]) :: xs -> (x, [Ret]) :: early_return (dir_ret x [Ret] xs)
   | (x, ([_; Ret] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
   | (x, ([_; _; Ret] as ret)) :: xs -> (x, ret) :: early_return (dir_ret x ret xs)
-  | (x, ret) :: xs when List.length ret < 10 -> (match tailb_label ret with
+  | (x, ret) :: xs when List.length ret < 30 -> (match tailb_label ret with
       | Some _ -> (x, ret) :: early_return (dir_ret x ret xs)
       | None -> (x, ret) :: (early_return xs))
   | xe :: xs -> xe :: (early_return xs)
