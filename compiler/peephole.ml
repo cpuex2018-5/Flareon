@@ -135,11 +135,19 @@ let rec concat (e : func) = match e with
   | (l1, []) :: (l2, e') :: xs -> concat ((l1 @ l2, e') :: xs)
   | x :: xs -> x :: (concat xs)
 
+let rec squash (e : func) = match e with
+  | [] -> []
+  | (x, e1) :: (y, e2) :: xs when e1 = e2 ->
+    squash @@ (x, e1) :: (subst y (List.hd x) xs)
+  | ([x], e1) :: (y, e2) :: (z, e3) :: xs when e3 = (e2 @ [B x]) ->
+    squash @@ ([x], e1) :: (y, e2) :: (subst z (List.hd y) xs)
+  | x :: xs -> x :: (squash xs)
+
 let f (e : func) =
   let rec inner_ e n =
     if n = 0 then e else
       (let e' = concat e in
-       let e' = List.rev (elim_label @@ early_return (List.rev e')) in
+       let e' = List.rev (squash @@ elim_label @@ early_return (List.rev e')) in
        let e' = elevate_bc e' in
        let e' = List.map (fun (x, body) -> (x, cond [] body)) e' in
        let e' = add_extra_labels e' in
