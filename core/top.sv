@@ -55,7 +55,7 @@ logic [4:0] e_rd, e_rd_1, e_rd_2, e_rd_3;
 logic [4:0] e_rs1, e_rs1_1;
 logic [4:0] e_rs2, e_rs2_1;
 
-logic [31:0] e_imm_sham, e_imm_sham_1;
+logic signed [31:0] e_imm_sham, e_imm_sham_1;
 logic [31:0] e_imm_i, e_imm_i_1;
 logic [31:0] e_imm_s, e_imm_s_1;
 logic [31:0] e_imm_u, e_imm_u_1;
@@ -103,7 +103,7 @@ assign e_funct = b_rdata_reg[14:12];
 assign e_rd = b_rdata_reg[11:7];
 assign e_rs1 = b_rdata_reg[19:15];
 assign e_rs2 = b_rdata_reg[24:20];
-assign e_imm_sham = {27'd0, b_rdata_reg[24:20]};
+assign e_imm_sham = b_rdata_reg[24]?{27'd134217727,b_rdata_reg[24:20]}:{27'd0, b_rdata_reg[24:20]};
 assign e_imm_i = b_rdata_reg[31]?{20'd1048575,b_rdata_reg[31:20]}:{20'd0,b_rdata_reg[31:20]};
 assign e_imm_s = b_rdata_reg[31]?{20'd1048575, b_rdata_reg[31:25],b_rdata_reg[11:7]}:{20'd0, b_rdata_reg[31:25],b_rdata_reg[11:7]};
 assign e_imm_u = {b_rdata_reg[31:12],12'd0};
