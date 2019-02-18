@@ -113,7 +113,7 @@ let defined (e : t) = match e with
   | Not(rd, _) | Neg(rd, _)
   | Xor(rd, _, _) | Add(rd, _, _) | Sub(rd, _, _) | Mul(rd, _, _) | Div(rd, _, _)
   | Sll(rd, _, _) | Lw(rd, _, _, _)
-  | FMv(rd, _) | FNeg(rd, _)
+  | FMv(rd, _) | FNeg(rd, _) | FInv(rd, _)
   | FAdd(rd, _, _) | FSub(rd, _, _) | FMul(rd, _, _) | FDiv(rd, _, _)
   | FEq(rd, _, _) | FLE(rd, _, _)
   | FAbs(rd, _) | FSqrt(rd, _) | Flw(rd, _, _, _) -> [rd]
@@ -121,7 +121,7 @@ let defined (e : t) = match e with
 
 let eq rs x = match rs with `V(y) -> y = x | _ -> false
 let used (x : Id.t) (e : t) = match e with
-  | Mv(_, rs) | Not(_, rs) | Neg(_, rs) | FMv(_, rs) | FNeg(_, rs) | FAbs(_, rs) | FSqrt(_, rs)
+  | Mv(_, rs) | Not(_, rs) | Neg(_, rs) | FMv(_, rs) | FNeg(_, rs) | FInv(_, rs) | FAbs(_, rs) | FSqrt(_, rs)
   | Lw(_, _, `V(rs), _) -> rs = x
   | Sw(rs1, _, rs2, _) -> eq rs1 x || eq rs2 x
   | Xor(_, rs1, rs2) | Add(_, rs1, rs2) | Sub(_, rs1, rs2) | Mul(_, rs1, rs2) | Div(_, rs1, rs2)

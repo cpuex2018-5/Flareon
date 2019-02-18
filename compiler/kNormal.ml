@@ -192,6 +192,7 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
   | Syntax.Bool(b) -> Int(if b then 1 else 0), Type.Int (* true -> 1, false -> 0 (caml2html: knormal_bool) *)
   | Syntax.Int(i) -> Int(i), Type.Int
   | Syntax.Float(d) -> Float(d), Type.Float
+  | Syntax.FDiv(Float(-1.0), f, p) -> g env (Syntax.FNeg(FDiv(Float(1.0), f, p), p)) (* hack for using finv *)
   | Syntax.Not(Xor(e1, Not(e2, _), _), p) | Syntax.Not(Xor(Not(e1, _), e2, _), p) ->
     g env (Xor(e1, e2, p))
   | Syntax.Not(e, p) ->
