@@ -106,47 +106,6 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
   | Closure.AppDir(Id.L("min_caml_fabs"), [x]) -> Ans(FAbs(x))
   | Closure.AppDir(Id.L("min_caml_sqrt"), [x]) -> Ans(FSqrt(x))
   | Closure.AppDir(Id.L("min_caml_print_char"), [x]) -> Ans(Write(x))
-(*
-  | Closure.AppDir(Id.L("min_caml_float_of_int"), [x]) ->
-    let tf = Id.gentmp Type.Float in
-    let ti = Id.gentmp Type.Int in
-    let x' = Id.gentmp Type.Int in
-    let ans = Id.gentmp Type.Float in
-    let ans' = Id.gentmp Type.Float in
-    let e_pos = Let((x', Type.Int), Add(ti, `V(x)),
-                    seq(Sw(x', reg_sp, `C(-4)),
-                        Let((ans, Type.Float), Flw(reg_sp, `C(-4)), Ans(FSub(ans, tf))))) in
-    let e_neg = Let((x', Type.Int), Sub(ti, `V(x)),
-                    seq(Sw(x', reg_sp, `C(-4)),
-                        Let((ans, Type.Float), Flw(reg_sp, `C(-4)),
-                            Let((ans', Type.Float), FSub(ans, tf), Ans(FNeg(ans')))))) in
-    Let((tf, Type.Float), FLi(Id.L("L_8388608")),
-        Let((ti, Type.Int), Li(1258291200),
-            Ans(IfGE(x, `C(0), e_neg, e_pos))))
-*)
-(*
-  | Closure.AppDir(Id.L("min_caml_int_of_float"), [x]) ->
-    let tf = Id.gentmp Type.Float in
-    let ti = Id.gentmp Type.Int in
-    let is_pos = Id.gentmp Type.Int in
-    let x1 = Id.gentmp Type.Float in
-    let x2 = Id.gentmp Type.Float in
-    let x3 = Id.gentmp Type.Int in
-    let x4 = Id.gentmp Type.Int in
-    let e_pos = Let((x1, Type.Float), FAdd(x, tf),
-                    seq(Fsw(`V(x1), reg_sp, `C(-4)),
-                        Let((x3, Type.Int), Lw(reg_sp, `C(-4)),
-                            Ans(Sub(x3, `V(ti)))))) in
-    let e_neg = Let((x1, Type.Float), FAbs(x),
-                    Let((x2, Type.Float), FAdd(x1, tf),
-                        seq(Fsw(`V(x2), reg_sp, `C(-4)),
-                            Let((x3, Type.Int), Lw(reg_sp, `C(-4)),
-                                Let((x4, Type.Int), Sub(x3, `V(ti)), Ans(Neg(x4))))))) in
-    Let((tf, Type.Float), FLi(Id.L("L_8388608")),
-        Let((ti, Type.Int), Li(1258291200),
-            Let((is_pos, Type.Int), FLE(FZero, `V(x)),
-                Ans(IfEq(is_pos, `C(0), e_neg, e_pos)))))
-*)
   | Closure.AppDir(Id.L(x), ys) ->
     let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
     Ans(CallDir(Id.L(x), int, float))

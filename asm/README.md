@@ -3,15 +3,18 @@
 ## Usage
 
 ### assembler
-
-    $ ./setup.sh
-    $ make
-    $ ./main [-a] [-v | -d] hoge.s  # `hoge.bin` will be generated
+```
+$ ./setup.sh    # makes symbolic link of libraries
+$ make
+$ ./main [-a] [-v | -d] hoge.s  # `hoge.bin` will be generated
+```
 
 for tests:
 
-    $ make bingen_test
-    $ ./bingen_test
+```
+$ make bingen_test
+$ ./bingen_test
+```
 
 #### options
 
@@ -74,6 +77,7 @@ Wikiを参照:
     * `minrt.s` をファイル名の部分文字列として含むアセンブリを入力とした場合、 `libcommon.S` および `libcontest.S` がリンクされます
     * その他の場合、 `libcommon.S` および `libcontest.S` がリンクされます
     * `libcontest.S` ではバイナリ入力、 `libmincaml.S` ではアスキー入力にそれぞれ対応した `read_int` & `read_float` が定義されています
+    * アセンブラを実行する場合、working directoryにこれらのライブラリ(へのリンク)を置くようにしてください
 * `.file`, `.option`, `.align`, `.globl`, `.type`, `.size`, `.ident` などのマーカーは読み飛ばします
 * 即値は10進数として解釈されます
 * プログラムの最後に32bitの0の羅列がつきます

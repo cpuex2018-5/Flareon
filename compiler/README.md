@@ -1,10 +1,9 @@
 # Flareon Compiler
 
-## 使い方
-### まだコンパイラをビルドしたことがないとき
-
+## Usage
+### build
 ```
-$ ./to_flareon    # シンボリックリンクが張られる
+$ make
 ```
 
 ### コンパイル&アセンブル方法
@@ -32,5 +31,3 @@ build.shのオプションの意味:
 ```
 $ ./build.sh [-d|-v] raytracer/minrt.ml
 ```
-
-* minrt.mlの最後の行では出力画像のサイズを指定しています(`rt 128 128` では128 x 128)

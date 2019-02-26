@@ -36,6 +36,7 @@ let rec appear_label label func =
   | [] -> false
   | (_, x) :: xs -> appear_label' label x || appear_label label xs
 
+(* 使われていないラベルを消す *)
 let rec elim_label (e : func) = match e with
   | [] -> []
   | (x, e1) :: (((l, e2) :: xs') as xs) ->
@@ -44,13 +45,14 @@ let rec elim_label (e : func) = match e with
      | x' -> (x', e1) :: (elim_label xs))
   | x :: xs -> x :: elim_label xs
 
-let dir_ret (a : Id.l list) (ret : t list) (e : func) =
+let dir_ret (a : Id.l list) (ret : t list) (e : func) = (* helper function *)
   let inner_ inst = match inst with
     | B(l) when List.mem l a -> ret
     | _ -> [inst]
   in
   List.map (fun (l, body) -> l, List.concat @@ List.map inner_ body) e
 
+(* tail duplicationのようなことをする *)
 let rec early_return (e : func) = match e with
   | [] -> []
   | (x, [B f]) :: xs -> ([], [B f]) :: early_return (subst x f xs)
@@ -78,6 +80,13 @@ let rec add_extra_labels (e : func) = match e with
     add_extra_labels xs
   | x :: xs -> x :: (add_extra_labels xs)
 
+(*
+        li   a6, 0
+        b    hoge
+    hoge:
+        beqi a6, 0, fuga
+  のような部分があったときに、条件分岐beqをliの後につなげるようにする -> 分岐結果の静的な解析が可能に
+*)
 let rec elevate_bc (e : func) = match e with
   | [] -> []
   | (l, e) :: xs ->
@@ -101,12 +110,6 @@ let rec elevate_bc (e : func) = match e with
       | x :: xs -> x :: (elevate_bc' xs)
     in
     (l, elevate_bc' e) :: elevate_bc xs
-
-(*
-    bne     a0, zero, .solver_rect_else_24
-    li      a0, 0
-  のような無駄なliを減らす
-*)
 
 let defined (e : t) = match e with
   | Li(rd, _) | FLi(rd, _) | SetL(rd, _) | SetDL(rd, _) | Mv(rd, _)
@@ -142,6 +145,11 @@ let rec overwritten_before_use r cont = match cont with
   | x :: xs -> false
   | [] -> false
 
+(*
+    bne     a0, zero, .solver_rect_else_24
+    li      a0, 0
+  のような無駄なliを減らす
+*)
 let rec cond env (e : Raw.t list) = match e with
   | [] -> []
   | x :: xs when (defined x <> []) &&
@@ -163,6 +171,7 @@ let rec cond env (e : Raw.t list) = match e with
       | Ret -> [x]
       | _ -> x :: cond env xs)
 
+(* labelやbodyが空のエントリがあったら前後とつなげる *)
 let rec concat (e : func) = match e with
   | [] -> []
   | ([], []) :: xs -> concat xs
@@ -170,6 +179,7 @@ let rec concat (e : func) = match e with
   | (l1, []) :: (l2, e') :: xs -> concat ((l1 @ l2, e') :: xs)
   | x :: xs -> x :: (concat xs)
 
+(* 重複する部分をつぶす *)
 let rec squash (e : func) = match e with
   | [] -> []
   | (x, e1) :: (y, e2) :: xs when e1 = e2 ->

@@ -8,6 +8,7 @@ type cmp_typ =
   | GE  of Id.t * id_or_imm
   | LT  of Id.t * id_or_imm
 
+(* 同じ比較演算が複数回行われている部分がなぜかあったので、それを避ける最適化 *)
 let rec g cenv e =
   match e with
   | Let(xt, IfEq(x, y, e1, e2), e) when List.mem (Eq(x, y)) cenv -> concat (g cenv e1) xt (g cenv e)

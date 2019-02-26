@@ -7,26 +7,12 @@ let print_asm = ref false
 let rec iter n e = (* optimization (caml2html: main_iter) *)
   Format.eprintf "iteration %d@." n;
   if n = 0 then e else (
-    (* print_endline "------------------------------";
-       KNormal.print_t e; *)
     let e' = Common.f e in
-    (* print_endline "-------------After Common.f-----------------";
-       KNormal.print_t e'; *)
     let e' = Beta.f !is_verbose e' in
-    (* print_endline "---------------After Beta.f-----------------";
-       KNormal.print_t e'; *)
     let e' = Assoc.f e' in
-    (* print_endline "--------------After Assoc.f-----------------";
-       KNormal.print_t e'; *)
     let e' = Inline.f !is_verbose e' in
-    (* print_endline "-------------After Inline.f-----------------";
-       KNormal.print_t e'; *)
     let e' = ConstFold.f e' in
-    (* print_endline "-------------After ConstFold.f--------------";
-       KNormal.print_t e'; *)
     let e' = Elim.f !is_verbose e' in
-    (* print_endline "---------------After Elim.f-----------------";
-       KNormal.print_t e'; *)
     if e = e' then e else
       iter (n - 1) e'
   )
@@ -36,18 +22,16 @@ let lexbuf outchan l = (* compile the buffer and put it to outchan (caml2html: m
   let e = Parser.exp Lexer.token l in
   let e = Typing.f e in
   let e = KNormal.f e in
-  print_endline "-----------After KNormal.f--------------";
-  (* KNormal.print_t e; *)
+  (* print_endline "-----------After KNormal.f--------------"; *)
   let e = Alpha.f e in
   let e = iter !limit e in
   (* let e = Lift.f e in *)
   if !print_k then KNormal.print_t e;
   let e = Closure.f !is_verbose e in
-  print_endline "-----------After Closure.f-----------------";
+  (* print_endline "-----------After Closure.f-----------------"; *)
   if !print_closure then Closure.print_prog e;
   (* let e = TupleOpt.f e in *)
-  (* Closure.print_prog e; *)
-  print_endline "-----------After Virtual.f-----------------";
+  (* print_endline "-----------After Virtual.f-----------------"; *)
   let e = Virtual.f e in
   let e = Simm.f e in
   let e = Simm.f e in

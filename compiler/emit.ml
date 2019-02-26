@@ -134,18 +134,11 @@ and g' (buf : Raw.func) e : Raw.func =
   | NonTail(z), IfGE(x, y, e1, e2) ->
     g'_non_tail_if buf (NonTail(z)) x y e1 e2 "bge" "blt"
 
-  (* INFO: caller-save regs: ra, t*, a* / callee-save regs: sp, fp, s* *)
   | Tail, CallCls(f, iargs, fargs) ->
-    (* TODO: tレジスタから使うようにする(?) *)
     adds [Lw("ra", `C(0), `V(reg_cl), None); Jalr] buf
   | Tail, CallDir(f, iargs, fargs) ->
     add (Call(f)) buf
   | NonTail(a), CallCls(f, iargs, fargs) ->
-(*
-    let ss = stacksize() + 4 in
-    Printf.bprintf buf "\taddi\tsp, sp, %d\n" (-1 * ss);
-    Printf.bprintf buf "\tsw\tra, %d(sp)\n" (ss - 4);
-*)
     let buf' = adds [Lw("ra", `C(0), `V(reg_cl), None); Jalr] buf in
     if List.mem a allregs && a <> regs.(0) then
       add (Mv(a, regs.(0))) buf'
@@ -153,16 +146,7 @@ and g' (buf : Raw.func) e : Raw.func =
       add (FMv(a, fregs.(0))) buf'
     else
       buf'
-(*
-    Printf.bprintf buf "\tlw\tra, %d(sp)\n" (ss - 4);
-    Printf.bprintf buf "\taddi\tsp, sp, %d\n" ss;
-*)
   | (NonTail(a), CallDir(f, iargs, fargs)) ->
-(*
-    let ss = stacksize() + 4 in
-    Printf.bprintf buf "\taddi\tsp, sp, %d\n" (-1 * ss);
-    Printf.bprintf buf "\tsw\tra, %d(sp)\n" (ss - 4);
-*)
     let buf' = add (Call(f)) buf in
     if List.mem a allregs && a <> regs.(0) then
       add (Mv(a, regs.(0))) buf'
@@ -170,10 +154,6 @@ and g' (buf : Raw.func) e : Raw.func =
       add (FMv(a, fregs.(0))) buf'
     else
       buf'
-(*
-    Printf.bprintf buf "\tlw\tra, %d(sp)\n" (ss - 4);
-    Printf.bprintf buf "\taddi\tsp, sp, %d\n" ss;
-*)
 and g'_branch buf mnemo rs1 rs2 label =
   match rs2 with
   | `V(rs2) ->

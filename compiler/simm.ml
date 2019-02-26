@@ -5,11 +5,8 @@ let label_1 = ref (Id.L(""))
 let rec g env lenv fenv f1env = function (* 命令列の12bit即値最適化 *)
   | Ans(exp) -> Ans(g' env lenv fenv f1env exp)
   | Let((x, t), Li(i), e) when -2048 <= i && i < 2047 ->
-    (* Format.eprintf "found simm12 %s = %d@." x i; *)
     let e' = g (M.add x i env) lenv fenv f1env e in
-    if List.mem x (fv e') then Let((x, t), Li(i), e') else
-      ((* Format.eprintf "erased redundant Set to %s@." x; *)
-        e')
+    if List.mem x (fv e') then Let((x, t), Li(i), e') else e'
   | Let((x, t), FMv("%fzero"), e) ->
     let e' = g env lenv (x :: fenv) f1env e in
     if List.mem x (fv e') then Let((x, t), FMv("%fzero"), e') else e'
@@ -17,7 +14,6 @@ let rec g env lenv fenv f1env = function (* 命令列の12bit即値最適化 *)
     let e' = g env lenv fenv (x :: f1env) e in
     if List.mem x (fv e') then Let((x, t), FLi(l), e') else e'
   | Let(xt, Sll(y, `C(i)), e) when M.mem y env -> (* for array access *)
-    (* Format.eprintf "erased redundant Sll on %s@." x; *)
     g env lenv fenv f1env (Let(xt, Li((M.find y env) lsl i), e))
   | Let((x, t), SetDL(l), e) ->
     let e' = g env (M.add x l lenv) fenv f1env e in

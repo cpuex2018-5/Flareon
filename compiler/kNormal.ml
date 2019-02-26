@@ -308,9 +308,6 @@ let rec g (env : Type.t M.t) (exp : Syntax.t) : t * Type.t = (* where K-normaliz
              (fun x -> bind (xs @ [x]) e2s) in
        bind [] e2s (* left-to-right evaluation *)
      | _ -> assert false)
-  (* | Syntax.App(Syntax.Var("tan"), [e2], _) ->
-     insert_let (g env e2)
-      (fun x -> ExtFunApp("tan", [x]), Type.Float) *)
   | Syntax.App(e1, e2s, _) ->
     (match g env e1 with
      | _, Type.Fun(_, t) as g_e1 ->

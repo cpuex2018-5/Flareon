@@ -1,3 +1,10 @@
+(*
+ * minrt.mlのglobal変数の数などを管理する。
+ * raytracer/globals.sは以下のprint_globalsを使って出力させたものを使っている。
+ * 現在のコンパイラではglobal変数の合計の大きさの情報(global_sizeの返り値)のみしか使っていないため、
+ * このファイルは必要ないといえば必要ないかも
+*)
+
 external castToInt : float -> int32 = "castToInt"
 
 type global = {
