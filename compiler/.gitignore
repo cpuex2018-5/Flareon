@@ -15,19 +15,6 @@ parser.mli
 *.bin
 
 sandbox/
-shootout/x86/
-to_x86
-x86/
-
-asm.mli
-asm.ml
-shootout/Makefile
-simm.ml
-emit.ml
-regAlloc.ml
-virtual.ml
-libmincaml.S
-
 bytemark/
 shootout/
 raytracer/
