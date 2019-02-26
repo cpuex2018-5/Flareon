@@ -1,10 +1,10 @@
-# eevee assembler
+# Flareon Assembler
 
 ## Usage
 
 ### assembler
 
-    $ ./setup.sh        # only before first build
+    $ ./setup.sh
     $ make
     $ ./main [-a] [-v | -d] hoge.s  # `hoge.bin` will be generated
 
@@ -41,13 +41,10 @@ $ ./main -v target/fib.s
     0000 0000 0000 0101 0000 0111 1001 0011
 ```
 
-* `-d` : debug mode (pcの値を先頭につけたアセンブリを[入力].asmに出力)
+* `-d` : debug mode (pcの値を先頭につけたアセンブリをstdoutに出力)
 
 ```
-$ ./main -d target/fib.s  # target/fib.asm will be generated as well as target/fib.bin
-```
-
-```
+$ ./main -d target/fib.s
 	_min_caml_start: # main entry point
 (   0)		addi	sp, sp, -8
 (   4)		sw	ra, 4(sp)
@@ -66,40 +63,18 @@ $ ./main -d target/fib.s  # target/fib.asm will be generated as well as target/f
 * `-a` : ascii mode (バイナリファイルではなく`0`, `1`でのASCIIファイルを出力する, vivadoのシミュレーション用)
     * `-v`, `-d` と併用可能
 
-## Notes
-* `min-caml-asm`: min-camlで吐いたアセンブリ (`./setup.sh` によって作られる)
-* `test` : テスト用に作った色々なアセンブリ
+## Instruction set
+Wikiを参照:
+* <https://github.com/cpuex2018-5/Flareon/wiki/Flareon-ISA>
+* <https://github.com/cpuex2018-5/Flareon/wiki/Flareon-Instruction-Format>
 
-## Specification
-### eevee ISA
-See [Wiki](https://github.com/cpuex2018-5/eevee/wiki/eevee-ISA-extension).
 
-### Pseudo-instructions
-See [Wiki](https://github.com/cpuex2018-5/eevee/wiki/eevee-ISA-extension).
-
-### その他, 更新logなど
-* ファイルの先頭の
-
-```
-.file    "fib.c"
-.option  nopic
-.align   1
-.globl   fib
-.type    fib, @function
-```
-
-  ここらへんの情報はとりあえず全部読み飛ばしている(コンパイラの実装次第では対処が必要になりそう)
-
-* immediate valueは10進数と解釈することにした
-
-* pseudo-instruction `li` の挙動を修正した(即値が大きい場合は2命令になる)
-
-* 吐き出すバイナリファイルに拡張子 `.bin` をつけるようにしました
-
-* プログラムの最後に32bitの0の羅列がつくようになりました(10/29)
-
-* 浮動小数演算のround modeの情報はデコードする際は読み捨ててください
-
-* コンテストでの入力用に最適化したライブラリ (`libcontest.S`) と普通のライブラリ (`libmincaml.S`) を分けました
-    * 共通のものは `libcommon.S` に入れました
-    * `minrt.s` を部分文字列として含むアセンブリをアセンブラに通すと`libcontest.S` と`libcommon.S` が、それ以外のアセンブリは `libmincaml.S` と `libcommon.S` がリンクされます
+## その他
+* このアセンブラ内でライブラリのリンクの処理も行なっています。 `libcommon.S` および、 `libmincaml.S` または `libcontest.S` のいずれかの2つのライブラリがリンクされます
+    * `minrt.s` をファイル名の部分文字列として含むアセンブリを入力とした場合、 `libcommon.S` および `libcontest.S` がリンクされます
+    * その他の場合、 `libcommon.S` および `libcontest.S` がリンクされます
+    * `libcontest.S` ではバイナリ入力、 `libmincaml.S` ではアスキー入力にそれぞれ対応した `read_int` & `read_float` が定義されています
+* `.file`, `.option`, `.align`, `.globl`, `.type`, `.size`, `.ident` などのマーカーは読み飛ばします
+* 即値は10進数として解釈されます
+* プログラムの最後に32bitの0の羅列がつきます
+* 浮動小数演算のround modeの情報はダミーです
