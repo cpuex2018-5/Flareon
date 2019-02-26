@@ -51,9 +51,8 @@ void BinGen::ReadLabels(std::string input) {
         return;
     }
 
+    // The input wasn't a label.
     if (mnemo.back() != ':') {
-        // The input wasn't a label.
-
         // Some pseudo-instructions will expand to two instrs
         if (mnemo == "la" || mnemo == "ret" || mnemo == "call" || mnemo == "fli" || mnemo == "tail") {
             nline_ += 2;
@@ -73,12 +72,12 @@ void BinGen::ReadLabels(std::string input) {
             ParseOffsetLabel(arg[1], &imm, &label);
             assert(data_map_.count(label) > 0);
             if (IsImmOutOfRange(data_map_[label] + stoi(imm), 12)) {
-                printf("lwd/swd/flwd/fswd out of range ;(\n");
+                printf("lwd/swd/flwd/fswd out of range\n");
                 nline_ += 3;
                 return;
             }
         }
-        // ラベルの値は
+        // ラベルの値
         if (mnemo == "lda" && IsImmOutOfRange(SolveDataLabel(arg[1]), 12)) {
             nline_ += 2;
             return;
@@ -92,7 +91,6 @@ void BinGen::ReadLabels(std::string input) {
         // Don't count these markers
         if (mnemo == ".file" || mnemo == ".option" || mnemo == ".align" ||
             mnemo == ".globl" || mnemo == ".type" || mnemo == ".size" || mnemo == ".ident") {
-            // std::fprintf(stderr, "[INFO] |%s| was ignored\n", input.c_str());
             return;
         }
 
@@ -382,7 +380,6 @@ BinGen::Inst BinGen::Convert(std::string input) {
     }
     else if (mnemo == "b") {
         assert(1 == arg.size());
-        // TODO: bgeじゃなくbeqにする？
         inst.set_fst(branch("bge", "zero", "zero", SolveLabel(arg[0])));
     }
     else if (mnemo == "jr") {
@@ -740,7 +737,6 @@ void BinGen::CheckImmediate(uint32_t imm, int range, std::string func_name) {
     // mask & imm  : immの上位(32 - range)bitが全部0なら0
     // mask & ~imm : immの上位(32 - range)bitが全部1なら0
     if (mask & imm && mask & (~imm)) {
-        //$BId9fIU(B range bit$B?t$N:GBg$H:G>.$KF~$C$F$$$k$+!)(B
         std::cerr << "\x1b[31m[ERROR](" << func_name << "): The immediate value " << imm << " should be smaller than 2 ^ " << range << "\x1b[39m\n";
         exit(1);
     }
@@ -799,12 +795,4 @@ uint32_t BinGen::SolveDataLabel(std::string label) {
         return 0;
     }
     return data_map_[label] * 4;
-}
-
-void print_binary(int val){
-  //for debug
-  for(int i = 31;i>=0;i--){
-    printf("%d ",((val>>i)&0x1));
-  }
-  printf("\n");
 }

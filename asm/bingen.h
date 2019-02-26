@@ -129,8 +129,6 @@ class BinGen {
         std::map<std::string, int> data_map_;
         const std::map<std::string, int> regmap_;
         const std::map<std::string, int> fregmap_;
-
-        void print_binary(uint32_t inst);
 };
 
 #endif  // __BINGEN_H__

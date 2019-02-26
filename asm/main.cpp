@@ -47,8 +47,12 @@ int main(int argc, char* argv[])
     }
 
     const bool is_minrt = infile.size() >= 7 && infile.substr(infile.size() - 7, 5) == "minrt";
+
+    // Input library (read_int, read_float)
     std::string iolibname = is_minrt ?  "libcontest.S" : "libmincaml.S";
+    // common library for other built-in functions
     std::string cmnlibname = "libcommon.S";
+
     std::ifstream ifs(infile), iolib(iolibname), cmnlib(cmnlibname);
     if (ifs.fail() || iolib.fail() || cmnlib.fail()) {
         std::cerr << "ERROR: Failed to open the file" << std::endl;
@@ -67,16 +71,16 @@ int main(int argc, char* argv[])
         while(getline(glbifs, str))
             bingen.ReadLabels(str);
     }
-    while (getline(ifs, str))
-        // Parse the input.
-        bingen.ReadLabels(str);
 
+    while (getline(ifs, str))
+        bingen.ReadLabels(str);
     // link the whole library.
     while (getline(iolib, str))
         bingen.ReadLabels(str);
     while (getline(cmnlib, str))
         bingen.ReadLabels(str);
 
+    // Get ready for the round 2
     bingen.OnReadLabelsCompleted();
     ifs.clear();
     ifs.seekg(0, std::ios::beg);
@@ -104,4 +108,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-
