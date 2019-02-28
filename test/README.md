@@ -1,4 +1,4 @@
-## test (compiler, asm, simulator)
+# testing compiler, asm & simulator
 
 ### setup (初回のみ)
 ```
@@ -7,7 +7,7 @@ $ ./setup.sh    # 初回のみ
 
 `min-caml-asm/` 以下に、 `../compiler/min-caml` でコンパイルしたgcd, fib, ack, mandelbrot, minrtのアセンブリへのシンボリックリンクがつくられる。
 
-### minrt.mlのコンパイルについて
+### minrt.mlをコンパイル&アセンブルして動かしてみる
 
 1. `../compiler/ `のディレクトリで次を実行
 ```
