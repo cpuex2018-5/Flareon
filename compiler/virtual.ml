@@ -196,7 +196,34 @@ let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.fv = zts; Closu
 
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
 let f (Closure.Prog(fundefs, e)) =
-  data := [];
+  data := [
+    (* libcommon.Sで使用する即値 *)
+    (Id.L("L_1"), 1.0);
+    (Id.L("L_2"), 2.0);
+    (Id.L("L_8388608"), 8388608.0);
+    (Id.L("L_10"), 10.0);
+    (Id.L("L_PI4"), 0.785398);
+    (Id.L("L_PI2"), 1.570796);
+    (Id.L("L_PI"), 3.141593);
+    (Id.L("L_2PI"), 6.283185);
+    (Id.L("L_S3"), 0.16666668);
+    (Id.L("L_S5"), 0.008332824);
+    (Id.L("L_S7"), 0.00019587841);
+    (Id.L("L_C2"), 0.5);
+    (Id.L("L_C4"), 0.04166368);
+    (Id.L("L_C6"), 0.0013695068);
+    (Id.L("L_Atan1"), 0.437500);
+    (Id.L("L_Atan2"), 2.437500);
+    (Id.L("L_A3"), 0.3333333);
+    (Id.L("L_A5"), 0.2);
+    (Id.L("L_A7"), 0.142857142);
+    (Id.L("L_A9"), 0.111111104);
+    (Id.L("L_A11"), 0.08976446);
+    (Id.L("L_A13"), 0.060035485);
+    (Id.L("L_T3"), 0.333333);
+    (Id.L("L_T5"), 0.133333);
+    (Id.L("L_T7"), 0.053968);
+  ];
   let fundefs = List.map h fundefs in
   let e = g M.empty e in
   Prog(!data, fundefs, e)

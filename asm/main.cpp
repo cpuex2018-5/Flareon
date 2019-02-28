@@ -65,20 +65,41 @@ int main(int argc, char* argv[])
     std::string str;
     BinGen bingen(std::move(ofs), std::move(coefs), is_verbose, is_debug, is_ascii);
 
+    // Round 0: Read Data Label
+    while (getline(ifs, str))
+        bingen.ReadDataLabels(str);
+    while (getline(cmnlib, str))
+        bingen.ReadDataLabels(str);
+    while (getline(iolib, str))
+        bingen.ReadDataLabels(str);
+    if (is_minrt) {
+        std::ifstream glbifs(infile.substr(0, infile.size() - 7) + "globals.s");
+        while(getline(glbifs, str))
+            bingen.ReadDataLabels(str);
+        glbifs.close();
+    }
+
+    bingen.OnReadLabelsCompleted();
+    ifs.clear();
+    ifs.seekg(0, std::ios::beg);
+    iolib.clear();
+    iolib.seekg(0, std::ios::beg);
+    cmnlib.clear();
+    cmnlib.seekg(0, std::ios::beg);
+
     // Round 1: Skim through the assembly code and get the position of each label
+    while (getline(ifs, str))
+        bingen.ReadLabels(str);
+    while (getline(cmnlib, str))
+        bingen.ReadLabels(str);
+    while (getline(iolib, str))
+        bingen.ReadLabels(str);
     if (is_minrt) {
         std::ifstream glbifs(infile.substr(0, infile.size() - 7) + "globals.s");
         while(getline(glbifs, str))
             bingen.ReadLabels(str);
+        glbifs.close();
     }
-
-    while (getline(ifs, str))
-        bingen.ReadLabels(str);
-    // link the whole library.
-    while (getline(iolib, str))
-        bingen.ReadLabels(str);
-    while (getline(cmnlib, str))
-        bingen.ReadLabels(str);
 
     // Get ready for the round 2
     bingen.OnReadLabelsCompleted();
@@ -90,21 +111,23 @@ int main(int argc, char* argv[])
     cmnlib.seekg(0, std::ios::beg);
 
     // Round 2: Replace the instructions with bytecodes
+    while (getline(ifs, str))
+        bingen.Main(str, true);
+    while (getline(cmnlib, str))
+        bingen.Main(str, true);
+    while (getline(iolib, str))
+        bingen.Main(str, true);
     if (is_minrt) {
         std::ifstream glbifs(infile.substr(0, infile.size() - 7) + "globals.s");
         while(getline(glbifs, str))
             bingen.Main(str, false);
+        glbifs.close();
     }
-    while (getline(ifs, str))
-        bingen.Main(str, true);
-    while (getline(iolib, str))
-        bingen.Main(str, true);
-    while (getline(cmnlib, str))
-        bingen.Main(str, true);
 
     bingen.Finish();
-
     ifs.close();
+    iolib.close();
+    cmnlib.close();
 
     return 0;
 }

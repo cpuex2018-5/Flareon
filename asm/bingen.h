@@ -36,6 +36,9 @@ class BinGen {
 
         BinGen(std::ofstream ofs, std::ofstream coefs, bool is_verbose, bool is_debug, bool is_ascii);
 
+        // 0周目
+        void ReadDataLabels(std::string input);
+
         // 1周目
         void ReadLabels(std::string input);
 

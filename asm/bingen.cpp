@@ -24,6 +24,35 @@ BinGen::BinGen(std::ofstream ofs, std::ofstream coefs, bool is_verbose, bool is_
     regmap_(create_regmap()),
     fregmap_(create_fregmap()) {}
 
+void BinGen::ReadDataLabels(std::string input) {
+    std::string mnemo;
+    std::vector<std::string> arg;
+    Parse(input, mnemo, arg);
+
+    if (mnemo == ".text") {
+        data_mode_ = false;
+        return;
+    }
+
+    if (mnemo == ".data") {
+        data_mode_ = true;
+        return;
+    }
+
+    if ((!data_mode_) || mnemo == "" /* comment */)
+        return;
+
+    if (mnemo.back() != ':') {
+        assert(mnemo == ".word");
+        ndata_++;
+        return;
+    }
+    mnemo.pop_back();
+    // std::cerr << "[INFO] new label " << mnemo << " registered at " << ndata_ * 4 << std::endl;
+    data_map_[mnemo] = ndata_;
+    return;
+}
+
 void BinGen::ReadLabels(std::string input) {
     std::string mnemo;
     std::vector<std::string> arg;
@@ -39,30 +68,32 @@ void BinGen::ReadLabels(std::string input) {
         return;
     }
 
-    if (data_mode_) {
-        if (mnemo.back() != ':') {
-            assert(mnemo == ".word");
-            ndata_++;
-            return;
-        }
-        mnemo.pop_back();
-        // std::cerr << "[INFO] new label " << mnemo << " registered at " << ndata_ * 4 << std::endl;
-        data_map_[mnemo] = ndata_;
+    if (data_mode_ || mnemo == "" /* comment */)
         return;
-    }
 
     // The input wasn't a label.
     if (mnemo.back() != ':') {
         // Some pseudo-instructions will expand to two instrs
-        if (mnemo == "la" || mnemo == "ret" || mnemo == "call" || mnemo == "fli" || mnemo == "tail") {
+        if (mnemo == "la" || mnemo == "ret" || mnemo == "call" || mnemo == "tail") {
             nline_ += 2;
             return;
+        }
+        if (mnemo == "fli") {
+            std::string reg, label;
+            ParseOffsetLabel(arg[1], &reg, &label);
+            uint32_t imm = SolveDataLabel(label);
+            if (IsImmOutOfRange(imm, 12)) {
+                printf("fli out of range\n");
+                nline_ += 2;
+                return;
+            }
         }
         if (mnemo == "lwl" || mnemo == "swl" || mnemo == "flwl" || mnemo == "fswl") {
             std::string reg, label;
             ParseOffsetLabel(arg[1], &reg, &label);
-            assert(data_map_.count(label) > 0);
-            if (IsImmOutOfRange(data_map_[label], 12)) {
+            uint32_t imm = SolveDataLabel(label);
+            if (IsImmOutOfRange(imm, 12)) {
+                printf("lwl/swl/flwl/fswl out of range\n");
                 nline_ += 3;
                 return;
             }
@@ -70,8 +101,8 @@ void BinGen::ReadLabels(std::string input) {
         if (mnemo == "lwd" || mnemo == "swd" || mnemo == "flwd" || mnemo == "fswd") {
             std::string imm, label;
             ParseOffsetLabel(arg[1], &imm, &label);
-            assert(data_map_.count(label) > 0);
-            if (IsImmOutOfRange(data_map_[label] + stoi(imm), 12)) {
+            uint32_t imml = SolveDataLabel(label);
+            if (IsImmOutOfRange(imml + stoi(imm), 12)) {
                 printf("lwd/swd/flwd/fswd out of range\n");
                 nline_ += 3;
                 return;
@@ -93,10 +124,6 @@ void BinGen::ReadLabels(std::string input) {
             mnemo == ".globl" || mnemo == ".type" || mnemo == ".size" || mnemo == ".ident") {
             return;
         }
-
-        // Don't count comments
-        if (mnemo == "")
-            return;
 
         nline_++;
         return;
@@ -123,7 +150,7 @@ void BinGen::Main(std::string input, bool do_debug_print) {
         }
     }
 
-    if (is_verbose_) {
+    if (is_verbose_ && do_debug_print) {
         std::cout << "(pc " << old_nline * 4 << "):" << input << std::endl;
         if (inst.is_inst()) PrintInst(inst);
         std::cout << std::endl;
@@ -411,10 +438,14 @@ BinGen::Inst BinGen::Convert(std::string input) {
         // Note: t6レジスタが潰される
         assert(2 == arg.size());
         uint32_t imm = SolveDataLabel(arg[1]);
-        std::string tmp_reg = "t6";
-        inst.set_fst(lui(tmp_reg, ((imm >> 12) + ((imm >> 11) & 1)) & 0xfffff));
-        nline_++;
-        inst.set_snd(flw(arg[0], tmp_reg, (imm & 0xfff)));
+        if (IsImmOutOfRange(imm, 12)) {
+            std::string tmp_reg = "t6";
+            inst.set_fst(lui(tmp_reg, ((imm >> 12) + ((imm >> 11) & 1)) & 0xfffff));
+            nline_++;
+            inst.set_snd(flw(arg[0], tmp_reg, (imm & 0xfff)));
+        } else {
+            inst.set_fst(flw(arg[0], "zero", (imm & 0xfff)));
+        }
     }
 
     else if (mnemo == "lwl" || mnemo == "swl" || mnemo == "flwl" || mnemo == "fswl") {
@@ -423,6 +454,7 @@ BinGen::Inst BinGen::Convert(std::string input) {
         ParseOffsetLabel(arg[1], &reg, &label);
         uint32_t imm = SolveDataLabel(label);
         if (IsImmOutOfRange(imm, 12)) {
+            // std::cerr << "Out of range!!!" << std::endl;
             inst.set_fst(lui(arg[0], ((imm >> 12) + ((imm >> 11) & 0x1)) & 0xfffff));
             nline_++;
             inst.set_snd(op("add", arg[0], arg[0], reg));
@@ -445,6 +477,7 @@ BinGen::Inst BinGen::Convert(std::string input) {
         ParseOffsetLabel(arg[1], &imms, &label);
         uint32_t imm = SolveDataLabel(label) + std::stoi(imms);
         if (IsImmOutOfRange(imm, 12)) {
+            // std::cerr << "Out of range!!!" << std::endl;
             inst.set_fst(lui(arg[0], ((imm >> 12) + ((imm >> 11) & 0x1)) & 0xfffff));
             nline_++;
             inst.set_snd(op("add", arg[0], arg[0], "zero"));
