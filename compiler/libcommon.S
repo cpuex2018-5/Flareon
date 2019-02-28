@@ -36,10 +36,10 @@ min_caml_print_int:
 	b	.print_int_body
 .print_int_L5:
 # a0 >= 1000
-	li	s1, 100000
+	lwd	s1, LI_100000(0)
 	bge	a0, s1, .print_int_L1
 # 1000 <= a0 < 10 ** 5
-	li	s1, 10000
+	lwd	s1, LI_10000(0)
 	bge	a0, s1, .print_int_body
 # 10 ** 3 <= a0 < 10 ** 4
 	li	s1, 1000
@@ -47,27 +47,27 @@ min_caml_print_int:
 ###
 .print_int_L2:
 # 10 ** 3 <= a0 < 10 ** 5
-	li	s1, 10000
+	lwd	s1, LI_10000(0)
 	bge	a0, s1, .print_int_body
 	li	s1, 1000
 	b	.print_int_body
 .print_int_L1:
 # a0 >= 10 ** 5
-	li	s1, 100000000
+	lwd	s1, LI_100000000(0)
 	bge	a0, s1, .print_int_L3
 # 10 ** 5 <= a0 < 10 ** 8
-	li	s1, 10000000
+	lwd	s1, LI_10000000(0)
 	bge	a0, s1, .print_int_body
-	li	s1, 1000000
+	lwd	s1, LI_1000000(0)
 	bge	a0, s1, .print_int_body
-	li	s1, 100000
+	lwd	s1, LI_100000(0)
 	b	.print_int_body
 .print_int_L3:
 # a0 >= 10 ** 8
-	li	s1, 1000000000
+	lwd	s1, LI_1000000000(0)
 	bge	a0, s1, .print_int_body
 # 10 ** 8 <= a0 < 10 ** 9
-	li	s1, 100000000
+	lwd	s1, LI_100000000(0)
 	b	.print_int_body
 ###############
 .print_int_body:
@@ -106,32 +106,32 @@ min_caml_print_int:
 	li	s1, 100
 	b	.print_int_body
 .print_int_div_10_L2:
-	li	t6, 10000
+	lwd	t6, LI_10000(0)
 	bne	s1, t6, .print_int_div_10_L3
 	li	s1, 1000
 	b	.print_int_body
 .print_int_div_10_L3:
-	li	t6, 100000
+	lwd	t6, LI_100000(0)
 	bne	s1, t6, .print_int_div_10_L4
-	li	s1, 10000
+	lwd	s1, LI_10000(0)
 	b	.print_int_body
 .print_int_div_10_L4:
-	li	t6, 1000000
+	lwd	t6, LI_1000000(0)
 	bne	s1, t6, .print_int_div_10_L5
-	li	s1, 100000
+	lwd	s1, LI_100000(0)
 	b	.print_int_body
 .print_int_div_10_L5:
-	li	t6, 10000000
+	lwd	t6, LI_10000000(0)
 	bne	s1, t6, .print_int_div_10_L6
-	li	s1, 1000000
+	lwd	s1, LI_1000000(0)
 	b	.print_int_body
 .print_int_div_10_L6:
-	li	t6, 100000000
+	lwd	t6, LI_100000000(0)
 	bne	s1, t6, .print_int_div_10_L7
-	li	s1, 10000000
+	lwd	s1, LI_10000000(0)
 	b	.print_int_body
 .print_int_div_10_L7:	# s1 = 10 ** 9
-	li	s1, 100000000
+	lwd	s1, LI_100000000(0)
 	b	.print_int_body
 ## -- print_int_div_10
 .print_int_end:
@@ -507,7 +507,7 @@ min_caml_floor:
 
 min_caml_float_of_int: # int -> float
 	fli	ft10, L_8388608
-	li	t6, 1258291200  # 0x4b000000
+	lwd	t6, LI_1258291200(0)  # 0x4b000000
 	bge	a0, zero, .float_of_int_pos
 # negativeの場合
 	sub	a0, t6, a0
@@ -518,7 +518,6 @@ min_caml_float_of_int: # int -> float
 	jr	ra
 .float_of_int_pos:
 	add	a0, a0, t6
-# TODO: integer -> floating レジスタ間のmv (fmv.w.x) がほしいかもしれない...
 	sw	a0, -4(sp)
 	flw	fa0, -4(sp)
 	fsub	fa0, fa0, ft10
@@ -532,7 +531,7 @@ min_caml_int_of_float: # float -> int
 	fadd	fa0, fa0, ft10
 	fsw	fa0, -4(sp)
 	lw	a0, -4(sp)
-	li	t6, 1258291200
+	lwd	t6, LI_1258291200(0)
 	sub	a0, a0, t6
 	jr	ra
 .int_of_float_neg:
@@ -540,59 +539,23 @@ min_caml_int_of_float: # float -> int
 	fadd	fa0, fa0, ft10
 	fsw	fa0, -4(sp)
 	lw	a0, -4(sp)
-	li	t6, 1258291200
+	lwd	t6, LI_1258291200(0)
 	sub	a0, a0, t6
 	neg	a0, a0
 	jr	ra
 
-# 	.data
-# L_1:	# 1.0
-# 	.word	1065353216
-# L_2:	# 2.0
-# 	.word	1073741824
-# L_8388608:	# 8388608.0
-# 	.word	1258291200
-# L_10:	# 10.0
-# 	.word	1092616192
-# L_PI4:	# 0.785398
-# 	.word	1061752795
-# L_PI2:	# 1.570796
-# 	.word	1070141403
-# L_PI:	# 3.141593
-# 	.word	1078530011
-# L_2PI:	# 6.283185
-# 	.word	1086918619
-# L_S3:	# 0.16666668
-# 	.word	1042983596
-# L_S5:	# 0.008332824
-# 	.word	1007191654
-# L_S7:	# 0.00019587841
-# 	.word	961373366
-# L_C2:	# 0.5
-# 	.word	1056964608
-# L_C4:	# 0.04166368
-# 	.word	1026205577
-# L_C6:	# 0.0013695068
-# 	.word	984842502
-# L_Atan1:	# 0.437500
-# 	.word	1054867456
-# L_Atan2:	# 2.437500
-# 	.word	1075576832
-# L_A3:	# 0.3333333
-# 	.word	1051372202
-# L_A5:	# 0.2
-# 	.word	1045220557
-# L_A7:	# 0.142857142
-# 	.word	1041385765
-# L_A9:	# 0.111111104
-# 	.word	1038323256
-# L_A11:	# 0.08976446
-# 	.word	1035458158
-# L_A13:	# 0.060035485
-# 	.word	1031137221
-# L_T3:	# 0.333333
-# 	.word	1051372203
-# L_T5:	# 0.133333
-# 	.word	1040746633
-# L_T7:	# 0.053968
-# 	.word	1029508561
+	.data
+LI_1258291200:
+	.word	1258291200
+LI_10000:
+	.word	10000
+LI_100000:
+	.word	100000
+LI_1000000:
+	.word	1000000
+LI_10000000:
+	.word	10000000
+LI_100000000:
+	.word	100000000
+LI_1000000000:
+	.word	1000000000

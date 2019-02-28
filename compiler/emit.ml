@@ -243,7 +243,7 @@ let h oc { name = Id.L(x); args = _; fargs = _; body = e; ret = _ } =
   |> Raw.output_buffer oc
 
 let f oc globals (Prog(data, fundefs, e)) =
-  let global_size = Globals.global_size() + List.length data in
+  let global_size = Globals.global_size() + List.length data + 7 in
   Format.eprintf "generating assembly...@.";
   Printf.fprintf oc "\t.text\n";
   let buf = addl (Id.L("_min_caml_start")) []

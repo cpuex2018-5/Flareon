@@ -1,6 +1,6 @@
 	.text
 _min_caml_start:
-	li	gp, 7392
+	li	gp, 7420
 	li	a0, 128
 	li	a1, 128
 	call	rt_3072
