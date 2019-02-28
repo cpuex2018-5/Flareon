@@ -22,7 +22,7 @@ ack (expected: 23)     : 23
 mandelbrot             : OK (results were identical)
 ```
 #### minrtのテスト
-`./test.sh` でminrtをコンパイル&アセンブルしシミュレータで実行させる。
+`./test_minrt.sh` でminrtをコンパイル&アセンブルしシミュレータで実行させる。
 テスト後に以下のようにstdoutに出ていればOK
 
 ```
