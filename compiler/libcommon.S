@@ -1,3 +1,4 @@
+	.text
 ## ft9, ft10はlibで自由に使ってよい
 
 min_caml_print_newline:
