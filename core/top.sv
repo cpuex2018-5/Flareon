@@ -49,9 +49,9 @@ logic [31:0] freg_rs1, freg_rs2, freg_rd;
 logic [31:0] freg_rd_load, reg_rd_load;
 
 logic [6:0] e_funct7, e_funct7_1;
-logic [6:0] e_opcode, e_opcode_1, e_opcode_2, e_opcode_3;
+logic [6:0] e_opcode, e_opcode_1, e_opcode_2;
 logic [2:0] e_funct, e_funct_1;
-logic [4:0] e_rd, e_rd_1, e_rd_2, e_rd_3;
+logic [4:0] e_rd, e_rd_1, e_rd_2;
 logic [4:0] e_rs1, e_rs1_1;
 logic [4:0] e_rs2, e_rs2_1;
 
@@ -182,23 +182,26 @@ always @(posedge clk) begin
         m_we <= 0;
     end else if (main_stage) begin
         m_we <= 0;
+        freg_rd_load <= m_r_data;
+        reg_rd_load  <= m_r_data;
+        pre_b_addr <= b_addr;
+        b_rdata_reg <= b_rdata;
+
         if (fetch_stage) begin
             if (global_counter != 0) begin
-                if (e_opcode_3 == OP_LOAD) begin
-                    e_registers[e_rd_3] <= reg_rd_load;
-                end else if (e_opcode_3 == LOAD_FP) begin
-                    f_registers[e_rd_3] <= freg_rd_load;
+                if (e_opcode_2 == OP_LOAD) begin
+                    e_registers[e_rd_2] <= reg_rd_load;
+                end else if (e_opcode_2 == LOAD_FP) begin
+                    f_registers[e_rd_2] <= freg_rd_load;
                 end else begin
-                    e_registers[e_rd_3] <= reg_rd;
-                    f_registers[e_rd_3] <= freg_rd;
+                    e_registers[e_rd_2] <= reg_rd;
+                    f_registers[e_rd_2] <= freg_rd;
                 end
             end
 
             fetch_stage <= 0;
             set_stage <= 1;
             global_counter <= global_counter + 1;
-
-            b_rdata_reg <= b_rdata;
         end
         else if (set_stage) begin
             reg_rs1 <= e_registers[e_rs1];
@@ -223,8 +226,8 @@ always @(posedge clk) begin
             e_imm_j_1 <= e_imm_j;
 
             case(e_opcode)
-                LOAD_FP: exe_remain <= 2;
-                OP_LOAD: exe_remain <= 2;
+                LOAD_FP: exe_remain <= 3;
+                OP_LOAD: exe_remain <= 3;
                 OP_FP: begin //float
                     case(e_funct7)
                         7'b0000000: exe_remain <= 3; //fadd
@@ -239,6 +242,10 @@ always @(posedge clk) begin
                 default: exe_remain <= 1;
             endcase
 
+            if (e_opcode != BRANCH && e_opcode != OP_JALR) begin
+                e_program_counter <= e_program_counter+4;
+                b_addr <= (e_program_counter+4)/4;
+            end
         end
         else if (exe_remain > 0) begin
             e_opcode_2 <= e_opcode_1;
@@ -247,9 +254,16 @@ always @(posedge clk) begin
             if (e_opcode_1 != OP_INOUT) begin
                 exe_remain <= exe_remain - 1;
                 if (exe_remain == 1) begin
+                    if (e_opcode_1 == BRANCH || e_opcode_1 == OP_JALR) begin
+                        out_stage <= 1;
+                    end else begin
+                        fetch_stage <= 1;
+                    end
+                    /*
                     out_stage <= 1;
                     e_program_counter <= e_program_counter+4;
                     b_addr <= (e_program_counter+4)/4;
+                    */
                 end
             end
 
@@ -264,7 +278,7 @@ always @(posedge clk) begin
                 endcase
             end
             else if (e_opcode_1 == OP_LUI) reg_rd <= e_imm_u_1;
-            else if (e_opcode_1 == OP_AUIPC) reg_rd <= e_program_counter + e_imm_u_1;
+            else if (e_opcode_1 == OP_AUIPC) reg_rd <= e_program_counter - 4 + e_imm_u_1;
             else if (e_opcode_1 == OP_JALR) begin
                 reg_rd <= e_program_counter + 4;
                 e_program_counter <= reg_rs1 + e_imm_i_1;
@@ -330,7 +344,7 @@ always @(posedge clk) begin
                 end
             end
             else if (e_opcode_1 == OP_INOUT) begin //inout
-                if (e_funct == 0) begin //out
+                if (e_funct_1 == 0) begin //out
                     if (e_wait == 0) begin
                         b_stage <= 0;
                         e_wait <= 1;
@@ -383,9 +397,10 @@ always @(posedge clk) begin
                         if (s_axi_bvalid) begin
                             s_axi_bready <= 0;
                             exe_remain <= 0;
-                            out_stage <= 1;
-                            e_program_counter <= e_program_counter+4;
-                            b_addr <= (e_program_counter+4)/4;
+                            fetch_stage <= 1;
+                            //out_stage <= 1;
+                            //e_program_counter <= e_program_counter+4;
+                            //b_addr <= (e_program_counter+4)/4;
                             e_wait <= 0;
                         end
                     end
@@ -432,28 +447,22 @@ always @(posedge clk) begin
                         end
                     end else if (b_stage == 6) begin
                         exe_remain <= 0;
-                        out_stage <= 1;
-                        e_program_counter <= e_program_counter+4;
-                        b_addr <= (e_program_counter+4)/4;
+                        fetch_stage <= 1;
+                        //out_stage <= 1;
+                        //e_program_counter <= e_program_counter+4;
+                        //b_addr <= (e_program_counter+4)/4;
                         e_wait <= 0;
                     end
                 end
             end
         end
         else if (out_stage) begin
-            freg_rd_load <= m_r_data;
-            reg_rd_load  <= m_r_data;
-
-            e_opcode_3 <= e_opcode_2;
-            e_rd_3 <= e_rd_2;
-
             out_stage <= 0;
             fetch_stage <= 1;
 
             if (b_addr == pre_b_addr) begin
                 main_stage <= 0;
             end
-            pre_b_addr <= b_addr;
         end
         e_registers[0] <= 0;
         f_registers[31] <= 0;
