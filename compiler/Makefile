@@ -26,7 +26,7 @@ inline.mli inline.ml constFold.mli constFold.ml elim.mli elim.ml \
 closure.mli closure.ml asm.mli asm.ml globals.ml virtual.mli virtual.ml \
 raw.ml peephole.ml \
 simm.mli simm.ml regAlloc.mli regAlloc.ml emit.mli emit.ml cond.ml \
-common.mli common.ml lift.mli lift.ml tupleOpt.ml schedule.ml \
+common.ml lift.ml tupleOpt.ml schedule.ml \
 main.mli main.ml
 
 # ↓テストプログラムが増えたら、これも増やす

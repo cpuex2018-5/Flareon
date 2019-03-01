@@ -106,47 +106,6 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: vir
   | Closure.AppDir(Id.L("min_caml_fabs"), [x]) -> Ans(FAbs(x))
   | Closure.AppDir(Id.L("min_caml_sqrt"), [x]) -> Ans(FSqrt(x))
   | Closure.AppDir(Id.L("min_caml_print_char"), [x]) -> Ans(Write(x))
-(*
-  | Closure.AppDir(Id.L("min_caml_float_of_int"), [x]) ->
-    let tf = Id.gentmp Type.Float in
-    let ti = Id.gentmp Type.Int in
-    let x' = Id.gentmp Type.Int in
-    let ans = Id.gentmp Type.Float in
-    let ans' = Id.gentmp Type.Float in
-    let e_pos = Let((x', Type.Int), Add(ti, `V(x)),
-                    seq(Sw(x', reg_sp, `C(-4)),
-                        Let((ans, Type.Float), Flw(reg_sp, `C(-4)), Ans(FSub(ans, tf))))) in
-    let e_neg = Let((x', Type.Int), Sub(ti, `V(x)),
-                    seq(Sw(x', reg_sp, `C(-4)),
-                        Let((ans, Type.Float), Flw(reg_sp, `C(-4)),
-                            Let((ans', Type.Float), FSub(ans, tf), Ans(FNeg(ans')))))) in
-    Let((tf, Type.Float), FLi(Id.L("L_8388608")),
-        Let((ti, Type.Int), Li(1258291200),
-            Ans(IfGE(x, `C(0), e_neg, e_pos))))
-*)
-(*
-  | Closure.AppDir(Id.L("min_caml_int_of_float"), [x]) ->
-    let tf = Id.gentmp Type.Float in
-    let ti = Id.gentmp Type.Int in
-    let is_pos = Id.gentmp Type.Int in
-    let x1 = Id.gentmp Type.Float in
-    let x2 = Id.gentmp Type.Float in
-    let x3 = Id.gentmp Type.Int in
-    let x4 = Id.gentmp Type.Int in
-    let e_pos = Let((x1, Type.Float), FAdd(x, tf),
-                    seq(Fsw(`V(x1), reg_sp, `C(-4)),
-                        Let((x3, Type.Int), Lw(reg_sp, `C(-4)),
-                            Ans(Sub(x3, `V(ti)))))) in
-    let e_neg = Let((x1, Type.Float), FAbs(x),
-                    Let((x2, Type.Float), FAdd(x1, tf),
-                        seq(Fsw(`V(x2), reg_sp, `C(-4)),
-                            Let((x3, Type.Int), Lw(reg_sp, `C(-4)),
-                                Let((x4, Type.Int), Sub(x3, `V(ti)), Ans(Neg(x4))))))) in
-    Let((tf, Type.Float), FLi(Id.L("L_8388608")),
-        Let((ti, Type.Int), Li(1258291200),
-            Let((is_pos, Type.Int), FLE(FZero, `V(x)),
-                Ans(IfEq(is_pos, `C(0), e_neg, e_pos)))))
-*)
   | Closure.AppDir(Id.L(x), ys) ->
     let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
     Ans(CallDir(Id.L(x), int, float))
@@ -237,7 +196,34 @@ let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.fv = zts; Closu
 
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
 let f (Closure.Prog(fundefs, e)) =
-  data := [];
+  data := [
+    (* libcommon.Sで使用する即値 *)
+    (Id.L("L_1"), 1.0);
+    (Id.L("L_2"), 2.0);
+    (Id.L("L_8388608"), 8388608.0);
+    (Id.L("L_10"), 10.0);
+    (Id.L("L_PI4"), 0.785398);
+    (Id.L("L_PI2"), 1.570796);
+    (Id.L("L_PI"), 3.141593);
+    (Id.L("L_2PI"), 6.283185);
+    (Id.L("L_S3"), 0.16666668);
+    (Id.L("L_S5"), 0.008332824);
+    (Id.L("L_S7"), 0.00019587841);
+    (Id.L("L_C2"), 0.5);
+    (Id.L("L_C4"), 0.04166368);
+    (Id.L("L_C6"), 0.0013695068);
+    (Id.L("L_Atan1"), 0.437500);
+    (Id.L("L_Atan2"), 2.437500);
+    (Id.L("L_A3"), 0.3333333);
+    (Id.L("L_A5"), 0.2);
+    (Id.L("L_A7"), 0.142857142);
+    (Id.L("L_A9"), 0.111111104);
+    (Id.L("L_A11"), 0.08976446);
+    (Id.L("L_A13"), 0.060035485);
+    (Id.L("L_T3"), 0.333333);
+    (Id.L("L_T5"), 0.133333);
+    (Id.L("L_T7"), 0.053968);
+  ];
   let fundefs = List.map h fundefs in
   let e = g M.empty e in
   Prog(!data, fundefs, e)

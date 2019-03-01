@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # compile & assemble everything
+echo "compiling & assembling..."
 ./../compiler/min-caml ../compiler/test/{gcd.ml,fib.ml,ack.ml} 2> /dev/null > /dev/null
 ./../compiler/min-caml ../compiler/shootout/mandelbrot.ml 2> /dev/null > /dev/null
-./../compiler/min-caml ../compiler/raytracer/minrt.ml 2> /dev/null > /dev/null
+
 ./../asm/main min-caml-asm/{gcd.s,fib.s,ack.s,mandelbrot.s}
-./../asm/main -d min-caml-asm/minrt.s > min-caml-asm/minrt.asm
 
 ./../simulator/eevee_sim -f min-caml-asm/gcd.bin > /dev/null
 echo "gcd (expected: 2700)   :" `cat output.ppm`

@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-ln -sf flareon/{*.ml{,i},libmincaml.S,libcommon.S,libcontest.S} .

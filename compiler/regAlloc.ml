@@ -93,14 +93,12 @@ let rec alloc dest cont regenv x t =
           free in
       (if (List.for_all (fun r -> (S.mem r live)) prefer) && prefer <> [] &&
           (let x' = reg2var (List.hd prefer) regenv in not (is_used_before_call x' cont regenv)) then
-         ((* Format.eprintf "Forcefully spilling %s@." (List.hd prefer); *)
-           Spill(reg2var (List.hd prefer) regenv))
+         Spill(reg2var (List.hd prefer) regenv)
        else
          let r : Id.t = (* そうでないレジスタを探す *)
            List.find
              (fun r -> not (S.mem r live))
              (prefer @ all) in
-         (* Format.eprintf "len(prefer) = %d, allocated %s to %s@." (List.length prefer) x r; *)
          Alloc(r))
     with Not_found ->
       Format.eprintf "register allocation failed for %s@." x;
@@ -114,7 +112,7 @@ let rec alloc dest cont regenv x t =
       Format.eprintf "spilling %s from %s@." y (var2reg y regenv);
       Spill(y)
 
-(* Shuffle registers so that the old content will not be lost *)
+(* Shuffle registers so that the old content will not be lost (emit.mlから移してきたもの) *)
 let rec shuffle sw xys =
   (* remove identical moves *)
   let xys = List.filter (fun (x, y) -> x <> y) xys in
@@ -166,8 +164,7 @@ let rec g dest cont regenv = function (* 命令列のレジスタ割り当て (c
 and g'_and_restore dest cont regenv exp = (* 使用される変数をスタックからレジスタへRestore (caml2html: regalloc_unspill) *)
   try g' dest cont regenv exp
   with NoReg(x, t) ->
-    ((* Format.eprintf "restoring %s@." x; *)
-      g dest cont regenv (Let((x, t), Restore(x), Ans(exp))))
+    g dest cont regenv (Let((x, t), Restore(x), Ans(exp)))
 and g' dest cont regenv = function (* 各命令のレジスタ割り当て (caml2html: regalloc_gprime) *)
   | Nop | Li _ | SetL _ | SetDL _ | Comment _ | Restore _ | FLi _ as exp -> (Ans(exp), regenv)
   | Mv(x) -> (Ans(Mv(find x Type.Int regenv)), regenv)
@@ -287,7 +284,6 @@ let h { name = Id.L(x); args = ys; fargs = zs; body = e; ret = t } = (* 関数�
   let (i, arg_regs, regenv) =
     List.fold_left
       (fun (i, arg_regs, regenv) y ->
-         (* Printf.printf "%s: i = %d\n" x i; *)
          let r = regs.(i) in
          (i + 1,
           arg_regs @ [r],
@@ -298,7 +294,6 @@ let h { name = Id.L(x); args = ys; fargs = zs; body = e; ret = t } = (* 関数�
   let (d, farg_regs, regenv) =
     List.fold_left
       (fun (d, farg_regs, regenv) z ->
-         (* Printf.printf "d = %d\n" d; *)
          let fr = fregs.(d) in
          (d + 1,
           farg_regs @ [fr],
